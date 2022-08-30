@@ -1,0 +1,113 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+  <link href="plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+<title>All Created Cases</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">List of Cases Under Prosecution
+						</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i>List of Cases Under Prosecution
+							
+						</h4>
+
+
+						<form th:action="@{/caseAndByProsecutorOrdDetail}" method="post"
+							class="needs-validation" th:object="${caseDetails}">
+
+							<div class="form-group row">
+								<table class="table table-striped" id="userTable">
+									<thead>
+										<tr style="background-color: blueviolet; color: white;">
+											<th>S.No.</th>
+											<th>Case Id</th>
+											<th>Case Title</th>
+											<th>View Order</th>
+											<th>Case Type</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="p,stats: ${caselist}">
+											 <td th:text="${stats.index+1}"></td> 
+											<td th:text="${p.caseStrId}"></td>
+											<td th:text="${p.caseTitle}"></td>
+											<td><a th:target="_blank" th:href="@{|/downloadFiles?fileName=${p.mcaOrderFile}|}" ><span
+									th:text="${p.mcaOrderFile}"></span></a>
+									<a th:target="_blank" th:href="@{|/downloadFiles?fileName=${p.courtOrderFile}|}" ><span
+									th:text="${p.courtOrderFile}"></span></a></td> 
+									<!-- <td th:text="${p.caseType}"></td> -->
+									<th:block th:if="${p.caseType == 'MCA'}">
+											<td class="text-wrap">System Generated</td>
+										</th:block>
+										<th:block th:if="${p.caseType == 'Legacy' }">
+											<td class="text-wrap">Legacy</td>
+										</th:block>
+										
+										<th:block th:if="${p.caseType == 'Prosecution' }">
+											<td class="text-wrap">Prosecution</td>	
+											</th:block>
+											<td><button type="submit" th:name="caseDetails" th:id="caseId" class="btn btn-info"
+													th:value="${p.caseId}">Case Details</button></td>
+												
+										</tr>
+
+                                     
+									</tbody>
+
+								</table>
+							</div>
+						</form>
+
+
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+			
+			 var table = $('#userTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+		});
+		
+		</script>
+
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,1946 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Office Orders Pending For Approval</title>
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+<link href="css/bootstrap-datetimepicker-build.css" rel="stylesheet" />
+<link
+	href="plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css"
+	rel="stylesheet" type="text/css">
+<link href="plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css"
+	rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Summon/Notices Report</li>
+
+				</ol>
+			</div>
+		</div>
+
+
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> Summon/Notices Report
+						</h4>
+
+
+
+
+						<div class="form-check form-check-inline">
+							<label class="form-check-label  col-form-label"
+								for="inlineRadio1">Summon </label> <input
+								class="form-check-input" type="radio" name="inlineRadioOptions"
+								id="inlineRadio1" value="S" checked="checked" />
+
+						</div>
+
+						<div class="form-check form-check-inline">
+							<label class="form-check-label col-form-label" for="inlineRadio2">Notice
+							</label> <input class="form-check-input" type="radio"
+								name="inlineRadioOptions" id="inlineRadio2" value="N" />
+
+						</div>
+
+
+						<div class="form-group row">
+							<label for="input-10" class=" col-form-label"> Status <span
+								class="text-danger">*</span>
+							</label>
+							<div class="col-sm-2">
+								<select class="form-control" id="type">
+									<option value="1">Select</option>
+									<option value="2">Approved</option>
+									<option value="3">E-Signed</option>
+									<option value="4">Created</option>
+								</select> <span class="text-danger"></span>
+							</div>
+
+
+							<label class="control-label" id="fromDate">From Date</label>
+							<div class="col-sm-2">
+								<input class="form-control" type="text" placehoder="Start Date"
+									id="startdate" /> <span class="text-danger"
+									style="display: none;" id="startDateError">Select Date</span>
+
+							</div>
+
+
+							<label class="control-label" id="toDate">To Date </label>
+							<div class="col-sm-2">
+								<input class="form-control" type="text" placehoder="End Date"
+									id="enddate" /> <span class="text-danger"
+									style="display: none;" id="endDateError">Select Date</span>
+							</div>
+
+
+						</div>
+
+						<div class="form-group row">
+							<label for="input-12" class="col-form-label">
+								Investigation Unit</label>
+							<div class="col-sm-2">
+								<select class="form-control" th:id="unitId" name="unitId"
+									onchange="getinspectorList(this);">
+									<option value="0">Select</option>
+									<option th:each="ulist: ${unitList}" th:value="${ulist.unitId}"
+										th:utext="${ulist.unitName}" />
+								</select>
+
+							</div>
+							<label for="input-10" class="col-form-label"> Inspector
+								List <span class="text-danger">*</span>
+							</label>
+							<div class="col-sm-3">
+								<select class="form-control" th:id="inspList">
+									<option value="0">Select</option>
+									<option th:each="ilist: ${inspList}" th:value="${ilist.userId}"
+										th:utext="${ilist.name}" />
+								</select> <span class="text-danger"></span>
+							</div>
+
+							<input type="button" class="btn btn-success" th:value="Search"
+								onclick="tableserach();">
+
+
+
+						</div>
+						<!-- <div class="form-group row">
+
+							
+						</div> -->
+
+						<br>
+
+						<table class="table table-responsive" id="summonTable">
+							<thead class="bg-info text-white">
+								<tr>
+									<th>Sr.No.</th>
+									<th class="text-wrap">Case Id<br>Summon Id/Notice Id<i
+										class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i></th>
+									<th class="text-wrap">Case Title<i class="fa fa-arrow-up"></i>
+										<i class="fa fa-arrow-down"></i></th>
+									<th class="text-wrap">Details<i class="fa fa-arrow-up"></i>
+										<i class="fa fa-arrow-down"></i></th>
+									<th class="text-class">Date of Appearance<i
+										class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i></th>
+									<th class="text-wrap">Current Status<i
+										class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i></th>
+								</tr>
+							</thead>
+							<tbody id="summonTableStatus">
+
+							</tbody>
+						</table>
+
+
+
+						<form method="post" id="getOrders" target="_blank">
+							<input id="id" name="id" type="hidden" /> <input type="hidden"
+								th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> <input
+								id="caseid" name="caseid" type="hidden" />
+						</form>
+
+						<form method="post" id="getNotices" target="_blank">
+							<input id="nid" name="id" type="hidden" /> <input type="hidden"
+								th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+						</form>
+
+						<form method="post" id="getSummons" target="_blank">
+							<input id="sid" name="id" type="hidden" /> <input type="hidden"
+								th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+						</form>
+
+						<form method="post" id="getSummon" target="_self">
+							<input id="Asid" name="id" type="hidden" /> <input type="hidden"
+								th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+						</form>
+
+						<form method="post" id="getNotice" target="_self">
+							<input id="Anid" name="id" type="hidden" /> <input type="hidden"
+								th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+						</form>
+
+						<script
+							src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+						<script
+							src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+						<script
+							src="plugins/bootstrap-datatable/js/dataTables.buttons.min.js"></script>
+						<script
+							src="plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js"></script>
+						<script src="plugins/bootstrap-datatable/js/jszip.min.js"></script>
+						<script src="plugins/bootstrap-datatable/js/pdfmake.min.js"></script>
+						<script src="plugins/bootstrap-datatable/js/vfs_fonts.js"></script>
+						<script src="plugins/bootstrap-datatable/js/buttons.html5.min.js"></script>
+						<script src="plugins/bootstrap-datatable/js/buttons.print.min.js"></script>
+						<script src="plugins/bootstrap-datatable/js/buttons.colVis.min.js"></script>
+						<script
+							src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+						<script
+							src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+						<script type="text/javascript">
+							$(document)
+									.ready(
+											function() {
+
+												$("#startdate")
+														.datepicker(
+																{
+
+																	format : 'dd-mm-yyyy',
+																	endDate : new Date(),
+																// autoclose: true,
+																})
+														.on(
+																'changeDate',
+																function(
+																		selected) {
+																	var minDate = new Date(
+																			selected.date
+																					.valueOf());
+																	$(
+																			'#enddate')
+																			.datepicker(
+																					'setStartDate',
+																					minDate);
+																});
+
+												$("#enddate")
+														.datepicker(
+																{
+																	format : 'dd-mm-yyyy',
+																	endDate : new Date(),
+
+																})
+														.on(
+																'changeDate',
+																function(
+																		selected) {
+																	var minDate = new Date(
+																			selected.date
+																					.valueOf());
+																	$(
+																			'#startdate')
+																			.datepicker(
+																					'setEndDate',
+																					minDate);
+																});
+
+												$("#unitId")
+														.append(
+																"<option value='0'>Select</option>");
+												if ($("#inlineRadio1").val() == "S") {
+													$
+															.ajax({
+																crossDomain : true,
+																type : "GET",
+																url : "getSummonList",
+																//contentType : "application/json; charset=utf-8",
+																cache : false,
+																timeout : 600000,
+																success : function(
+																		data) {
+																	debugger
+																	//alert(data.id);
+																	var html = '';
+																	var len = data.length;
+																	//alert(len);
+																	$(
+																			'#summonTableStatus')
+																			.empty();
+
+																	table = $(
+																			'#summonTable')
+																			.dataTable(
+																					{
+																						dom:'Bfrtip',
+																						'bProcessing' : false,
+																						'bServerSide' : false,
+																						'bJQueryUI' : true,
+																						'destroy' : true,
+																						"autoWidth" : false,
+																						"buttons" : [
+																								'copy',
+																								'excel',
+																								'pdf',
+																								'print',
+																								'colvis' ],
+																								
+																						'language' : {
+																							'sLoadingRecords' : '<span style="width:100%;"><img src="resources/images/Spinner-1s-80px1.gif"></span>'
+																						},
+
+																						'data' : data,
+																						'columns' : [
+																								{
+																									'sDefaultContent' : '',
+																									"mData" : function(
+																											mData,
+																											type,
+																											row,
+																											meta) {
+																										return meta.row
+																												+ meta.settings._iDisplayStart
+																												+ 1;
+																									}
+																								},
+																								{
+																									'sDefaultContent' : '',
+																									'mData' : function(
+																											data,
+																											type,
+																											row) {
+
+																										return data.caseDetails.caseId
+																												+ '<br>'
+																												+ data.summonNo;
+																										//editIndividual(\'' + ${sumType.id} +'\',\''+${companylist.id}+'\',\''+${sumType.individualType.IndividualId}+'\');
+																										//return "<a href='#' onclick=showPersonAddDetails(" + data[0] +  '\',\''+data[3]+ ")>"+data[3]+"</a>";
+																									}
+																								},
+																								{
+																									'sDefaultContent' : '',
+																									'mData' : function(
+																											data,
+																											type,
+																											row) {
+																										return data.caseDetails.caseTitle
+																												+ '<br>'
+																												+ data.summonType.individualType.individualName;
+																									}
+																								},
+																								{
+																									'sDefaultContent' : '',
+																									'mData' : function(
+																											data,
+																											type,
+																											row) {
+
+																										if (data.summonType.individualType.individualId == 1
+																												|| data.summonType.individualType.individualId == 2) {
+
+																											var d = new Date(
+																													data.summonType.offJoinDate);
+																											var joiningDate = '';
+																											if (data.summonType.offJoinDate != null) {
+
+																												joiningDate = d
+																														.toLocaleDateString(
+																																'en-GB',
+																																data.summonType.offJoinDate);
+																											}
+
+																											return '<td class="text-wrap"><strong>Individual Type :</strong>'
+																													+ data.summonType.individualType.individualName
+																													+ ' <br> <strong> DIN :</strong>'
+																													+ data.summonType.registration_no
+																													+ '<br> <strong>Name: </strong>'
+																													+ data.summonType.name
+																													+ '<br> <strong>Date of joining :</strong>'
+																													+ joiningDate
+																													+ '<br><strong>Address:</strong>'
+																													+ data.summonType.address
+																													+ '<br><strong>Mobilne No:</strong>'
+																													+ data.summonType.mobileNo
+																													+ '<br><strong>Email Id:</strong>'
+																													+ data.summonType.email
+																													+ '</td>';
+																										}
+
+																										if (data.summonType.individualType.individualId == 3
+																												|| data.summonType.individualType.individualId == 4) {
+																											return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																													+ data.summonType.individualType.individualName
+																													+ ' <br> <strong>Name : </strong>'
+																													+ data.summonType.Name
+																													+ '<br><strong>Designation: </strong>'
+																													+ data.summonType.designation
+																													+ ' <br><strong>sex: </strong>'
+																													+ data.summonType.sex
+																													+ ' <br><strong>DOB: </strong>'
+																													+ '<strong>Nationality : </strong> '
+																													+ data.summonType.nationality
+																													+ '<br><strong>NationalId : </strong>'
+																													+ data.summonType.nationalId
+																													+ '<br><strong>Passport No. : </strong>'
+																													+ data.summonType.passport
+																													+ '<strong>Issue date : </strong>'
+																											'<br> <strong>Place of issues : </strong>'
+																													+ data.summonType.placeof_issued
+																													+ ' <br> <strong>Mobile No : </strong>'
+																													+ data.summonType.MobileNo
+																													+ ' <br> <strong>Email Id: </strong>'
+																													+ data.summonType.email
+																													+ '</td>'
+																										}
+
+																										if (data.summonType.individualType.individualId == 5
+																												|| data.summonType.individualType.individualId == 6) {
+																											if (data.summonType.isCin == 'Y') {
+																												return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																														+ data.summonType.individualType.individualName
+																														+ '<br> <strong> If CIN is available ? :</strong>'
+																														+ data.summonType.isCin
+																														+ '<br>'
+																														+ data.summonType.registration_no
+																														+ ' <br> <strong>Name : </strong>'
+																														+ data.summonType.name
+																														+ '<br><strong>Address: </strong> <span class ="text-wrap">'
+																														+ data.summonType.address
+																														+ '</span> <br> <strong>Mobile No : </strong>'
+																														+ data.summonType.mobileNo
+																														+ ' <br> <strong>Email Id: </strong>'
+																														+ data.summonType.email
+																														+ ' <br> <strong>NameCompany: </strong>'
+																														+'<span class ="nowrap"> '+data.summonType.nameCompany+'</span>'
+																														+ '</td>'
+																											} else {
+																												return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																														+ data.summonType.individualType.individualName
+																														+ '<br> <strong> If CIN is available ? :</strong>'
+																														+ data.summonType.isCin
+																														+ ' <br> <strong>Name : </strong>'
+																														+ data.summonType.name
+																														+ '<br><strong>Address: </strong>'
+																														+ data.summonType.address
+																														+ ' <br> <strong>Mobile No : </strong>'
+																														+ data.summonType.mobileNo
+																														+ ' <br> <strong>Email Id: </strong>'
+																														+ data.summonType.email
+																														+ ' <br> <strong>NameCompany: </strong>'
+																														+ data.summonType.nameCompany
+																														+ '</td>'
+																											}
+																										}
+
+																										if (data.summonType.individualType.individualId == 7) {
+																											if (data.summonType.isCin == 'Y') {
+																												return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																														+ data.summonType.individualType.individualName
+																														+ '<br> <strong> If CIN is available ? :</strong>'
+																														+ data.summonType.isCin
+																														+ '<br>'
+																														+ data.summonType.registration_no
+																														+ ' <br> <strong>Name : </strong>'
+																														+ data.summonType.name
+																														+ '<br><strong>Address: </strong>'
+																														+ data.summonType.address
+																														+ ' <br> <strong>Mobile No : </strong>'
+																														+ data.summonType.mobileNo
+																														+ ' <br> <strong>Email Id: </strong>'
+																														+ data.summonType.email
+																														+ ' <br> <strong>NameCompany: </strong>'
+																														+ data.summonType.nameCompany
+																														+ '</td>'
+																											} else {
+																												return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																														+ data.summonType.individualType.individualName
+																														+ '<br> <strong> If CIN is available ? :</strong>'
+																														+ data.summonType.isCin
+																														+ ' <br> <strong>Name : </strong>'
+																														+ data.summonType.name
+																														+ '<br><strong>Address: </strong>'
+																														+ data.summonType.address
+																														+ ' <br> <strong>Mobile No : </strong>'
+																														+ data.summonType.mobileNo
+																														+ ' <br> <strong>Email Id: </strong>'
+																														+ data.summonType.email
+																														+ ' <br> <strong>Relation With Company: </strong>'
+																														+ data.summonType.relationwithcompany
+																														+ '</td>'
+																											}
+																										}
+
+																									}
+																								},
+																								{
+																									'sDefaultContent' : '',
+																									'mData' : function(
+																											data,
+																											type,
+																											row) {
+																										return data.dateOfAppear;
+																									}
+																								},
+
+																								{
+																									'sDefaultContent' : '',
+																									'mData' : function(
+																											data,
+																											type,
+																											row) {
+																										if (data.aprrovalStage1 == false
+																												&& data.isRejected == false) {
+																											return '<td class="text-wrap">Pending for Approval from Addl.Director <a href="#" class="btn btn-success" onclick="getSummon(\''
+																													+ data.id
+																													+ '\');">View Summons</a></td>'
+																										} else if (data.aprrovalStage2 == true
+																												&& data.isSigned == 0) {
+																											return '<td>Pending for e-Sign <a href="#" class="btn btn-success" onclick="getSummon(\''
+																											+ data.id
+																											+ '\');">View Approved Summons</a></td>';
+																										} else if (data.aprrovalStage2 == true
+																												&& data.isSigned == 1) {
+																											var d = new Date(
+																													data.orderSignedDate);
+																											var newDate;
+																											if (data.orderSignedDate != null) {
+
+																												newDate = d
+																														.toLocaleDateString(
+																																'en-GB',
+																																data.orderSignedDate);
+																											}
+																											//alert(newDate);
+																											return '<td>Summon e-Sign '
+																													+ newDate
+																													+ '</input><span><a href="#"  class="btn btn-danger" onclick="getSummons(\''
+																													+ data.id
+																													+ '\');">View</a></span></td>';
+																										} else if (data.isRejected == true
+																												&& data.aprrovalStage1 == false) {
+																											return '<td>Sent Back to Review BY Addl. <a href="#" class="btn btn-success"     onclick="getSummon(\''
+																													+ data.id
+																													+ '\');" >View Summons</a></td>';
+																										}
+
+																									}
+																								},
+
+																						],
+																					});
+
+																},
+
+																error : function(
+																		xhr,
+																		status,
+																		error) {
+																	alert('error in getting User List');
+																}
+															});
+												}
+
+											});
+							function getOrders(id, caseid) {
+
+								$('#id').val(id);
+								$('#caseid').val(caseid);
+
+								$('#getOrders').attr("action", "viewSorders");
+								$('#getOrders').submit();
+								interval = setInterval(removeDiv, 500);
+							}
+							function getSummons(id) {
+								//	alert(id);
+								$('#sid').val(id);
+								$('#getSummons').attr("action", "viewSSummon");
+								$('#getSummons').submit();
+
+								interval = setInterval(removeDiv, 500);
+							}
+							function getNotices(id) {
+								//alert(id)
+								$('#nid').val(id);
+								$('#getNotices').attr("action", "viewSNotice");
+								$('#getNotices').submit();
+
+								interval = setInterval(removeDiv, 500);
+							}
+
+							function removeDiv() {
+								$('div').removeClass('loading');
+								clearInterval(interval);
+							}
+
+							function getSummon(id) {
+								//alert(id);
+								$('#Asid').val(id);
+								$('#getSummon')
+										.attr("action", "getViewSummons");
+								$('#getSummon').submit();
+							}
+
+							function getNotice(id) {
+								$('#Anid').val(id);
+								$('#getNotice').attr("action", "getNoticeView");
+								$('#getNotice').submit();
+							}
+
+							function getinspectorList(unitid) {
+								//alert($('#unitId').val());
+
+								var unitid = $('#unitId').val();
+
+								var token = $("input[name=_csrf]").val();
+								var header = 'X-CSRF-TOKEN';
+										$(document).ajaxSend(
+												function(e, xhr, options) {
+													xhr.setRequestHeader(
+															header, token);
+												}),
+										$
+												.ajax({
+													crossDomain : true,
+													type : "GET",
+													url : "getInspectorListReportByUnitId?unitId="
+															+ unitid,
+													contentType : "application/json; charset=utf-8",
+													/* data:{caseId:caseId
+													}, */
+													cache : false,
+													timeout : 600000,
+													success : function(data) {
+														//alert(data);
+														var html = '';
+														var len = data.length;
+														$("#inspList").empty();
+														$("#inspList")
+																.append(
+
+																"<option value='0'>Select</option>");
+														for (var i = 0; i < len; i++) {
+															var id = data[i]['userId'];
+															var name = data[i]['name'];
+
+															$("#inspList")
+																	.append(
+
+																			"<option value='"+id+"'>"
+																					+ name
+																					+ "</option>");
+
+														}
+													},
+													error : function(xhr,
+															status, error) {
+														alert('error in getting count');
+													}
+												});
+
+							}
+							$('input[type="radio"]')
+									.click(
+											function() {
+												var inputValue = $(this).attr(
+														"value");
+												if (inputValue == "S") {
+													var token = $(
+															"input[name=_csrf]")
+															.val();
+													var header = 'X-CSRF-TOKEN';
+															$(document)
+																	.ajaxSend(
+																			function(
+																					e,
+																					xhr,
+																					options) {
+																				xhr
+																						.setRequestHeader(
+																								header,
+																								token);
+																			}),
+															$
+																	.ajax({
+																		crossDomain : true,
+																		type : "GET",
+																		url : "getSummonList",
+																		//contentType : "application/json; charset=utf-8",
+																		cache : false,
+																		timeout : 600000,
+																		success : function(
+																				data) {
+																			debugger
+																			//alert(data.id);
+																			var html = '';
+																			var len = data.length;
+																			//alert(len);
+																			$(
+																					'#summonTableStatus')
+																					.empty();
+
+																			table = $(
+																					'#summonTable')
+																					.dataTable(
+																							{
+																								'bProcessing' : false,
+																								'bServerSide' : false,
+																								'bJQueryUI' : true,
+																								'destroy' : true,
+																								"autoWidth" : false,
+																								"buttons" : [
+																										'copy',
+																										'excel',
+																										'pdf',
+																										'print',
+																										'colvis' ],
+																								'language' : {
+																									'sLoadingRecords' : '<span style="width:100%;"><img src="resources/images/Spinner-1s-80px1.gif"></span>'
+																								},
+
+																								'data' : data,
+																								'columns' : [
+																										{
+																											'sDefaultContent' : '',
+																											"mData" : function(
+																													mData,
+																													type,
+																													row,
+																													meta) {
+																												return meta.row
+																														+ meta.settings._iDisplayStart
+																														+ 1;
+																											}
+																										},
+																										{
+																											'sDefaultContent' : '',
+																											'mData' : function(
+																													data,
+																													type,
+																													row) {
+
+																												return data.caseDetails.caseId
+																														+ '<br>'
+																														+ data.summonNo;
+																												//editIndividual(\'' + ${sumType.id} +'\',\''+${companylist.id}+'\',\''+${sumType.individualType.IndividualId}+'\');
+																												//return "<a href='#' onclick=showPersonAddDetails(" + data[0] +  '\',\''+data[3]+ ")>"+data[3]+"</a>";
+																											}
+																										},
+																										{
+																											'sDefaultContent' : '',
+																											'mData' : function(
+																													data,
+																													type,
+																													row) {
+																												return data.caseDetails.caseTitle
+																														+ '<br>'
+																														+ data.summonType.individualType.individualName;
+																											}
+																										},
+																										{
+																											'sDefaultContent' : '',
+																											'mData' : function(
+																													data,
+																													type,
+																													row) {
+
+																												if (data.summonType.individualType.individualId == 1
+																														|| data.summonType.individualType.individualId == 2) {
+																													var d = new Date(
+																															data.summonType.offJoinDate);
+																													var joiningDate = '';
+																													if (data.summonType.offJoinDate != null) {
+
+																														joiningDate = d
+																																.toLocaleDateString(
+																																		'en-GB',
+																																		data.summonType.offJoinDate);
+																													}
+																													return '<td class="text-wrap"><strong>Individual Type :</strong>'
+																															+ data.summonType.individualType.individualName
+																															+ ' <br> <strong> DIN :</strong>'
+																															+ data.summonType.registration_no
+																															+ '<br> <strong>Name: </strong>'
+																															+ data.summonType.name
+																															+ '<br> <strong>Date of joining :</strong>'
+																															+ joiningDate
+																															+ '<br><strong>Address:</strong>'
+																															+ data.summonType.address
+																															+ '<br><strong>Mobilne No:</strong>'
+																															+ data.summonType.mobileNo
+																															+ '<br><strong>Email Id:</strong>'
+																															+ data.summonType.email
+																															+ '</td>';
+																												}
+
+																												if (data.summonType.individualType.individualId == 3
+																														|| data.summonType.individualType.individualId == 4) {
+																													return '<td class="text-wrap"> <strong>IIdividual Type :</strong>'
+																															+ data.summonType.individualType.individualName
+																															+ ' <br> <strong>Name : </strong>'
+																															+ data.summonType.Name
+																															+ '<br><strong>Designation: </strong>'
+																															+ data.summonType.designation
+																															+ ' <br><strong>sex: </strong>'
+																															+ data.summonType.sex
+																															+ ' <br><strong>DOB: </strong>'
+																															+ '<strong>Nationality : </strong> '
+																															+ data.summonType.nationality
+																															+ '<br><strong>NationalId : </strong>'
+																															+ data.summonType.nationalId
+																															+ '<br><strong>Passport No. : </strong>'
+																															+ data.summonType.passport
+																															+ '<strong>Issue date : </strong>'
+																													'<br> <strong>Place of issues : </strong>'
+																															+ data.summonType.placeof_issued
+																															+ ' <br> <strong>Mobile No : </strong>'
+																															+ data.summonType.MobileNo
+																															+ ' <br> <strong>Email Id: </strong>'
+																															+ data.summonType.email
+																															+ '</td>'
+																												}
+
+																												if (data.summonType.individualType.individualId == 5
+																														|| data.summonType.individualType.individualId == 6) {
+																													if (data.summonType.isCin == 'Y') {
+																														return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																																+ data.summonType.individualType.individualName
+																																+ '<br> <strong> If CIN is available ? :</strong>'
+																																+ data.summonType.isCin
+																																+ '<br>'
+																																+ data.summonType.registration_no
+																																+ ' <br> <strong>Name : </strong>'
+																																+ data.summonType.name
+																																+ '<br><strong>Address: </strong>'
+																																+ data.summonType.address
+																																+ ' <br> <strong>Mobile No : </strong>'
+																																+ data.summonType.mobileNo
+																																+ ' <br> <strong>Email Id: </strong>'
+																																+ data.summonType.email
+																																+ ' <br> <strong>NameCompany: </strong>'
+																																+ data.summonType.nameCompany
+																																+ '</td>'
+																													} else {
+																														return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																																+ data.summonType.individualType.individualName
+																																+ '<br> <strong> If CIN is available ? :</strong>'
+																																+ data.summonType.isCin
+																																+ ' <br> <strong>Name : </strong>'
+																																+ data.summonType.name
+																																+ '<br><strong>Address: </strong>'
+																																+ data.summonType.address
+																																+ ' <br> <strong>Mobile No : </strong>'
+																																+ data.summonType.mobileNo
+																																+ ' <br> <strong>Email Id: </strong>'
+																																+ data.summonType.email
+																																+ ' <br> <strong>NameCompany: </strong>'
+																																+ data.summonType.nameCompany
+																																+ '</td>'
+																													}
+																												}
+
+																												if (data.summonType.individualType.individualId == 7) {
+																													if (data.summonType.isCin == 'Y') {
+																														return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																																+ data.summonType.individualType.individualName
+																																+ '<br> <strong> If CIN is available ? :</strong>'
+																																+ data.summonType.isCin
+																																+ '<br>'
+																																+ data.summonType.registration_no
+																																+ ' <br> <strong>Name : </strong>'
+																																+ data.summonType.name
+																																+ '<br><strong>Address: </strong>'
+																																+ data.summonType.address
+																																+ ' <br> <strong>Mobile No : </strong>'
+																																+ data.summonType.mobileNo
+																																+ ' <br> <strong>Email Id: </strong>'
+																																+ data.summonType.email
+																																+ ' <br> <strong>NameCompany: </strong>'
+																																+ data.summonType.nameCompany
+																																+ '</td>'
+																													} else {
+																														return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																																+ data.summonType.individualType.individualName
+																																+ '<br> <strong> If CIN is available ? :</strong>'
+																																+ data.summonType.isCin
+																																+ ' <br> <strong>Name : </strong>'
+																																+ data.summonType.name
+																																+ '<br><strong>Address: </strong>'
+																																+ data.summonType.address
+																																+ ' <br> <strong>Mobile No : </strong>'
+																																+ data.summonType.mobileNo
+																																+ ' <br> <strong>Email Id: </strong>'
+																																+ data.summonType.email
+																																+ ' <br> <strong>Relation With Company: </strong>'
+																																+ data.summonType.relationwithcompany
+																																+ '</td>'
+																													}
+																												}
+
+																											}
+																										},
+																										{
+																											'sDefaultContent' : '',
+																											'mData' : function(
+																													data,
+																													type,
+																													row) {
+																												return data.dateOfAppear;
+																											}
+																										},
+																										{
+																											'sDefaultContent' : '',
+																											'mData' : function(
+																													data,
+																													type,
+																													row) {
+																												if (data.aprrovalStage1 == false
+																														&& data.isRejected == false) {
+																													return '<td class="text-wrap">Pending for Approval from Addl.Director <a href="#" class="btn btn-success" onclick="getSummon(\''
+																															+ data.id
+																															+ '\');">View Summons</a></td>'
+																												} else if (data.aprrovalStage2 == true
+																														&& data.isSigned == 0) {
+																													return '<td>Pending for e-Sign <a href="#" class="btn btn-success" onclick="getSummon(\''
+																													+ data.id
+																													+ '\');">View Approved Summons</a></td>';
+																												} else if (data.aprrovalStage2 == true
+																														&& data.isSigned == 1) {
+																													var d = new Date(
+																															data.orderSignedDate);
+																													var newDate;
+																													if (data.orderSignedDate != null) {
+
+																														newDate = d
+																																.toLocaleDateString(
+																																		'en-GB',
+																																		data.orderSignedDate);
+																													}
+																													//alert(newDate);
+																													return '<td>Summon e-Sign '
+																															+ newDate
+																															+ '</input><span><a href="#"  class="btn btn-danger"   onclick="getSummons(\''
+																															+ data.id
+																															+ '\');">View</a></span></td>';
+																												} else if (data.isRejected == true
+																														&& data.aprrovalStage1 == false) {
+																													return '<td>Sent Back to Review BY Addl. <a href="#" class="btn btn-success" 	onclick="getSummon(\''
+																															+ data.id
+																															+ '\');" >View Summons</a></td>';
+																												}
+
+																											}
+																										}, ],
+																							});
+
+																		},
+
+																		error : function(
+																				xhr,
+																				status,
+																				error) {
+																			alert('error in getting User List');
+																		}
+																	});
+												}
+
+												if (inputValue == "N") {
+													var token = $(
+															"input[name=_csrf]")
+															.val();
+													var header = 'X-CSRF-TOKEN';
+															$(document)
+																	.ajaxSend(
+																			function(
+																					e,
+																					xhr,
+																					options) {
+																				xhr
+																						.setRequestHeader(
+																								header,
+																								token);
+																			}),
+															//alert("summon");
+															$
+																	.ajax({
+																		crossDomain : true,
+																		type : "GET",
+																		url : "getNoticeList",
+																		//contentType : "application/json; charset=utf-8",
+																		cache : false,
+																		timeout : 600000,
+																		success : function(
+																				data) {
+																			debugger
+																			//alert(data.id);
+																			var html = '';
+																			var len = data.length;
+																			//alert(len);
+																			$(
+																					'#summonTableStatus')
+																					.empty();
+
+																			table = $(
+																					'#summonTable')
+																					.dataTable(
+																							{
+																								'bProcessing' : false,
+																								'bServerSide' : false,
+																								'bJQueryUI' : true,
+																								'destroy' : true,
+																								"autoWidth" : false,
+																								"buttons" : [
+																										'copy',
+																										'excel',
+																										'pdf',
+																										'print',
+																										'colvis' ],
+																								'language' : {
+																									'sLoadingRecords' : '<span style="width:100%;"><img src="resources/images/Spinner-1s-80px1.gif"></span>'
+																								},
+
+																								'data' : data,
+																								'columns' : [
+																										{
+																											'sDefaultContent' : '',
+																											"mData" : function(
+																													mData,
+																													type,
+																													row,
+																													meta) {
+																												return meta.row
+																														+ meta.settings._iDisplayStart
+																														+ 1;
+																											}
+																										},
+																										{
+																											'sDefaultContent' : '',
+																											'mData' : function(
+																													data,
+																													type,
+																													row) {
+
+																												return data.caseDetails.caseId
+																														+ '<br>'
+																														+ data.summonNo;
+																												//editIndividual(\'' + ${sumType.id} +'\',\''+${companylist.id}+'\',\''+${sumType.individualType.IndividualId}+'\');
+																												//return "<a href='#' onclick=showPersonAddDetails(" + data[0] +  '\',\''+data[3]+ ")>"+data[3]+"</a>";
+																											}
+																										},
+																										{
+																											'sDefaultContent' : '',
+																											'mData' : function(
+																													data,
+																													type,
+																													row) {
+																												return data.caseDetails.caseTitle
+																														+ '<br>'
+																														+ data.summonType.individualType.individualName;
+																											}
+																										},
+																										{
+																											'sDefaultContent' : '',
+																											'mData' : function(
+																													data,
+																													type,
+																													row) {
+
+																												if (data.summonType.individualType.individualId == 1
+																														|| data.summonType.individualType.individualId == 2) {
+																													return '<td class="text-wrap"><strong>Individual Type :</strong>'
+																															+ data.summonType.individualType.individualName
+																															+ ' <br> <strong> DIN :</strong>'
+																															+ data.summonType.registration_no
+																															+ '<br> <strong>Name: </strong>'
+																															+ data.summonType.name
+																															+ '<br> <strong>Date of joining :</strong>'
+																															+ data.summonType.offJoinDate
+																															+ '<br><strong>Address:</strong>'
+																															+ data.summonType.address
+																															+ '<br><strong>Mobilne No:</strong>'
+																															+ data.summonType.mobileNo
+																															+ '<br><strong>Email Id:</strong>'
+																															+ data.summonType.email
+																															+ '</td>';
+																												}
+
+																												if (data.summonType.individualType.individualId == 3
+																														|| data.summonType.individualType.individualId == 4) {
+																													return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																															+ data.summonType.individualType.individualName
+																															+ ' <br> <strong>Name : </strong>'
+																															+ data.summonType.Name
+																															+ '<br><strong>Designation: </strong>'
+																															+ data.summonType.designation
+																															+ ' <br><strong>sex: </strong>'
+																															+ data.summonType.sex
+																															+ ' <br><strong>DOB: </strong>'
+																															+ '<strong>Nationality : </strong> '
+																															+ data.summonType.nationality
+																															+ '<br><strong>NationalId : </strong>'
+																															+ data.summonType.nationalId
+																															+ '<br><strong>Passport No. : </strong>'
+																															+ data.summonType.passport
+																															+ '<strong>Issue date : </strong>'
+																													'<br> <strong>Place of issues : </strong>'
+																															+ data.summonType.placeof_issued
+																															+ ' <br> <strong>Mobile No : </strong>'
+																															+ data.summonType.MobileNo
+																															+ ' <br> <strong>Email Id: </strong>'
+																															+ data.summonType.email
+																															+ '</td>'
+																												}
+
+																												if (data.summonType.individualType.individualId == 5
+																														|| data.summonType.individualType.individualId == 6) {
+																													if (data.summonType.isCin == 'Y') {
+																														return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																																+ data.summonType.individualType.individualName
+																																+ '<br> <strong> If CIN is available ? :</strong>'
+																																+ data.summonType.isCin
+																																+ '<br>'
+																																+ data.summonType.registration_no
+																																+ ' <br> <strong>Name : </strong>'
+																																+ data.summonType.name
+																																+ '<br><strong>Address: </strong>'
+																																+ data.summonType.address
+																																+ ' <br> <strong>Mobile No : </strong>'
+																																+ data.summonType.mobileNo
+																																+ ' <br> <strong>Email Id: </strong>'
+																																+ data.summonType.email
+																																+ ' <br> <strong>NameCompany: </strong>'
+																																+ data.summonType.nameCompany
+																																+ '</td>'
+																													} else {
+																														return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																																+ data.summonType.individualType.individualName
+																																+ '<br> <strong> If CIN is available ? :</strong>'
+																																+ data.summonType.isCin
+																																+ ' <br> <strong>Name : </strong>'
+																																+ data.summonType.name
+																																+ '<br><strong>Address: </strong>'
+																																+ data.summonType.address
+																																+ ' <br> <strong>Mobile No : </strong>'
+																																+ data.summonType.mobileNo
+																																+ ' <br> <strong>Email Id: </strong>'
+																																+ data.summonType.email
+																																+ ' <br> <strong>NameCompany: </strong>'
+																																+ data.summonType.nameCompany
+																																+ '</td>'
+																													}
+																												}
+
+																												if (data.summonType.individualType.individualId == 7) {
+																													if (data.summonType.isCin == 'Y') {
+																														return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																																+ data.summonType.individualType.individualName
+																																+ '<br> <strong> If CIN is available ? :</strong>'
+																																+ data.summonType.isCin
+																																+ '<br>'
+																																+ data.summonType.registration_no
+																																+ ' <br> <strong>Name : </strong>'
+																																+ data.summonType.name
+																																+ '<br><strong>Address: </strong>'
+																																+ data.summonType.address
+																																+ ' <br> <strong>Mobile No : </strong>'
+																																+ data.summonType.mobileNo
+																																+ ' <br> <strong>Email Id: </strong>'
+																																+ data.summonType.email
+																																+ ' <br> <strong>NameCompany: </strong>'
+																																+ data.summonType.nameCompany
+																																+ '</td>'
+																													} else {
+																														return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																																+ data.summonType.individualType.individualName
+																																+ '<br> <strong> If CIN is available ? :</strong>'
+																																+ data.summonType.isCin
+																																+ ' <br> <strong>Name : </strong>'
+																																+ data.summonType.name
+																																+ '<br><strong>Address: </strong>'
+																																+ data.summonType.address
+																																+ ' <br> <strong>Mobile No : </strong>'
+																																+ data.summonType.mobileNo
+																																+ ' <br> <strong>Email Id: </strong>'
+																																+ data.summonType.email
+																																+ ' <br> <strong>Relation With Company: </strong>'
+																																+ data.summonType.relationwithcompany
+																																+ '</td>'
+																													}
+																												}
+
+																											}
+																										},
+																										{
+																											'sDefaultContent' : '',
+																											'mData' : function(
+																													data,
+																													type,
+																													row) {
+																												return data.dateOfAppear;
+																											}
+																										},
+																										{
+																											'sDefaultContent' : '',
+																											'mData' : function(
+																													data,
+																													type,
+																													row) {
+																												if (data.aprrovalStage1 == false ) {
+																													return '<td class="text-wrap">Pending for Approval from Addl.Director <a href="#" class="btn btn-success" onclick="getSummon(\''
+																															+ data.id
+																															+ '\');">View Notice</a></td>'
+																												} else if (data.aprrovalStage2 == true
+																														&& data.isSigned == 0) {
+																													return '<td>Pending for e-Sign<a href="#" class="btn btn-success" onclick="getNotice(\''
+																													+ data.id
+																													+ '\');">View Aprroved Notice</a></td>';
+																												} else if (data.aprrovalStage2 == true
+																														&& data.isSigned == 1) {
+																													var d = new Date(
+																															data.orderSignedDate);
+																													var newDate;
+																													if (data.orderSignedDate != null) {
+
+																														newDate = d
+																																.toLocaleDateString(
+																																		'en-GB',
+																																		data.orderSignedDate);
+																													}
+																													//alert(newDate);
+																													return '<td>Notice e-Sign '
+																															+ newDate
+																															+ '</input><span><a href="#"  class="btn btn-danger"  onclick="getNotices(\''
+																															+ data.id
+																															+ '\');">View</a></span></td>';
+																												} else if (data.isRejected == true
+																														&& data.aprrovalStage1 == false) {
+																													return '<td>Sent Back to Review BY Addl. <a href="#" class="btn btn-success"    onclick="getNotice(\''
+																															+ data.id
+																															+ '\');" >View Notice</a></td>';
+																												}
+
+																											}
+																										}, ],
+																							});
+
+																		},
+
+																		error : function(
+																				xhr,
+																				status,
+																				error) {
+																			alert('error in getting User List');
+																		}
+																	});
+												}
+											});
+
+							function tableserach() {
+
+								var selectedValue = $('#type').val();
+								var startDate = $('#startdate').val();
+								var endDate = $('#enddate').val();
+								//alert(startDate);
+								//alert(endDate);
+
+								if (startDate != "" && endDate == "") {
+									$('#startDateError').hide();
+									$('#endDateError').show();
+									return null;
+									//alert("Date is requred")
+								}
+								if (startDate == "" && endDate != "") {
+									$('#endDateError').hide();
+									$('#startDateError').show();
+									return null;
+									//alert("Date is requred")
+								}
+
+								$('#endDateError').hide();
+								$('#startDateError').hide();
+								var radioValue = $(
+										'input[name="inlineRadioOptions"]:checked')
+										.val();
+								var unitId = $('#unitId').val();
+								var inspList = $('#inspList').val();
+								//alert(inspList);
+								var token = $("input[name=_csrf]").val();
+								var header = 'X-CSRF-TOKEN';
+								if (radioValue == 'S') {
+									debugger
+											$(document).ajaxSend(
+													function(e, xhr, options) {
+														xhr.setRequestHeader(
+																header, token);
+													}),
+											$
+													.ajax({
+														crossDomain : true,
+														type : "GET",
+														url : "getReportList?status="
+																+ selectedValue
+																+ "&radioValue="
+																+ radioValue
+																+ "&unitId="
+																+ unitId
+																+ "&inspList="
+																+ inspList
+																+ "&startDate="
+																+ startDate
+																+ "&endDate="
+																+ endDate,
+														//contentType : "application/json; charset=utf-8",
+														cache : false,
+														timeout : 600000,
+														success : function(data) {
+															if (data == '') {
+																debugger
+																var html = '';
+																var table = $(
+																		'#summonTable')
+																		.DataTable();
+																table.destroy();
+																$(
+																		'#summonTableStatus')
+																		.empty();
+																//	$('#summonTableStatus').empty();
+
+																$(
+																		'#summonTableStatus')
+																		.append(
+																				html);
+															} else {
+																debugger
+																//alert(data.id);
+																var html = '';
+																var len = data.length;
+																//alert(len);
+																$(
+																		'#summonTableStatus')
+																		.empty();
+
+																table = $(
+																		'#summonTable')
+																		.dataTable(
+																				{
+																					'bProcessing' : false,
+																					'bServerSide' : false,
+																					'bJQueryUI' : true,
+																					'destroy' : true,
+																					"autoWidth" : false,
+																					"buttons" : [
+																							'copy',
+																							'excel',
+																							'pdf',
+																							'print',
+																							'colvis' ],
+																					'language' : {
+																						'sLoadingRecords' : '<span style="width:100%;"><img src="resources/images/Spinner-1s-80px1.gif"></span>'
+																					},
+
+																					'data' : data,
+																					'columns' : [
+																							{
+																								'sDefaultContent' : '',
+																								"mData" : function(
+																										mData,
+																										type,
+																										row,
+																										meta) {
+																									return meta.row
+																											+ meta.settings._iDisplayStart
+																											+ 1;
+																								}
+																							},
+																							{
+																								'sDefaultContent' : '',
+																								'mData' : function(
+																										data,
+																										type,
+																										row) {
+
+																									return data.caseDetails.caseId
+																											+ '<br>'
+																											+ data.summonNo;
+																									//editIndividual(\'' + ${sumType.id} +'\',\''+${companylist.id}+'\',\''+${sumType.individualType.IndividualId}+'\');
+																									//return "<a href='#' onclick=showPersonAddDetails(" + data[0] +  '\',\''+data[3]+ ")>"+data[3]+"</a>";
+																								}
+																							},
+																							{
+																								'sDefaultContent' : '',
+																								'mData' : function(
+																										data,
+																										type,
+																										row) {
+																									return data.caseDetails.caseTitle
+																											+ '<br>'
+																											+ data.summonType.individualType.individualName;
+																								}
+																							},
+																							{
+																								'sDefaultContent' : '',
+																								'mData' : function(
+																										data,
+																										type,
+																										row) {
+
+																									if (data.summonType.individualType.individualId == 1
+																											|| data.summonType.individualType.individualId == 2) {
+																										var d = new Date(
+																												data.summonType.offJoinDate);
+																										var joiningDate = '';
+																										if (data.summonType.offJoinDate != null) {
+
+																											joiningDate = d
+																													.toLocaleDateString(
+																															'en-GB',
+																															data.summonType.offJoinDate);
+																										}
+																										return '<td class="text-wrap"><strong>Individual Type :</strong>'
+																												+ data.summonType.individualType.individualName
+																												+ ' <br> <strong> DIN :</strong>'
+																												+ data.summonType.registration_no
+																												+ '<br> <strong>Name: </strong>'
+																												+ data.summonType.name
+																												+ '<br> <strong>Date of joining :</strong>'
+																												+ joiningDate
+																												+ '<br><strong>Address:</strong>'
+																												+ data.summonType.address
+																												+ '<br><strong>Mobilne No:</strong>'
+																												+ data.summonType.mobileNo
+																												+ '<br><strong>Email Id:</strong>'
+																												+ data.summonType.email
+																												+ '</td>';
+																									}
+
+																									if (data.summonType.individualType.individualId == 3
+																											|| data.summonType.individualType.individualId == 4) {
+																										return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																												+ data.summonType.individualType.individualName
+																												+ ' <br> <strong>Name : </strong>'
+																												+ data.summonType.Name
+																												+ '<br><strong>Designation: </strong>'
+																												+ data.summonType.designation
+																												+ ' <br><strong>sex: </strong>'
+																												+ data.summonType.sex
+																												+ ' <br><strong>DOB: </strong>'
+																												+ '<strong>Nationality : </strong> '
+																												+ data.summonType.nationality
+																												+ '<br><strong>NationalId : </strong>'
+																												+ data.summonType.nationalId
+																												+ '<br><strong>Passport No. : </strong>'
+																												+ data.summonType.passport
+																												+ '<strong>Issue date : </strong>'
+																										'<br> <strong>Place of issues : </strong>'
+																												+ data.summonType.placeof_issued
+																												+ ' <br> <strong>Mobile No : </strong>'
+																												+ data.summonType.MobileNo
+																												+ ' <br> <strong>Email Id: </strong>'
+																												+ data.summonType.email
+																												+ '</td>'
+																									}
+
+																									if (data.summonType.individualType.individualId == 5
+																											|| data.summonType.individualType.individualId == 6) {
+																										if (data.summonType.isCin == 'Y') {
+																											return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																													+ data.summonType.individualType.individualName
+																													+ '<br> <strong> If CIN is available ? :</strong>'
+																													+ data.summonType.isCin
+																													+ '<br>'
+																													+ data.summonType.registration_no
+																													+ ' <br> <strong>Name : </strong>'
+																													+ data.summonType.name
+																													+ '<br><strong>Address: </strong>'
+																													+ data.summonType.address
+																													+ ' <br> <strong>Mobile No : </strong>'
+																													+ data.summonType.mobileNo
+																													+ ' <br> <strong>Email Id: </strong>'
+																													+ data.summonType.email
+																													+ ' <br> <strong>NameCompany: </strong>'
+																													+ data.summonType.nameCompany
+																													+ '</td>'
+																										} else {
+																											return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																													+ data.summonType.individualType.individualName
+																													+ '<br> <strong> If CIN is available ? :</strong>'
+																													+ data.summonType.isCin
+																													+ ' <br> <strong>Name : </strong>'
+																													+ data.summonType.name
+																													+ '<br><strong>Address: </strong>'
+																													+ data.summonType.address
+																													+ ' <br> <strong>Mobile No : </strong>'
+																													+ data.summonType.mobileNo
+																													+ ' <br> <strong>Email Id: </strong>'
+																													+ data.summonType.email
+																													+ ' <br> <strong>NameCompany: </strong>'
+																													+ data.summonType.nameCompany
+																													+ '</td>'
+																										}
+																									}
+
+																									if (data.summonType.individualType.individualId == 7) {
+																										if (data.summonType.isCin == 'Y') {
+																											return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																													+ data.summonType.individualType.individualName
+																													+ '<br> <strong> If CIN is available ? :</strong>'
+																													+ data.summonType.isCin
+																													+ '<br>'
+																													+ data.summonType.registration_no
+																													+ ' <br> <strong>Name : </strong>'
+																													+ data.summonType.name
+																													+ '<br><strong>Address: </strong>'
+																													+ data.summonType.address
+																													+ ' <br> <strong>Mobile No : </strong>'
+																													+ data.summonType.mobileNo
+																													+ ' <br> <strong>Email Id: </strong>'
+																													+ data.summonType.email
+																													+ ' <br> <strong>NameCompany: </strong>'
+																													+ data.summonType.nameCompany
+																													+ '</td>'
+																										} else {
+																											return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																													+ data.summonType.individualType.individualName
+																													+ '<br> <strong> If CIN is available ? :</strong>'
+																													+ data.summonType.isCin
+																													+ ' <br> <strong>Name : </strong>'
+																													+ data.summonType.name
+																													+ '<br><strong>Address: </strong>'
+																													+ data.summonType.address
+																													+ ' <br> <strong>Mobile No : </strong>'
+																													+ data.summonType.mobileNo
+																													+ ' <br> <strong>Email Id: </strong>'
+																													+ data.summonType.email
+																													+ ' <br> <strong>Relation With Company: </strong>'
+																													+ data.summonType.relationwithcompany
+																													+ '</td>'
+																										}
+																									}
+
+																								}
+																							},
+																							{
+																								'sDefaultContent' : '',
+																								'mData' : function(
+																										data,
+																										type,
+																										row) {
+																									return data.dateOfAppear;
+																								}
+																							},
+																							{
+																								'sDefaultContent' : '',
+																								'mData' : function(
+																										data,
+																										type,
+																										row) {
+																									if (data.aprrovalStage1 == false
+																											&& data.isRejected == false) {
+																										return '<td class="text-wrap">Pending for Approval from Addl.Director <a href="#" class="btn btn-success" onclick="getSummon(\''
+																												+ data.id
+																												+ '\');">View Summons</a></td>'
+																									} else if (data.aprrovalStage2 == true
+																											&& data.isSigned == 0) {
+																										return '<td>Pending for e-Sign <a href="#" class="btn btn-success" onclick="getSummon(\''
+																										+ data.id
+																										+ '\');">View Approved Summons</a></td>';
+																									} else if (data.aprrovalStage2 == true
+																											&& data.isSigned == 1) {
+																										var d = new Date(
+																												data.orderSignedDate);
+																										var newDate;
+																										if (data.orderSignedDate != null) {
+
+																											newDate = d
+																													.toLocaleDateString(
+																															'en-GB',
+																															data.orderSignedDate);
+																										}
+																										//alert(newDate);
+																										return '<td>Summon e-Sign '
+																												+ newDate
+																												+ '</input><span><a href="#"  class="btn btn-danger" onclick="getSummons(\''
+																												+ data.id
+																												+ '\');">View</a></span></td>';
+																									} else if (data.isRejected == true
+																											&& data.aprrovalStage1 == false) {
+																										return '<td>Sent Back to Review BY Addl. <a href="#" class="btn btn-success" onclick="getSummon(\''
+																												+ data.id
+																												+ '\');" >View Summons</a></td>';
+																									}
+
+																								}
+																							},
+
+																					],
+																				});
+															}
+														},
+
+														error : function(xhr,
+																status, error) {
+															$(
+																	'#summonTableStatus')
+																	.empty();
+															alert('error in getting User List');
+														}
+													});
+								} else {
+											$(document).ajaxSend(
+													function(e, xhr, options) {
+														xhr.setRequestHeader(
+																header, token);
+													}),
+											$
+													.ajax({
+														crossDomain : true,
+														type : "GET",
+														url : "getReportNoticeList?status="
+																+ selectedValue
+																+ "&radioValue="
+																+ radioValue
+																+ "&unitId="
+																+ unitId
+																+ "&inspList="
+																+ inspList
+																+ "&startDate="
+																+ startDate
+																+ "&endDate="
+																+ endDate,
+														//contentType : "application/json; charset=utf-8",
+														cache : false,
+														timeout : 600000,
+														success : function(data) {
+															if (data == '') {
+																debugger
+																var html = '';
+																var table = $(
+																		'#summonTable')
+																		.DataTable();
+																table.destroy();
+																$(
+																		'#summonTableStatus')
+																		.empty();
+																//	$('#summonTableStatus').empty();
+
+																$(
+																		'#summonTableStatus')
+																		.append(
+																				html);
+															} else {
+																debugger
+																//alert(data.id);
+																var html = '';
+																var len = data.length;
+																//alert(len);
+																$(
+																		'#summonTableStatus')
+																		.empty();
+
+																table = $(
+																		'#summonTable')
+																		.dataTable(
+																				{
+																					'bProcessing' : false,
+																					'bServerSide' : false,
+																					'bJQueryUI' : true,
+																					'destroy' : true,
+																					"autoWidth" : false,
+																					"buttons" : [
+																							'copy',
+																							'excel',
+																							'pdf',
+																							'print',
+																							'colvis' ],
+																					'language' : {
+																						'sLoadingRecords' : '<span style="width:100%;"><img src="resources/images/Spinner-1s-80px1.gif"></span>'
+																					},
+
+																					'data' : data,
+																					'columns' : [
+																							{
+																								'sDefaultContent' : '',
+																								"mData" : function(
+																										mData,
+																										type,
+																										row,
+																										meta) {
+																									return meta.row
+																											+ meta.settings._iDisplayStart
+																											+ 1;
+																								}
+																							},
+																							{
+																								'sDefaultContent' : '',
+																								'mData' : function(
+																										data,
+																										type,
+																										row) {
+
+																									return data.caseDetails.caseId
+																											+ '<br>'
+																											+ data.summonNo;
+																									//editIndividual(\'' + ${sumType.id} +'\',\''+${companylist.id}+'\',\''+${sumType.individualType.IndividualId}+'\');
+																									//return "<a href='#' onclick=showPersonAddDetails(" + data[0] +  '\',\''+data[3]+ ")>"+data[3]+"</a>";
+																								}
+																							},
+																							{
+																								'sDefaultContent' : '',
+																								'mData' : function(
+																										data,
+																										type,
+																										row) {
+																									return data.caseDetails.caseTitle
+																											+ '<br>'
+																											+ data.summonType.individualType.individualName;
+																								}
+																							},
+																							{
+																								'sDefaultContent' : '',
+																								'mData' : function(
+																										data,
+																										type,
+																										row) {
+
+																									if (data.summonType.individualType.individualId == 1
+																											|| data.summonType.individualType.individualId == 2) {
+
+																										var d = new Date(
+																												data.summonType.offJoinDate);
+																										var joiningDate = '';
+																										if (data.summonType.offJoinDate != null) {
+
+																											joiningDate = d
+																													.toLocaleDateString(
+																															'en-GB',
+																															data.summonType.offJoinDate);
+																										}
+
+																										return '<td class="text-wrap"><strong>Individual Type :</strong>'
+																												+ data.summonType.individualType.individualName
+																												+ ' <br> <strong> DIN :</strong>'
+																												+ data.summonType.registration_no
+																												+ '<br> <strong>Name: </strong>'
+																												+ data.summonType.name
+																												+ '<br> <strong>Date of joining :</strong>'
+																												+ data.summonType.offJoinDate
+																												+ '<br><strong>Address:</strong>'
+																												+ data.summonType.address
+																												+ '<br><strong>Mobilne No:</strong>'
+																												+ data.summonType.mobileNo
+																												+ '<br><strong>Email Id:</strong>'
+																												+ data.summonType.email
+																												+ '</td>';
+																									}
+
+																									if (data.summonType.individualType.individualId == 3
+																											|| data.summonType.individualType.individualId == 4) {
+																										return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																												+ data.summonType.individualType.individualName
+																												+ ' <br> <strong>Name : </strong>'
+																												+ data.summonType.Name
+																												+ '<br><strong>Designation: </strong>'
+																												+ data.summonType.designation
+																												+ ' <br><strong>sex: </strong>'
+																												+ data.summonType.sex
+																												+ ' <br><strong>DOB: </strong>'
+																												+ '<strong>Nationality : </strong> '
+																												+ data.summonType.nationality
+																												+ '<br><strong>NationalId : </strong>'
+																												+ data.summonType.nationalId
+																												+ '<br><strong>Passport No. : </strong>'
+																												+ data.summonType.passport
+																												+ '<strong>Issue date : </strong>'
+																										'<br> <strong>Place of issues : </strong>'
+																												+ data.summonType.placeof_issued
+																												+ ' <br> <strong>Mobile No : </strong>'
+																												+ data.summonType.MobileNo
+																												+ ' <br> <strong>Email Id: </strong>'
+																												+ data.summonType.email
+																												+ '</td>'
+																									}
+
+																									if (data.summonType.individualType.individualId == 5
+																											|| data.summonType.individualType.individualId == 6) {
+																										if (data.summonType.isCin == 'Y') {
+																											return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																													+ data.summonType.individualType.individualName
+																													+ '<br> <strong> If CIN is available ? :</strong>'
+																													+ data.summonType.isCin
+																													+ '<br>'
+																													+ data.summonType.registration_no
+																													+ ' <br> <strong>Name : </strong>'
+																													+ data.summonType.name
+																													+ '<br><strong>Address: </strong>'
+																													+ data.summonType.address
+																													+ ' <br> <strong>Mobile No : </strong>'
+																													+ data.summonType.mobileNo
+																													+ ' <br> <strong>Email Id: </strong>'
+																													+ data.summonType.email
+																													+ ' <br> <strong>NameCompany: </strong>'
+																													+ data.summonType.nameCompany
+																													+ '</td>'
+																										} else {
+																											return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																													+ data.summonType.individualType.individualName
+																													+ '<br> <strong> If CIN is available ? :</strong>'
+																													+ data.summonType.isCin
+																													+ ' <br> <strong>Name : </strong>'
+																													+ data.summonType.name
+																													+ '<br><strong>Address: </strong>'
+																													+ data.summonType.address
+																													+ ' <br> <strong>Mobile No : </strong>'
+																													+ data.summonType.mobileNo
+																													+ ' <br> <strong>Email Id: </strong>'
+																													+ data.summonType.email
+																													+ ' <br> <strong>NameCompany: </strong>'
+																													+ data.summonType.nameCompany
+																													+ '</td>'
+																										}
+																									}
+
+																									if (data.summonType.individualType.individualId == 7) {
+																										if (data.summonType.isCin == 'Y') {
+																											return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																													+ data.summonType.individualType.individualName
+																													+ '<br> <strong> If CIN is available ? :</strong>'
+																													+ data.summonType.isCin
+																													+ '<br>'
+																													+ data.summonType.registration_no
+																													+ ' <br> <strong>Name : </strong>'
+																													+ data.summonType.name
+																													+ '<br><strong>Address: </strong>'
+																													+ data.summonType.address
+																													+ ' <br> <strong>Mobile No : </strong>'
+																													+ data.summonType.mobileNo
+																													+ ' <br> <strong>Email Id: </strong>'
+																													+ data.summonType.email
+																													+ ' <br> <strong>NameCompany: </strong>'
+																													+ data.summonType.nameCompany
+																													+ '</td>'
+																										} else {
+																											return '<td class="text-wrap"> <strong>Individual Type :</strong>'
+																													+ data.summonType.individualType.individualName
+																													+ '<br> <strong> If CIN is available ? :</strong>'
+																													+ data.summonType.isCin
+																													+ ' <br> <strong>Name : </strong>'
+																													+ data.summonType.name
+																													+ '<br><strong>Address: </strong>'
+																													+ data.summonType.address
+																													+ ' <br> <strong>Mobile No : </strong>'
+																													+ data.summonType.mobileNo
+																													+ ' <br> <strong>Email Id: </strong>'
+																													+ data.summonType.email
+																													+ ' <br> <strong>Relation With Company: </strong>'
+																													+ data.summonType.relationwithcompany
+																													+ '</td>'
+																										}
+																									}
+
+																								}
+																							},
+																							{
+																								'sDefaultContent' : '',
+																								'mData' : function(
+																										data,
+																										type,
+																										row) {
+																									return data.dateOfAppear;
+																								}
+																							},
+
+																							{
+																								'sDefaultContent' : '',
+																								'mData' : function(
+																										data,
+																										type,
+																										row) {
+																									if (data.aprrovalStage1 == false
+																											&& data.isRejected == false) {
+																										return '<td class="text-wrap">Pending for Approval from Addl.Director <a href="#" class="btn btn-success" onclick="getNotice(\''
+																												+ data.id
+																												+ '\');">View Notice</a></td>'
+																									} else if (data.aprrovalStage2 == true
+																											&& data.isSigned == 0) {
+																										return '<td>Pending for e-Sign<a href="#" class="btn btn-success" onclick="getNotice(\''
+																										+ data.id
+																										+ '\');">View Aprroved Notice</a></td>';
+																									} else if (data.aprrovalStage2 == true
+																											&& data.isSigned == 1) {
+																										var d = new Date(
+																												data.orderSignedDate);
+																										var newDate;
+																										if (data.orderSignedDate != null) {
+
+																											newDate = d
+																													.toLocaleDateString(
+																															'en-GB',
+																															data.orderSignedDate);
+																										}
+																										//alert(newDate);
+																										return '<td>Summon e-Sign '
+																												+ newDate
+																												+ '</input><span><a href="#"  class="btn btn-danger" onclick="getNotices(\''
+																												+ data.id
+																												+ '\');">View</a></span></td>';
+																									} else if (data.isRejected == true
+																											&& data.aprrovalStage1 == false) {
+																										return '<td>Sent Back to Review BY Addl. <a href="#" class="btn btn-success"      onclick="getNotice(\''
+																												+ data.id
+																												+ '\');" >View Notice</a></td>';
+																									}
+
+																								}
+																							},
+
+																					],
+																				});
+															}
+														},
+
+														error : function(xhr,
+																status, error) {
+															alert('error in getting User List');
+														}
+													});
+								}
+
+							}
+
+							var fromDate = '';
+							var toDate = '';
+							$('#type').on('change', function() {
+								//alert(this.value)
+								$('#fromDate').text("Created From  Date"); //Change the text before changing the value
+								$('#toDate').text("Created To Date");
+								switch (this.value) {
+								case '1':
+									fromDate = 'Created  From Date';
+									toDate = 'Created To Date';
+									break;
+								case '2':
+
+									$('#fromDate').text('Approved  From Date');
+									$('#toDate').text('Approved  To Date');
+									/* fromDate = 'Approved  From Date';
+									toDate = 'Approved To Date' */
+									break;
+								case '3':
+									//alert ("inside esigned");
+									$('#fromDate').text('Esigned  From Date');
+									$('#toDate').text('Esigned To Date');
+
+									break;
+								case '4':
+									$('#fromDate').text("Created From  Date");
+									$('#toDate').text("Created To Date");
+									break;
+								}
+							}).trigger('change');
+						</script>
+						<script type="text/javascript" src="js/customValidation.js"></script>
+					</div>
+</body>
+</html>

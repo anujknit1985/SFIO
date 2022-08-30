@@ -1,0 +1,309 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Summon/Notice as on</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<script type="text/javascript">
+		function getCompletCase(id)
+	  	{
+	  		$('#id').val(id);
+	        $('#getCompleteCase').attr("action", "getApprovedOrder");
+	        $('#getCompleteCase').submit();  		
+	  	}
+		</script>
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Summon Report</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> Summons Status Report Generated on <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span>
+						</h4>
+
+						<!-- <form th:action="@{/createNotice}" method="post"
+							class="needs-validation" th:object="${caseDetails}"> -->
+							
+							<span th:text="${errorEsign}" class="text-danger text-lowercase"></span>
+							
+							<div class="form-group row">
+								<table class="table table-respnsive" id="approvedOrderTable">
+									<thead class="bg-info text-white">
+										<tr class="text-wrap">
+											<th>S.No.</th>
+											<th>Unit Name</th>
+											<th>Total summons
+										<br>
+										SUM(S1+S2+S3+S4+S6)
+										</th>
+										<th><!-- Summons Pending for approval by Unit Head  -->
+										 <span>S1</span></th>
+										 <th><!-- Summons Pending for approval  by Director -->
+										 <span>S2</span></th>
+										<th><!--  Summons Approved by Unit Head -->
+										<span>S3</span></th>
+										 <th>Total Signed <br> Summons <br> SUM(S4+S5+S6)</th>
+										<th><!-- Signed Summons-->										 
+										<span>S4</span>
+										</th>
+										<th> <!-- Offline Summons Signed with Ack. By IO  -->
+										 <span>S5</span>
+										</th>
+										<th><!-- Signed Physically sent Summons -->
+										 <span>S6</span>
+										</th>
+ 
+										<th>  <!-- Summons Created  and  approved before 1st Sept 2021 and physically signed doc. not  uploaded -->
+										 <span>S7</span>
+										</th>
+										<th><!-- Physically sent Summons <br>uploaded by IO  <br>& sent for approval -->
+										 <span>S8</span>
+										</th>
+										
+										</tr>
+									</thead>
+									<tfoot class="table table-respnsive " align="center">
+		<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+	</tfoot>
+									 <tbody class="text-center">
+									<!--  <tr th:each="p,stats: ${UnitList}"> -->
+									<tr th:each="s,rowStat : ${stdList}" class="text-center" >
+									<td class="text-wrap" ><span th:text="${rowStat.index+1}" ></span></td>
+									<td><span th:text="${s.unitName}" style="align-content: center;"></span></td>
+									<td th:text="${s.allSummonUnit}" class="bg-warning" ><span th:text="${s.allSummonUnit}"></span></td>
+								
+										<td th:text="${s.PendingSummonUnit1}"><span  class="text-center" th:text="${s.PendingSummonUnit1}"></span></td>
+										<td th:text="${s.summonSensitive}"><span class="text-center" th:text="${s.summonSensitive}"></span></td>
+										<td th:text="${s.approvedSummonUnit1}"><span  class="text-center" th:text="${s.approvedSummonUnit1}"></span></td>
+										<td th:text="${s.totalSigned}" class="bg-success"  ><span class="text-center" th:text="${s.totalSigned}"></span></td>
+										<td th:text="${s.EsignedSummonUnit1}"><span class="text-center" th:text="${s.EsignedSummonUnit1}"></span></td>
+										<td th:text="${s.offlineSummon}"><span class="text-center" th:text="${s.offlineSummon}"></span></td>
+										<td th:text="${s.physummon}"><span class="text-center" th:text="${s.physummon}"></span></td>
+										<td th:text="${s.pendingPhySummon}"><span class="text-center" th:text="${s.pendingPhySummon}"></span></td>
+										<td th:text="${s.phySummonYetApprove}"><span class="text-center" th:text="${s.phySummonYetApprove}"></span></td>
+								
+									 </tr> 
+									</tbody>
+
+								</table>
+								
+								<div >
+							<span style="font: bold;">S1 :Summons Pending for approval by Unit Head </span><br>
+							<span style="font: bold;">S2 :Summons Pending for approval by Director</span><br>
+							<span style="font: bold;">S3 :Summons Approved by Unit Head </span><br>
+							<span style="font: bold;">S4 :Signed Summons</span><br>
+							<span style="font: bold;">S5 :	Offline Summons Signed with Ack. By IO</span><br>
+							<span style="font: bold; size: ">S6 :Signed Physically sent Summons</span><br>
+							<span style="font: bold;">S7 :	Summons Created and approved before 1st Sept 2021 and physically signed doc. not  uploaded</span><br>
+							<span style="font: bold; size: ">S8 :Physically sent Summons uploaded by IO & sent for approval</span><br>
+							</div>
+								
+							</div>
+					
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<form method="post" id="getCompleteCase" target="_self">
+		<input id="id" name="id" type="hidden" />
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		</form>
+		
+			<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.buttons.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/jszip.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/pdfmake.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/vfs_fonts.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.html5.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.print.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.colVis.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				 var table = $('#approvedOrderTable').DataTable( {
+//			 	        lengthChange: false,
+                              "scrollX": true,
+                              "bSort" : false,
+                dom: 'Bfrtip',
+                "pageLength": 50,
+				buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ],
+				 
+				 "footerCallback": function ( row, data, start, end, display ) {
+			            var api = this.api(), data;
+			           
+			          
+			// alert(data);
+			            // converting to interger to find total
+			            var intVal = function ( i ) {
+			                return typeof i === 'string' ?
+			                    i.replace(/[\$,]/g, '')*1 :
+			                    typeof i === 'number' ?
+			                        i : 0;
+			            };
+			 
+			            // computing column Total of the complete result 
+			            
+			              var tn = api
+			                .column( 2 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+				
+			            var monTotal = api
+			                .column( 3 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+						
+							
+				    var tueTotal = api
+			                .column( 4 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+							
+			            var wedTotal = api
+			                .column( 5 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+							
+				     var thuTotal = api
+			                .column( 6 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+							
+				     var friTotal = api
+			                .column( 7 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+				     
+				     var satTotal = api
+		                .column( 8 )
+		                .data()
+		                .reduce( function (a, b) {
+		                    return intVal(a) + intVal(b);
+		                }, 0 );
+					 
+				     var sunTotal = api
+		                .column( 9 )
+		                .data()
+		                .reduce( function (a, b) {
+		                    return intVal(a) + intVal(b);
+		                }, 0 );
+				     var janTotal = api
+		                .column( 10 )
+		                .data()
+		                .reduce( function (a, b) {
+		                    return intVal(a) + intVal(b);
+		                }, 0 );
+				     var febTotal = api
+		                .column( 11 )
+		                .data()
+		                .reduce( function (a, b) {
+		                    return intVal(a) + intVal(b);
+		                }, 0 );		
+			            // Update footer by showing the total with the reference of the column index 
+				    $( api.column( 0 ).footer() ).html("Total");
+				   	    $( api.column( 2 ).footer() ).html(tn);
+			            $( api.column( 3 ).footer() ).html(monTotal);
+			            $( api.column( 4 ).footer() ).html(tueTotal);
+			            $( api.column( 5 ).footer() ).html(wedTotal);
+			            $( api.column( 6 ).footer() ).html(thuTotal);
+			            $( api.column( 7 ).footer() ).html(friTotal);
+			            $( api.column( 8 ).footer() ).html(satTotal);
+			            $( api.column( 9 ).footer() ).html(sunTotal);
+			            $( api.column( 10 ).footer() ).html(janTotal);
+			            $( api.column( 11 ).footer() ).html(febTotal);
+			        },
+				
+							  buttons: {
+							    buttons: [{
+							      extend: 'excel',
+							      text: '<i class="fa fa-print"></i> Excel',
+							      title: $('h4').text(),
+							      exportOptions: {
+							        columns: ':not(.no-print)'
+							      },
+							      footer: true,
+							      autoPrint: false
+							    },
+							    {
+								      extend: 'print',
+								      
+								      text: '<i class="fa fa-print"></i> Print',
+								      title: $('h4').text(),
+								      orientation: 'landscape',
+						                pageSize: 'LEGAL',
+						                messageBottom: '<div><span>S1 :Summons Pending for approval by Unit Head </span><br> <span>S2 :Summons Pending for approval by Director </span><br>'+
+		                                '<span>S3 :Summons Approved by Unit Head </span><br> '+
+		                                '<span>S4 :Signed Summons</span><br>'+
+		                                '<span>S5 :	Offline Summons Signed with Ack. By IO</span><br>'+
+		                                '<span>S6 :Signed Physically sent Summons</span><br>  '+
+		                                '<span>S7 :	Summons Created and approved before 1st Sept 2021 and physically signed doc. not  uploaded</span>'+
+		                                ' <br> <span>S8 :Physically sent Summons uploaded by IO & sent for approval</span></div>',
+								      exportOptions: {
+								        columns: ':not(.no-print)'
+								      },
+								      footer: true,
+								      autoPrint: false
+								    },{
+							      extend: 'pdf',
+							      text: '<i class="fa fa-file-pdf-o"></i> PDF',
+							      title: $('h4').text(),
+							      messageBottom: 'S1 :Summons Pending for approval by Unit Head \n <span>S2 :Summons Pending for approval by Director'+
+	                                '\n S3 :Summons Approved by Unit Head  '+
+	                                '\n S4 :Signed Summons'+
+	                                '\n S5 :	Offline Summons Signed with Ack. By IO'+
+	                                '\n S6 :Signed Physically sent Summons '+
+	                                '\n S7 :	Summons Created and approved before 1st Sept 2021 and physically signed doc. not  uploaded'+
+	                                '\n S8 :Physically sent Summons uploaded by IO & sent for approval',
+							      exportOptions: {
+							        columns: ':not(.no-print)'
+							      },
+							      footer: true
+							    }],
+							    
+							    
+							    dom: {
+							      container: {
+							        className: 'dt-buttons'
+							      },
+							      button: {
+							        className: 'btn btn-default'
+							      }
+							    }
+							  }
+							
+				      } );
+			});
+		</script>
+
+	</div>
+
+</body>
+</html>

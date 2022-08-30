@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+
+</head>
+<body>
+
+	<!--Start sidebar-wrapper-->
+	<div id="sidebar-wrapper" data-simplebar=""
+		data-simplebar-auto-hide="true" th:fragment="sidebar"
+		sec:authorize="isAuthenticated()">
+		<div class="brand-logo">
+			<span sec:authorize="hasRole('ROLE_ADMIN')"><a href="home"
+				class="logo-text" style="font-size: 29px; font-weight: bolder;">SNMS</a></span>
+
+			<span sec:authorize="hasRole('ROLE_DIRECTOR')"><a
+				href="dirHome" class="logo-text"
+				style="font-size: 29px; font-weight: bolder;">SNMS</a></span> <span
+				sec:authorize="hasRole('ROLE_ADMIN_SECTION')"><a
+				href="adsHome" class="logo-text"
+				style="font-size: 29px; font-weight: bolder;">SNMS</a></span> <span
+				sec:authorize="hasRole('ROLE_ADMIN_OFFICER')"><a
+				href="adoHome" class="logo-text"
+				style="font-size: 29px; font-weight: bolder;">SNMS</a></span> <span
+				sec:authorize="hasRole('ROLE_USER')"><a href="userHome"
+				class="logo-text" style="font-size: 29px; font-weight: bolder;">SNMS</a></span>
+		</div>
+		<div class="user-details">
+			<div class="media align-items-center user-pointer collapsed"
+				data-toggle="collapse" data-target="#user-dropdown">
+				<div class="avatar">
+					<img class="mr-3 side-user-img" src="images/avatars/profilepic.jpg"
+						alt="user avatar">
+				</div>
+				<div class="media-body">
+					<h6 class="side-user-name">
+						<span sec:authentication="name"></span>
+
+					</h6>
+				</div>
+			</div>
+			<div id="user-dropdown" class="collapse">
+				<ul class="user-setting-menu">
+					<!-- <li><a href="#"><i class="icon-user"></i> My
+							Profile</a></li> -->
+					<li><a href="logout"><i class="icon-power"></i> Logout</a></li>
+				</ul>
+			</div>
+		</div>
+		<th:block th:if="${session.menu == true}">
+
+			<ul class="sidebar-menu">
+
+
+
+				<li class="sidebar-header">MAIN NAVIGATION</li>
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a href="home"
+					class="waves-effect"> <i class="zmdi zmdi-view-dashboard"></i>
+						<span>DASHBOARD</span><i class="fa fa-angle-left pull-right"></i>
+				</a></li>
+
+
+				<li sec:authorize="hasRole('ROLE_DIRECTOR')"><a href="dirHome"
+					class="waves-effect"> <i class="zmdi zmdi-view-dashboard"></i>
+						<span>DASHBOARD</span><i class="fa fa-angle-left pull-right"></i>
+				</a></li>
+
+
+				<li sec:authorize="hasRole('ROLE_ADMIN_SECTION')"><a
+					href="adsHome" class="waves-effect"> <i
+						class="zmdi zmdi-view-dashboard"></i> <span>DASHBOARD</span><i
+						class="fa fa-angle-left pull-right"></i>
+				</a></li>
+
+				<li sec:authorize="hasRole('ROLE_ADMIN_OFFICER')"><a
+					href="adoHome" class="waves-effect"> <i
+						class="zmdi zmdi-view-dashboard"></i> <span>DASHBOARD</span><i
+						class="fa fa-angle-left pull-right"></i>
+				</a></li>
+
+				<li sec:authorize="hasRole('ROLE_USER')"><a href="userHome"
+					class="waves-effect"> <i class="zmdi zmdi-view-dashboard"></i>
+						<span>DASHBOARD</span><i class="fa fa-angle-left pull-right"></i>
+				</a></li>
+
+				<li sec:authorize="hasRole('ROLE_PROSECUTION')"><a
+					href="proHome" class="waves-effect"> <i
+						class="zmdi zmdi-view-dashboard"></i> <span>DASHBOARD</span><i
+						class="fa fa-angle-left pull-right"></i>
+				</a></li>
+
+				<li sec:authorize="hasRole('ROLE_PROSECUTION_ADMIN')"><a
+					href="padoHome" class="waves-effect"> <i
+						class="zmdi zmdi-view-dashboard"></i> <span>DASHBOARD</span><i
+						class="fa fa-angle-left pull-right"></i>
+				</a></li>
+
+				<!--   <li sec:authorize="hasAnyRole('ROLE_USER','ROLE_DIRECTOR')"><a href="showCert" class="waves-effect"> <i
+					class="fa fa-usb"></i> <span>Register DSC</span><i
+					class="fa fa-angle-left pull-right"></i>
+			</a></li> -->
+
+
+
+				<li
+					sec:authorize="hasAnyRole('ROLE_DIRECTOR','ROLE_ADMIN_OFFICER','ROLE_USER')"><a
+					href="#" class="waves-effect"> <i class="zmdi zmdi-layers"></i>
+						<span>Approval</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						<li sec:authorize="hasRole('ROLE_DIRECTOR')"><a
+							href="dirPendingApp"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Pending For Approval</a></li>
+						<li sec:authorize="hasRole('ROLE_ADMIN_OFFICER')"><a
+							href="pendingForAppr"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Pending For Approval</a></li>
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="casesAsIoAdo"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Pending For Approval</a></li>
+
+					</ul></li>
+
+				<!-- <li
+					sec:authorize="hasAnyRole('ROLE_USER')"><a
+					href="#" class="waves-effect"> <i class="zmdi zmdi-layers"></i>
+						<span>Reviewer</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="casesAsIoAddl"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Send Back To Review </a></li>
+
+					</ul></li> -->
+
+				<li sec:authorize="hasAnyRole('ROLE_USER')"><a href="#"
+					class="waves-effect"> <i class="zmdi zmdi-layers"></i> <span>GEP
+							Person Approved</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						<li sec:authorize="hasRole('ROLE_USER')"><a href="GEPAsIoAdo"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Approved Persons</a></li>
+
+
+
+					</ul></li>
+
+
+
+
+
+				<li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a href="#"
+					class="waves-effect"> <i class="zmdi zmdi-layers"></i> <span>Case
+							Management</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						<li><a href="approvedOrders"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Approved Order</a></li>
+						<!-- <li><a href="getSignedOrders"><i
+							class="zmdi zmdi-dot-circle-alt"></i> View Signed Order</a></li> -->
+
+					</ul></li>
+
+				<li
+					sec:authorize="hasAnyRole('ROLE_ADMIN_SECTION','ROLE_ADMIN_OFFICER')"><a
+					href="#" class="waves-effect"> <i class="zmdi zmdi-layers"></i>
+						<span>Case Management</span> <i
+						class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						<li sec:authorize="hasRole('ROLE_ADMIN_SECTION')"><a
+							href="caseDetails"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Create New Case</a></li>
+						<li sec:authorize="hasRole('ROLE_ADMIN_SECTION')"><a
+							href="legacyOrder"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Add Legacy Order</a></li>
+						<li><a sec:authorize="hasAnyRole('ROLE_ADMIN_SECTION')" href="addProcesecutionOrder"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Add Prosecution Case </a></li>		
+						<li sec:authorize="hasAnyRole('ROLE_ADMIN_SECTION')"><a
+							href="showEditAllCase"><i class="zmdi zmdi-dot-circle-alt"></i>View
+								/Edit Cases</a></li>
+
+						<li sec:authorize="hasAnyRole('ROLE_ADMIN_OFFICER')"><a
+							href="showAllCase"><i class="zmdi zmdi-dot-circle-alt"></i>View
+								All Cases</a></li>
+
+
+						<li
+							sec:authorize="hasAnyRole('ROLE_DIRECTOR','ROLE_ADMIN_SECTION','ROLE_ADMIN_OFFICER')"><a
+							href="allSignedOrders"><i class="zmdi zmdi-dot-circle-alt"></i>
+								View All Signed Orders</a></li>
+
+					</ul></li>
+
+				<li><a href="javaScript:void();" class="waves-effect"
+					sec:authorize="hasAnyRole('ROLE_USER','ROLE_DIRECTOR')"> <i
+						class="zmdi zmdi-card-travel"></i> <span>Notices/Summons</span> <i
+						class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getCaseList"><i class="zmdi zmdi-dot-circle-alt"></i>
+								View Assigned Cases</a></li>
+
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getDraftedSummonNotices"><i
+								class="zmdi zmdi-dot-circle-alt"></i> View Drafted
+								Summons/Notices Cases</a></li>
+
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getCompleteCase"><i class="zmdi zmdi-dot-circle-alt"></i>Send
+								Notice/Summon</a></li>
+
+
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getCompleteCaseoffline"><i
+								class="zmdi zmdi-dot-circle-alt"></i>Offline Summon</a></li>
+
+
+						<li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a
+							href="approvedSummon"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Approved Summons</a></li>
+						<li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a
+							href="approvedNotice"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Approved Notices</a></li>
+						<li sec:authorize="hasAnyRole('ROLE_USER')"><a
+							href="approvedSummonUsr"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Approved Summons</a></li>
+						<li sec:authorize="hasAnyRole('ROLE_USER')"><a
+							href="approvedNoticeUsr"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Approved Notices</a></li>
+
+						<!-- <li sec:authorize="hasRole('ROLE_USER')"><a href="getSignedOrders"><i
+							class="zmdi zmdi-dot-circle-alt"></i> View All Signed Orders</a></li> -->
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getSignedSummons1"><i class="zmdi zmdi-dot-circle-alt"></i>
+								View All Signed Summons</a></li>
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getSignedNotices1"><i class="zmdi zmdi-dot-circle-alt"></i>
+								View All Signed Notices</a></li>
+
+
+						<li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a
+							href="allSignedOrders"><i class="zmdi zmdi-dot-circle-alt"></i>
+								View All Signed Orders</a></li>
+						<!-- <li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a
+							href="allSignedSummons"><i class="zmdi zmdi-dot-circle-alt"></i>
+								View All Signed Summons</a></li> -->
+								
+						<!-- <li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a
+							href="allSignedSummons"><i class="zmdi zmdi-dot-circle-alt"></i>
+								View All Signed Summons</a></li> -->	
+						<li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a
+							href="getSignedSummons1"><i class="zmdi zmdi-dot-circle-alt"></i>
+								View All Signed Summons</a></li>			
+						<li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a
+							href="getSignedNotices1"><i class="zmdi zmdi-dot-circle-alt"></i>
+								View All Signed Notices</a></li>
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="PhysicallysentList"><i class="zmdi zmdi-dot-circle-alt"></i>
+								View Physically sent Summon/Notice </a></li>
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getPhysicalsent"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Upload Physically sent Summon/Notice </a></li>
+					</ul></li>
+				<li sec:authorize="hasAnyRole('ROLE_USER')"><a href="#"
+					class="waves-effect"> <i class="zmdi zmdi-layers"></i> <span>Add
+							Person For GEP </span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						<li sec:authorize="hasAnyRole('ROLE_USER')"><a
+							href="getAssignCaseList"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Assigned Cases</a></li>
+
+
+					</ul></li>
+
+
+				<li sec:authorize="hasAnyRole('ROLE_USER')"><a href="#"
+					class="waves-effect"> <i class="zmdi zmdi-layers"></i> <span>Update
+							Case Status </span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						<li sec:authorize="hasAnyRole('ROLE_USER')"><a
+							href="getAssignCaseListAdir"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Assigned Cases</a></li>
+
+
+					</ul></li>
+
+
+			<!-- 	<li sec:authorize="hasRole('ROLE_ADMIN_SECTION')"><a
+					href="javaScript:void();" class="waves-effect"> <i
+						class="zmdi zmdi-layers"></i> <span> Prosecution Case
+							Management</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+
+						<li><a href="addlegacyOrder"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Add Prosecution Case </a></li>
+						<li><a href="listAddCase"><i
+								class="zmdi zmdi-dot-circle-alt"></i> View/Edit Prosecution Case
+						</a></li>
+
+
+					</ul></li> -->
+				<li sec:authorize="hasRole('ROLE_PROSECUTION')"><a
+					href="javaScript:void();" class="waves-effect"> <i
+						class="zmdi zmdi-layers"></i> <span>Add Person For GEP</span> <i
+						class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						<li sec:authorize="hasAnyRole('ROLE_PROSECUTION')"><a
+							href="getpersonStatus"><i class="zmdi zmdi-dot-circle-alt"></i>
+								ADD/Update Person Status</a></li>
+
+
+					</ul></li>
+
+
+
+				<li
+					sec:authorize="hasAnyRole('ROLE_DIRECTOR','ROLE_ADMIN_SECTION','ROLE_ADMIN_OFFICER','ROLE_USER','ROLE_PROSECUTION','ROLE_PROSECUTION_ADMIN')"><a
+					href="#" class="waves-effect"> <i class="zmdi zmdi-layers"></i>
+						<span>Status</span> <i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						<li
+							sec:authorize="hasAnyRole('ROLE_DIRECTOR','ROLE_ADMIN_SECTION','ROLE_ADMIN_OFFICER')"><a
+							href="orderStatus"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Office Order Status</a></li>
+						<li sec:authorize="hasAnyRole('ROLE_DIRECTOR','ROLE_USER')"><a
+							href="noticeStatus"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Notice Status</a></li>
+						<li sec:authorize="hasAnyRole('ROLE_DIRECTOR','ROLE_USER')"><a
+							href="summonStatus"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Summon Status</a></li>
+
+
+
+						<li
+							sec:authorize="hasAnyRole('ROLE_PROSECUTION' ,'ROLE_USER','ROLE_DIRECTOR')"><a
+							href="AllPersonList"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Person Status</a></li>
+<li
+							sec:authorize="hasAnyRole('ROLE_PROSECUTION_ADMIN')"><a
+							href="personStatus"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Person Status</a></li>
+						<li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a
+							href="ReportStatus"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Summon/Notices Status</a></li>
+
+						<li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a
+							href="SumomReportStatus"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Summon Status Report</a></li>
+						<li sec:authorize="hasAnyRole('ROLE_DIRECTOR')"><a
+							href="StatusByDate"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Notice Status Report</a></li>
+								
+								
+					<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getPeningPhysicalsentNotice"><i class="zmdi zmdi-dot-circle-alt"></i>
+								 Physically Sent Notice Yet to be Upload By Unit </a></li>			
+									 
+						<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getPeningPhysicalsentSummon"><i class="zmdi zmdi-dot-circle-alt"></i>
+								 Physically Sent Summon Yet to be Upload By Unit</a></li>	
+								 
+							<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getPeningPhysicalsentNoticeAddl"><i class="zmdi zmdi-dot-circle-alt"></i>
+								 Physically Sent Notice Yet to be Upload As a Addl Director </a></li>			 
+							<li sec:authorize="hasRole('ROLE_USER')"><a
+							href="getPeningPhysicalsentSummonAddl"><i class="zmdi zmdi-dot-circle-alt"></i>
+								 Physically Sent Summon Yet to be Upload As a Addl Director </a></li>		
+					<!-- 	<li sec:authorize="hasAnyRole('ROLE_USER')"><a
+							href="StatusReportByDate"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Summon/Notices Report</a></li>
+						<li sec:authorize="hasAnyRole('ROLE_USER')"><a
+							href="AddlStatusReportByDate"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Summon/Notices Report</a></li> -->
+
+						<!--  <li sec:authorize="hasAnyRole('ROLE_USER')"><a href="filterCase"><i
+							class="zmdi zmdi-dot-circle-alt"></i> Forward Summon/Notice</a></li>	 -->
+
+					</ul></li>
+
+				<li sec:authorize="hasAnyRole('ROLE_USER')"><a href="#"
+					class="waves-effect"> <i class="zmdi zmdi-layers"></i> <span>Summon/Notice <br> Report</span>
+						<i class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						<li sec:authorize="hasAnyRole('ROLE_USER')"><a
+							href="summonReportIO"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Summon Report (as IO)</a></li>
+
+						<li sec:authorize="hasAnyRole('ROLE_USER')"><a
+							href="noticeReportIO"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Notice Report (as IO)</a></li>
+						<li sec:authorize="hasAnyRole('ROLE_USER')"><a
+							href="summonReportAddl"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Summon Report (as ADDL Director)</a></li>
+
+						<li sec:authorize="hasAnyRole('ROLE_USER')"><a
+							href="NoticeReportAddl"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Notice Report (as ADDL Director)</a></li>
+					</ul></li>
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a
+					href="javaScript:void();" class="waves-effect"> <i
+						class="zmdi zmdi-widgets"></i> <span>User Management</span> <i
+						class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+
+						<li><a href="addUser"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Add New User</a></li>
+
+						<li><a href="addDesignation"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Add New Designation</a></li>
+						<li><a href="addStatus"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Add New Status</a></li>
+
+						<li><a href="addRole"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Create New Role</a></li>
+
+						<li><a href="addUnit"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Create New Unit</a></li>
+						<li><a href="LinkOfficer"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Link Officer</a></li>
+						<li><a href="showAuditTrail"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Audit Trails</a></li>
+						<!-- <li><a href="financeYear"><i class="zmdi zmdi-dot-circle-alt"></i>
+								Create New Financial Year</a></li>		 -->
+
+					</ul></li>
+
+
+
+
+			<!-- 	<li sec:authorize="hasRole('ROLE_PROSECUTION_ADMIN')"><a
+					href="javaScript:void();" class="waves-effect"> <i
+						class="zmdi zmdi-layers"></i> <span>Approval</span> <i
+						class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+
+						<li><a href="pendingForApprBypro"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Pending for Approval</a></li>
+
+						<li><a href="showPendProOOStage1"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Office order Pending for
+								Approval</a></li>
+
+
+
+
+					</ul></li> -->
+
+				<li
+					sec:authorize="hasAnyRole('ROLE_DIRECTOR','ROLE_ADMIN_SECTION','ROLE_ADMIN_OFFICER','ROLE_USER','ROLE_PROSECUTION','ROLE_PROSECUTION_ADMIN')"><a
+					href="javaScript:void();" class="waves-effect"> <i
+						class="zmdi zmdi-layers"></i> <span>Manual</span> <i
+						class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+
+						<li><a th:target="_blank"
+							th:href="@{|/downloadFiles?fileName=SNMSmanual.pdf|}"> SNMS
+								Manual(draft)</a></li>
+
+
+					</ul></li>
+
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a
+					href="javaScript:void();" class="waves-effect"> <i
+						class="zmdi zmdi-layers"></i> <span>Link Officer </span> <i
+						class="fa fa-angle-left pull-right"></i>
+				</a>
+					<ul class="sidebar-submenu">
+						<li><a href="LinkOfficer"><i
+								class="zmdi zmdi-dot-circle-alt"></i> Activate Link Officer</a></li>
+						<li><a href="LinkOfficerList"><i
+								class="zmdi zmdi-dot-circle-alt"></i> View/Deactivate Link
+								Officer</a></li>
+
+					</ul></li>
+				<!-- 	<li sec:authorize="hasRole('ROLE_PROSECUTION_ADMIN')"><a
+					href="javaScript:void();" class="waves-effect"> <i
+						class="zmdi zmdi-layers"></i> <span>Person Status</span> <i
+						class="fa fa-angle-left pull-right"></i>
+			</a>
+				<ul class="sidebar-submenu">
+					<li sec:authorize="hasAnyRole('ROLE_PROSECUTION_ADMIN')">
+					<a href="PersonStatus"><i class="zmdi zmdi-dot-circle-alt"></i>
+							View  Person Status</a></li>
+
+
+				</ul></li> -->
+			</ul>
+
+
+		</th:block>
+	</div>
+
+</body>
+</html>

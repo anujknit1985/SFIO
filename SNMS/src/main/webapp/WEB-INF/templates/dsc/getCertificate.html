@@ -1,0 +1,71 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Register DSC</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+	<script type="text/javascript">
+	function getCertList() {
+		$.ajax({
+			contentType : "application/xml",
+			url : "http://localhost:55100/dsc/getCertList",
+			success : function(data) {
+				console.log(data);
+				var form = document.getElementById("cert");
+				console.log(form);
+				form.action = "getCertList";
+				$("#certValue").val(new XMLSerializer().serializeToString(data));
+				form.submit();
+				return true;
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				console.log('Error in Cert get List');
+			}
+		});
+
+	}
+</script>
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header">
+							<i class="fa fa-usb"></i> Register Digital Signature Certificate
+						</h4>
+					
+					<hr>
+					<div class="form-group row">
+
+								<!-- <label for="input-13" class="col-sm-2 col-form-label">
+									Case ID <span class="text-danger">*</span></label> -->
+								<div class="col-sm-4">
+									<input type="button" class="btn btn-danger" value="Register DSC"
+									onclick="getCertList();">
+								</div>
+								
+							</div>
+					
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<form method="post" id="cert">
+		<input type="hidden" id="certValue" name="certValue" />
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+	</form>
+	</div>
+
+	
+</body>
+</html>

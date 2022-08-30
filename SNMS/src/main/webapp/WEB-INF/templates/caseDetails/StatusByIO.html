@@ -1,0 +1,130 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Summon/Notice as on</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<script type="text/javascript">
+		function getCompletCase(id)
+	  	{
+	  		$('#id').val(id);
+	        $('#getCompleteCase').attr("action", "getApprovedOrder");
+	        $('#getCompleteCase').submit();  		
+	  	}
+		</script>
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Summon/Notice Status</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> Summon/Notice as on <span th:text="${date}"></span>
+						</h4>
+
+						<!-- <form th:action="@{/createNotice}" method="post"
+							class="needs-validation" th:object="${caseDetails}"> -->
+							
+							<span th:text="${errorEsign}" class="text-danger text-lowercase"></span>
+							
+							<div class="form-group row">
+								<table class="table table-repsonsive" id="approvedOrderTable">
+									<thead class="bg-info text-white">
+										<tr class="text-center">
+											<th>S.No.</th>
+											<!-- <th>UnitNo</th> -->
+											<th>Case Id <br>  Case Tittle </th>
+											<!-- <th>Case Tittle </th> -->
+											
+											<th>Total  Notices</th>
+											<th>Notices Pending for Approval</th>
+											<th>Unsigned Notices</th>
+											<th>Signed Notices</th>
+											<th> Total summons</th>
+											<th> Summons Pending for Approval</th>
+											<th>Unsigned Summons</th>
+											<th>Signed Summons</th>
+											<th>Offline Summons</th>
+											
+										</tr>
+									</thead>
+									 <tbody class="text-center">
+									<!--  <tr th:each="p,stats: ${UnitList}"> -->
+									<tr th:each="s,rowStat : ${stdList}">
+									<td class="text-wrap"><span th:text="${rowStat.index+1}"></span></td>
+									<td class="text-wrap"><span th:text="${s.caseId}"></span> <br><span th:text="${s.caseTittle}"  class="text-wrap"></span></td>
+									
+									<!--  <td class="text-wrap"><span th:text="${s.caseTittle}"  class="text-wrap"></span></td> -->
+									  <td><span th:text="${s.allNoticeUnit1}" style="align-content: center;"></span></td>
+									   <td><span th:text="${s.PendingNoticeUnit1}" style="align-content: center;"></span></td>
+										<td><span th:text="${s.approvedNoticeUnit1}" style="align-content: center;"></span></td>
+										 <td><span th:text="${s.EsignedNoticeUnit1}" style="align-content: center;"></span></td>
+										 
+										  <td><span th:text="${s.allSummonUnit}"></span></td>
+										   <td><span th:text="${s.PendingSummonUnit1}"></span></td>
+										  <td><span th:text="${s.approvedSummonUnit1}"></span></td>
+										  <td><span th:text="${s.EsignedSummonUnit1}"></span></td>
+										   <td><span th:text="${s.offlineSummon}"></span></td>
+										 
+																					</tr> 
+									</tbody>
+
+								</table>
+							</div>
+					
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<form method="post" id="getCompleteCase" target="_self">
+		<input id="id" name="id" type="hidden" />
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		</form>
+		
+			<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.buttons.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/jszip.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/pdfmake.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/vfs_fonts.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.html5.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.print.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.colVis.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				 var table = $('#approvedOrderTable').DataTable( {
+//			 	        lengthChange: false,
+                dom: 'Bfrtip',
+                "scrollX": true,
+                responsive: true,
+				buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+					/*  buttons: [
+					        {
+					            extend: 'print',
+					            text: 'Print current page',
+					            autoPrint: false
+					        }
+					    ] */
+				      } );
+			});
+		</script>
+
+	</div>
+
+</body>
+</html>

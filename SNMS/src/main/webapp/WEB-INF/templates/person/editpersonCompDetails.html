@@ -1,0 +1,1327 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Add Persons</title>
+</head>
+<body>
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-8">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="getCaseList">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Add
+						Person</li>
+				</ol>
+			</div>
+		</div>
+		<form th:action="@{/updatePersoncomp}" method="post"
+			th:object="${summonDetails}" id="createpersonForm">
+			<input type="hidden" th:field="*{editperson}" th:id="editperson">
+			<input type="hidden" th:id="prcId"
+				th:field="*{personDetails.compDto.id}" name="prcId"> <input
+				type="hidden" th:id="isApproved"
+				th:field="*{personDetails.isApproved}" name="isApproved"> <input
+				type="hidden" th:id="caseId" th:field="*{caseId}" /> <input
+				type="hidden" name="editDeleteId" id="editDeleteId" />
+				 <input
+				type="hidden" name="compId" id="compId" /> 
+				<input type="hidden"
+				name="dataId" id="dataId" />
+				
+				
+				<input type ="hidden" id="personId" th:field="*{personDetails.personID}" />
+				
+			<div class="form-group row" th:if="${errorCaseID}">
+				<span th:text="${errorCaseID}" class="text-danger "></span>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-briefcase"></i> Edit person/company Details
+							</h4>
+
+
+
+							<input type="hidden" th:field="*{id}" /> 
+							<input type="hidden"
+								th:id="caseId" th:field="*{caseId}" /> 
+								<input type="hidden"
+								th:id="personId" th:field="*{personDetails.personID}" />
+										
+								
+								 <input
+								type="hidden" th:id="pcompId"
+								th:field="*{personDetails.compDto.id}" />
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Case
+									ID : </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${caseDetails.caseId}"></span>
+									</label>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">Case
+									Title : </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${caseDetails.caseTitle}"></span>
+									</label>
+
+								</div>
+
+							</div>
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Name:
+								</label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.fullName}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<input type="text" class="form-control" autocomplete="off"
+											id="fullName" name="fullName"
+											th:field="*{personDetails.fullName}"
+											placeholder="Enter First Name" maxlength="70">
+										<span class="text-danger"
+											th:errors="*{personDetails.fullName}"></span>
+									</th:block>
+
+								</div>
+								<label for="input-10" class="col-sm-2 col-form-label">Gender:
+								</label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.Gender}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<select class="form-control"
+											th:field="*{personDetails.Gender}">
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
+											<option value="Other">Other</option>
+										</select>
+										<span class="text-danger" th:errors="*{personDetails.Gender}"></span>
+									</th:block>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">
+									FATHER'S NAME </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.RelationName}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<input type="text" class="form-control" autocomplete="off"
+											id="fatherName" name="fatherName"
+											onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32) || (event.charCode==46)"
+											th:field="*{personDetails.RelationName}"
+											placeholder="Enter Father's Name" maxlength="50">
+										<span class="text-danger"
+											th:errors="*{personDetails.RelationName}"></span>
+									</th:block>
+								</div>
+								<label for="input-16" class="col-sm-2 col-form-label">Date
+									of Birth </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span
+											th:text="${	#dates.format(summonDetails.personDetails.dob,'dd/MM/YYYY ')}"></span>
+										</label>
+
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<input type="text" class="form-control" id="dob" name="dob"
+											placeholder="DD/MM/YYYY" th:field="*{personDetails.dob}"
+											maxlength="10">
+										<span class="text-danger" th:errors="*{personDetails.dob}"></span>
+									</th:block>
+								</div>
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-16" class="col-sm-2 col-form-label">
+									Address </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.address}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+
+										<textarea rows="4" cols="5" class="form-control"
+											name="address" id="address"
+											th:field="*{personDetails.address}"
+											placeholder="Enter address" maxlength="200"></textarea>
+										<p>
+											<span id="wordCount">0</span> Characters
+										</p>
+
+										<span class="text-danger"></span>
+										<span id="addressErr" class="text-danger"
+											th:errors="*{personDetails.address}"></span>
+
+
+
+									</th:block>
+								</div>
+
+								<label for="input-16" class="col-sm-2 col-form-label">OFFICIAL
+									EMAIL ID </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span id="email"  th:text="${summonDetails.personDetails.email}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<input type="text" class="form-control" id="email"
+											th:field="*{personDetails.email}" name="email"
+											placeholder="Enter Official Email ID">
+										<span class="text-danger" th:errors="*{personDetails.email}"></span>
+									</th:block>
+								</div>
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-16" class="col-sm-2 col-form-label">
+									Mobile NO </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.primaryMobile}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<input type="text" class="form-control" autocomplete="off"
+											id="primaryMobile" name="primaryMobile"
+											th:field="*{personDetails.primaryMobile}"
+											onkeypress="return isNumber(event)"
+											placeholder="Enter Mobile Number" maxlength="10">
+										<span class="text-danger"
+											th:errors="*{personDetails.primaryMobile}"></span>
+									</th:block>
+								</div>
+								
+								<label for="input-16" class="col-sm-2 col-form-label">Pan
+									Number </label>
+								<div class="col-sm-4">
+								 <th:block th:if="*{personDetails.isApproved == true}">
+                                 <th:block th:if="*{personDetails.isDummy == false}">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.panNumber}"></span></label>		
+									</th:block>
+									<th:block th:if="*{personDetails.isDummy == true}">
+									<input type="text" class="form-control" name="panNumber"
+											th:field="*{personDetails.panNumber}" id="panNumber"
+											onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 47 && event.charCode < 58)"
+											placeholder="Enter Pan Number " maxlength="10"> <span
+											class="text-danger" th:errors="*{personDetails.panNumber}"></span>
+									</th:block>
+								</th:block>	
+								
+								 <th:block th:if="*{personDetails.isApproved == false}">
+                                 
+										 <th:block th:if="*{personDetails.isDummy == false}">
+									<input type="text" class="form-control" name="panNumber"
+											th:field="*{personDetails.panNumber}" id="panNumber"
+											onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 47 && event.charCode < 58)"
+											placeholder="Enter Pan Number " maxlength="10"> <span
+											class="text-danger" th:errors="*{personDetails.panNumber}"></span>	
+									</th:block>
+									<th:block th:if="*{personDetails.isDummy == true}">
+									<input type="text" class="form-control" name="panNumber"
+											th:field="*{personDetails.panNumber}" id="panNumber"
+											onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 47 && event.charCode < 58)"
+											placeholder="Enter Pan Number " maxlength="10"> <span
+											class="text-danger" th:errors="*{personDetails.panNumber}"></span>
+									</th:block>									
+									</th:block>
+								</div>
+
+
+							</div>
+							
+							
+						<!-- 	// Changes Start -->
+								
+						<input type ="hidden" th:id="aisadummy" th:field="*{personDetails.isDummy}" />
+						
+							<div class="form-group row">
+								<label for="input-16" class="col-sm-2 col-form-label">
+									Pan Number Type? </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true} ">
+									
+									<th:block th:if="*{personDetails.isDummy == true} ">
+									<div class="icheck-inline">
+											<input type="radio" id="dummyY" name="isDummy" value="true" />
+											<label for="inline-radio-primary">Dummy</label>
+										</div>
+										<div class="icheck-inline">
+											<input type="radio" id="dummyN" name="isDummy" value="false" />
+											<label for="inline-radio-info">Original</label>
+										</div>									
+									</th:block>	
+									
+									
+									
+									<th:block th:if="*{personDetails.isDummy == false} ">
+										 <label class="col-sm-10 col-form-label text-primary"> 
+										<span  th:text="Original"></span> </label> 
+									</th:block>		
+									
+									 <input type="hidden" th:field="*{personDetails.isDummyValue}"
+											th:id="aisadummy">
+										<span id="isdummyErr" class="text-danger" th:errors="*{personDetails.isDummyValue}"></span>				 
+									</th:block>
+										
+										
+																	
+									<th:block th:if="*{personDetails.isApproved == false}">  
+								
+									<th:block th:if="*{personDetails.isDummy == true} ">
+									<div class="icheck-inline">
+											<input type="radio" id="dummyY" name="isDummy" value="true" />
+											<label for="inline-radio-primary">Dummy</label>
+										</div>
+										<div class="icheck-inline">
+											<input type="radio" id="dummyN" name="isDummy" value="false" />
+											<label for="inline-radio-info">Original</label>
+										</div>																			
+									</th:block>	
+									<th:block th:if="*{personDetails.isDummy == false} ">
+										<div class="icheck-inline">
+											<input type="radio" id="dummyY" name="isDummy" value="true" />
+											<label for="inline-radio-primary">Dummy</label>
+										</div>
+										<div class="icheck-inline">
+											<input type="radio" id="dummyN" name="isDummy" value="false" />
+											<label for="inline-radio-info">Original</label>
+										</div>		
+									</th:block>
+									
+									  <input type="hidden" th:field="*{personDetails.isDummyValue}"
+											th:id="aisadummyV">
+										<span id="isdummyErr" class="text-danger" th:errors="*{personDetails.isDummyValue}"></span>
+									</th:block>
+								</div>
+</div>
+								 
+						<!-- ********************* -->		 
+								
+
+
+
+							<div class="form-group row">
+								<label for="input-16" class="col-sm-2 col-form-label">
+									Passport Issued Country <span class="text-danger"></span>
+								</label>
+								<div class="col-sm-4">
+                                  <th:block th:if="*{personDetails.isApproved == true}">
+                                  <th:block th:if="*{personDetails.country != null}">
+                                  
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.country.country_name}"></span>
+										</label>
+									</th:block>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+									
+									<select class="form-control"
+										th:field="*{personDetails.country}" th:id="Country">
+										<option value="0" selected="selected">Choose Country</option>
+										<option th:each="c,stats : ${Country}" th:value="${c.id}"
+											th:utext="${c.country_name}" />
+									</select> <span class="text-danger"
+										th:if="${#fields.hasErrors('personDetails.country')}"
+										th:errors="*{personDetails.country}"></span>
+										</th:block>
+								</div>
+
+								<label for="input-14" class="col-sm-2 col-form-label">Passport
+									Number </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.passportNumber}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<input type="text" class="form-control"
+											th:field="*{personDetails.passportNumber}"
+											name="passportNumber" id="passportNumber"
+											placeholder="Enter Passport Number" maxlength="9"
+											th:onblur="'javascript:checkpassport(this);'">
+										<span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.passportNumber')}"
+											th:errors="*{personDetails.passportNumber}"> </span>
+										<span id="passportNoErr" class="text-danger"></span>
+									</th:block>
+								</div>
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-14" class="col-sm-2 col-form-label">Passport
+									issue Date </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.passportDate}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<input type="text" class="form-control"
+											th:field="*{personDetails.passportDate}" id="passportDate"
+											name="PassportDate" placeholder="DD/MM/YYYY">
+										<span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.passportDate')}"
+											th:errors="*{personDetails.passportDate}"></span>
+									</th:block>
+								</div>
+								<label for="input-14" class="col-sm-2 col-form-label">Voter
+									Id </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.voterId}"></span>
+										</label>
+
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<input type="text" class="form-control" autocomplete="off"
+											id="voterId" name="voterId"
+											onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode > 47 && event.charCode < 58) "
+											th:field="*{personDetails.voterId}"
+											placeholder="Enter Voter Id Number" maxlength="10">
+										<span class="text-danger" th:errors="*{personDetails.voterId}"></span>
+									</th:block>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Company
+									Name: </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.companySummon.companyName}"></span>
+									</label>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">CIN:
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.companySummon.cin}"></span>
+									</label>
+
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Email:
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.companySummon.email}"></span>
+									</label>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">Address:
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.companySummon.address}"></span>
+									</label>
+
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Company
+									Type: </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.companySummon.companyType.name}"></span>
+									</label>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">Designation
+								</label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span
+											th:text="${summonDetails.personDetails.compDto.designation.designation}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<select class="form-control"
+											th:field="*{personDetails.compDto.designation}"
+											id="designation">
+											<option value="0" selected="selected">Choose
+												Designation</option>
+											<option th:each="design: ${designationList}"
+												th:value="${design.id}" th:utext="${design.designation}" />
+										</select>
+										<span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.compDto.designation')}"
+											th:errors="*{personDetails.compDto.designation}"></span>
+									</th:block>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">IEC
+								</label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.compDto.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.compDto.Iec}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.compDto.isApproved == false}">
+										<input type="text" class="form-control"
+											th:field="*{personDetails.compDto.Iec}" name="Iec" id="Iec"
+											placeholder="Enter Iec Number">
+										<span id="passwordErr" class="text-danger"></span>
+										<span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.compDto.Iec')}"
+											th:errors="personDetails.compDto.Iec"></span>
+									</th:block>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">FRN
+								</label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.compDto.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.compDto.frn}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.compDto.isApproved == false}">
+										<input type="text" class="form-control" autocomplete="off"
+											id="gstin" name="gstin"
+											th:field="*{personDetails.compDto.frn}"
+											placeholder="Enter GSTIN Number" maxlength="10">
+										<span class="text-danger"
+											th:errors="*{personDetails.compDto.frn}"></span>
+									</th:block>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">DATE
+									OF APPOINTMENT </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.compDto.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span
+											th:text="${	#dates.format(summonDetails.personDetails.compDto.dateAppointment,'dd/MM/YYYY ')}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.compDto.isApproved == false}">
+										<input type="text" class="form-control"
+											th:field="*{personDetails.compDto.dateAppointment}"
+											id="dateAppoit" name="dateAppoit" placeholder="DD/MM/YYYY"
+											maxlength="10">
+										<span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.compDto.dateAppointment')}"
+											th:errors="*{personDetails.compDto.dateAppointment}"></span>
+									</th:block>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">DATE
+									OF CESSATION </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.compDto.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span
+											th:text="${	#dates.format(summonDetails.personDetails.compDto.dateCessation,'dd/MM/YYYY ')}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.compDto.isApproved == false}">
+										<input type="text" class="form-control"
+											th:field="*{personDetails.compDto.dateCessation}"
+											id="dateCessa" name="dob" placeholder="DD/MM/YYYY"
+											maxlength="10">
+										<span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.compDto.dateCessation')}"
+											th:errors="*{personDetails.compDto.dateCessation}"></span>
+									</th:block>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<th:block th:if="*{personDetails.compDto.status.id!=6 }">
+
+									<label for="input-15" class="col-sm-2 col-form-label">Investigation
+										Status<span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control"
+											th:field="*{personDetails.compDto.status}">
+											<option th:each="ulist: ${statusLst}" th:value="${ulist.id}"
+												th:utext="${ulist.statusName}" />
+										</select> <span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.compDto.pca.status')}"
+											th:errors="*{personDetails.compDto.status}"></span>
+									</div>
+
+									<label for="input-10" class="col-sm-2 col-form-label">Remark
+									</label>
+									<div class="col-sm-4">
+										<th:block th:if="*{personDetails.compDto.isApproved == true}">
+											<label class="col-sm-10 col-form-label text-primary">
+												<span
+												th:text="${summonDetails.personDetails.compDto.personRemark}"></span>
+											</label>
+										</th:block>
+										<th:block th:if="*{personDetails.compDto.isApproved == false}">
+											<input type="text" class="form-control" autocomplete="off"
+												id="Remark" name="Remark"
+												onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32) || (event.charCode==46)"
+												th:field="*{personDetails.compDto.personRemark}"
+												placeholder="Enter Remark" maxlength="70">
+											<span class="text-danger"
+												th:errors="*{personDetails.compDto.personRemark}"></span>
+
+										</th:block>
+									</div>
+								</th:block>
+
+
+
+
+								<th:block
+									th:if="*{personDetails.compDto.status.id==6 and personDetails.compDto.isApprovedstage2 == true}">
+
+									<label for="input-15" class="col-sm-2 col-form-label">Investigation
+										Status<span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span
+											th:text="${summonDetails.personDetails.compDto.status.statusName}"></span>
+										</label>
+									</div>
+								</th:block>
+
+							</div>
+
+
+							<div class="form-footer">
+								<button type="submit" name="caseDetails" id="caseId"
+									class="btn btn-danger" th:value="${caseDetails.id}">Back</button>
+
+
+								<th:block th:if="*{personDetails.compDto.isApproved == true}">
+									<button type="submit" class="btn btn-success" id="updatecomp"
+										th:name="upstatus">
+										<i class="fa fa-check-square-o"></i> Update status
+									</button>
+								</th:block>
+
+
+								<th:block
+									th:unless="*{personDetails.compDto.isApproved == true}"> 
+									<button type="button" class="btn btn-success"
+										id="updateperoncomp">
+										<i class="fa fa-check-square-o"></i> Update
+									</button>
+								</th:block>
+
+
+								<span></span>
+							</div>
+
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Add New
+								Designation</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="form-group">
+									<label for="recipient-name" class="col-form-label">Designation
+										Name :</label> <input type="text" class="form-control"
+										id="DesignatinName"
+										th:field="*{personDetails.designationName}"
+										onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32) || (event.charCode==46)">
+									<span id="DesignatinNameErr" class="text-danger"></span>
+								</div>
+
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary"
+								onClick="savedDesignation()">Save</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</form>
+
+		<link rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script src="js/jquery-confirm.js"></script>
+		<script th:inline="javascript">
+		
+		
+$(document).ready(function(){
+			
+	
+			//debugger
+			$('#AvoterBlock').hide();
+			$('#ApassBlock').hide();
+			
+			if($('#aispass').val()=='Y'){
+				 $("input[name=aifpass][value=" + $('#aispass').val() + "]").prop('checked', true);
+					$('#ApassBlock').show();
+              }else{
+				var value = "N"
+				 $("input[name=aifpass][value=" +value+ "]").prop('checked', true);
+			}
+			
+			if($('#aisavoter').val()=='Y'){
+				 $("input[name=aifvoter][value=" + $('#aisavoter').val() + "]").prop('checked', true);
+					$('#AvoterBlock').show();
+				
+			}else{
+				var value = "N"
+				 $("input[name=aifvoter][value=" +value+ "]").prop('checked', true);
+			}
+			
+			
+			 $("input[name='isDummy']").change(function() { 	
+						$('#aisadummy').val($('input:radio[name=isDummy]:checked').val());	
+					}); 
+			
+			// Changes Start
+			
+					if($('#aisadummy').val() == "true"){
+	
+			
+				var value = "true"
+				 $("input[name=isDummy][value="  +value+ "]").prop('checked', true);
+				 //$("input[name=isDummy][value= N]").attr("disabled",true);
+             }
+			else
+             {
+				var value = "false"
+				 $("input[name=isDummy][value=" +value+ "]").prop('checked', true);
+				//$("input[name=isDummy][value= true]").attr("disabled",true);
+			} 
+			
+			/* if($('#aisadummy').val()=='Y'){
+				 $("input[name=isDummy][value=" + $('#aisadummy').val() + "]").prop('checked', true);
+				
+				
+			}else{
+				var value = "N"
+				 $("input[name=isDummy][value=" +value+ "]").prop('checked', true);
+			} */
+			
+			
+		
+			
+			
+			
+			
+			
+			if($('#editperson').val()=="true"){
+				$('#personBlock').show();
+			}
+			
+			$('#uploadDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			
+			
+			$('#dob').datepicker({
+				format : 'dd/mm/yyyy',
+				 maxDate :new Date()
+			
+			});
+
+			$('#applicationDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			
+			$('#dateAppoit').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			$('#dateCessa').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+				 minDate: 0
+
+			});
+			$('#statusDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			$('#lastPassportDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			$('#passportDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+				endDate: new Date(),
+			});
+});
+		 function addnewpersoncase() {
+			 
+			 $("#largesizemodal").modal("hide");
+			 
+			
+				$('#personBlock').show();
+		}
+	 $('#selectPerson').click(function(){
+		 if($('#chooseComp').val()!=0){
+			
+			 var company=$('#chooseComp').val();
+			    company  = company.replaceAll('&','@and@');
+			    var caseId=$('#caseId').val();
+		
+			 var token = $("input[name=_csrf]").val();
+			 var header = 'X-CSRF-TOKEN';
+			
+			 $(document).ajaxSend(function(e, xhr, options)
+			{
+			    xhr.setRequestHeader(header, token);
+			}), 
+			
+			$('#personBlock').hide();
+			$.ajax({
+				 crossDomain: true,
+			        type: "post",
+			        url: "getpersonListBycompany?company="+company+"&caseId="+caseId,
+			        contentType : "application/json; charset=utf-8",
+			        dataType:"json",
+			        /* data:{caseId:caseId
+			        }, */
+			        cache: false,
+			        timeout: 600000,
+			        success: function(data){
+			        	
+			        	 $("#largesizemodal").modal("show");
+			        	
+			        	 var html = '';
+							var len = data.length;
+							$('#companyTable').empty();
+							for (var i = 0; i < len; i++) {
+//								debugger
+								var a = i+1;
+								var isAdded=false;
+								var trString='';
+								$('#compsumid tr').each(function(j,v){ if($(this).children('td:eq(0)').text()==data[i][5]){
+									isAdded=true };  }); 
+								if(isAdded)
+									trString = '<td><input type="button"  value = "Already Added" class = "btn btn-info" disabled="true"/></td></tr>';
+								else
+									trString ='<td><input type="button"  value = "ADD" class = "btn btn-success"  onclick = "addpersondetail(\'' + data[i][0] +'\',\''+data[i][1]+'\',\''+data[i][2]+'\',\''+data[i][3]+'\',\''+data[i][5]+'\')"/></td></tr>';	
+										
+									if(data[i][2]==null){
+										data[i][2]='';
+									}
+									if(data[i][3]==null){
+										data[i][3]='';
+									}
+								html += '<tr><td>'+a+'</td>'+
+										
+								
+										'<td>'+data[i][0]+'</td>'+ 
+										'<td>'+data[i][1]+'</td>'+
+										
+										'<td>'+data[i][2]+'</td>'+
+										
+										
+										'<td>'+data[i][3]+'</td>'+
+										'<td>'+data[i][7]+'</td>'+
+										'<td>'+data[i][4]+'</td>'+
+										
+										trString;
+										
+							}
+				        	$('#companyTable').append(html);
+			  
+			        	},
+			        	
+			 error : function(xhr, status, error) {
+		       alert('NO DATA FOUND');
+		  /*      $("#largesizemodal").modal("hide");*/
+				 $('#compnayBlock').show(); 
+				 
+		      }
+			 });
+		 }else{
+			 alert('Please select company');
+		 }
+	 });
+	 
+	 function addpersondetail(name,email,passportNumber,panNumber,summon_typeid) {
+		 
+	
+  
+		 $("#largesizemodal").modal("hide");
+	
+		 $("#fullName").attr("readonly", true); 
+    	  $('#fullName').val(name)
+    	  if(email!="")
+    	  $("#email").attr("readonly", true); 
+    	  $('#email').val(email)
+		  
+    	  if(passportNumber!="")
+    	  $("#passportNumber").attr("readonly", true); 
+    	  $('#passportNumber').val(passportNumber)
+    	    
+    	  
+    	 if ( panNumber!="" ){
+    	  $("#panNumber").attr("readonly", true); 
+    	  $('#panNumber').val(panNumber)
+    	    }
+    	  if ( panNumber!=null ){
+    		  $("#panNumber").attr("readonly", false); 
+	    	  $('#panNumber').val('') 
+    	  }
+    	      else{
+    	    	 $("#panNumber").attr("readonly", false); 
+    	    	  $('#panNumber').val('')
+    	    }
+    	  
+    	 $('#snms_summon_type_id').val(summon_typeid)
+		$('#personBlock').show();
+	} 
+	 
+	  $('#chooseComp').change(function(){
+		
+		var compName = $(this).val();
+		 compName  = compName.replaceAll('&','@and@')
+		var token = [[${_csrf.token}]];
+		 var header = [[${_csrf.headerName}]];
+		 $(document).ajaxSend(function(e, xhr, options)
+		   {
+			 xhr.setRequestHeader(header,token );
+		   }), 
+		  $.ajax({
+		      type : "POST",
+		      url : "getCompanyDetail?companyName=" + compName,
+		      contentType : "application/json; charset=utf-8",		  
+		      success : function(data) {
+		    	
+		    	  if(data[0]!=null){
+		    	 $("#cin").attr("readonly", true); 
+		    	  }else{
+		    		  $("#cin").attr("readonly", false); 
+				    	 	  
+		    	  }
+		        $("#cin").val(data[0]);
+		        if(data[1]!=null){
+		        $("#address").attr("readonly", true);
+		        }
+		        else{
+		        $("#address").attr("readonly", false);
+		        }
+		        $("#address").val(data[1]);
+		        
+		        if(data[2]!=null){
+		        $("#emailCompany").attr("readonly", true); 
+		        }else{
+		        	 $("#emailCompany").attr("readonly", false); 
+		        }
+		        $('#emailCompany').val(data[2]);
+		        $("#compType").val(data[3]) 
+		      },
+		      error : function(jqXHR, textStatus, errorThrown) {
+		        alert(textStatus);
+		      }
+	 }); 
+});
+		 $("input[name='aifvoter']").change(function() { 
+			 
+				
+			 $('#aisavoter').val($('input:radio[name=aifvoter]:checked').val());
+		
+		if($(this).attr('id')=='AvoterY' )
+		
+			$('#AvoterBlock').show();
+		
+		
+		else if($(this).attr('id')=='AvoterN')
+			$('#AvoterBlock').hide();
+		 
+		 });
+		 $("input[name='aifpass']").change(function() { 
+			 $('#aispass').val($('input:radio[name=aifpass]:checked').val());
+
+		if($(this).attr('id')=='ApassY' )
+			$('#ApassBlock').show();
+
+
+		else if($(this).attr('id')=='ApassN')
+			$('#ApassBlock').hide();
+
+		$('#vendorName').val('');
+
+		});
+	 $('#savecomp').click(function(e){
+		 if($('#chooseComp').val()==0){
+			 alert('Please choose Company');
+			 e.preventDefault();
+		 }
+	 });
+	 
+ $('#updateperoncomp').click(function(){
+	
+		 
+		 var myTextEmail = $('#email').val();
+
+	
+           
+         	if(myTextEmail!=""){
+			$.ajax({
+				   type : "post",
+			      url : "getValidEmail?Email="+myTextEmail,
+                   contentType : "application/json; charset=utf-8",
+			      success : function(data) {
+			    	//alert(data);
+			    	
+			    	if(data==false){
+			    		alert("Invalid Email Address ")
+			    		
+			    		 
+			    		
+			    	}else{
+			    		//alert("hello");
+				  		   
+				  		            	$('#createpersonForm').attr('action', 'updatePersoncompDetails');
+				  		  		 	
+				  						$('#createpersonForm').submit();
+				  				 
+			                                  
+				  		    
+			    	}
+			      }
+			});
+						 
+         	}	else{
+         		$('#createpersonForm').attr('action', 'updatePersoncompDetails');
+		  		 	
+					$('#createpersonForm').submit();
+         	}
+	 });
+	 
+	 $('#savecompdtl').click(function(){
+		 if($('#chooseComp').val()!=0){
+		 		$('#createpersonForm').attr('action', 'addCompany');
+				$('#createpersonForm').submit();
+		 }else{
+			 alert('Please select company');
+		 }
+	 });
+	 function editpersoncomp(compid) {
+			$.confirm({
+	  		    title: '',
+	  		    content: 'Are You sure you want to Edit',
+	  		    type: 'red',
+	  		    typeAnimated: true,
+	  		    buttons: {
+	  		        tryAgain: {
+	  		            text: 'Yes',
+	  		            btnClass: 'btn-Success',
+	  		            action: function(){
+	  		            	
+
+	  		    			$('#createpersonForm').attr('action', 'personcomEdit');
+	  		    			$('#prcId').val(compid);
+	  		    			$('#createpersonForm').submit();
+	  		            }
+	  		        },
+	  		        close: function () {
+	  		        }
+	  		    }
+	  		});
+
+		}
+	 
+	 $('#designation').on('change', function() {
+			
+	      if ( this.value == '11')
+	  
+	      {
+	    	  //alert("designation   "+ this.value)
+	    	  
+	    	   $("#exampleModal").modal("show");
+	     //   $("#exampleModal").show();
+	      
+	      }
+	      else
+	      {
+	        $("#AdinBlock").hide();
+	      }
+	    });
+	 var myText = document.getElementById("address");
+	 
+	 
+	 
+if(myText!=null ){
+	var wordCount = document.getElementById("wordCount");
+	 myText.addEventListener("keyup",function(){
+	 	var characters = myText.value.split('');
+	   wordCount.innerText = characters.length;
+	 });
+	 
+}
+	 function savedDesignation() {
+		 
+		 
+		var DesignationName = $("#DesignatinName").val();
+		if(DesignationName == null || DesignationName == ""){
+			document.getElementById("DesignatinNameErr").textContent="Enter the Designation Name";
+			//$("#DesignatinNameErr").val('Enter the Designation Name ')
+		}
+		else{
+		//alert(DesignationName);
+		$.ajax({
+				//crossDomain: true,
+				type : "GET",
+				url : "addOtherDesignation?DesignationName="+DesignationName,
+				//contentType : "application/json; charset=utf-8",
+				cache : false,
+				timeout : 600000,
+				success : function(data) {
+					debugger 
+					 $("#exampleModal").modal("hide");
+					
+					$("#DesignatinName").val('');
+						alert("The Designation is saved. Now  Choose from dropdown ");
+					 $("#designation").empty();
+					 var len = data.length;
+
+	                for( var i = 0; i<len; i++){
+	                    var id = data[i]['id'];
+	                    var name = data[i]['designation'];
+	                    
+	                    $("#designation").append("<option value='"+id+"'>"+name+"</option>");
+
+	                }
+					
+				},
+
+				error : function(xhr, status, error) {
+					alert('This designation is already exits');
+				}
+			});
+		}
+
+	}
+	 
+	 
+	 
+	
+		    $(".panNumber").keyup(function () {
+		        var VAL = this.value;
+
+		        var pannumber = new RegExp('^[A-Z]{5}[0-9]{4}[A-Z]{1}');
+
+		        if (pannumber.test(VAL)) {
+		            alert('Great, you entered an Pan Number');
+		        }
+		    }); 
+		
+	 
+	 
+	 
+	 
+	 
+	 
+	 $('#panNumber').blur(function(){
+		 var token = $("input[name=_csrf]").val();
+		 var header = 'X-CSRF-TOKEN';
+
+		var panNumber = $(this).val();
+		
+		
+		debugger 
+		
+		var personId = $("#personId").val();
+		if(panNumber ==''){
+			
+			alert("Enter Pan NUmber")
+		}
+		
+		 $(document).ajaxSend(function(e, xhr, options)
+					{
+					    xhr.setRequestHeader(header, token);
+					}),
+		$.ajax({
+		      type : "post",
+		      url : "getValidPan?pan="+panNumber,
+//		      data : {editDeleteId:id},
+		      contentType : "application/json; charset=utf-8",
+		      success : function(data) {
+		    	//alert(data);
+		    	
+		    	if(data==false){
+		    		swal("Required!", "Invalid Pan Number", "error");
+		    		
+		    		 $("#updateperoncomp").attr("disabled", true);
+		    		  $("#updatecomp").attr("disabled", true);
+		    		
+		    	}else{
+		    		
+		    		$.ajax({
+		    			 crossDomain: true,
+		    		      type : "post",
+		    		      url : "getpanDetailsAccept?panNumber="+panNumber,
+//		     		      data : {editDeleteId:id},
+		    		      contentType : "application/json; charset=utf-8",
+		    		      success : function(data) {
+		    		    	  //debugger;
+		    		    	
+		    		    	  
+		    		    	  if(data!=''){
+		    		    		  console.log(data);
+		    		    		/*   console.log(data.companyperson);
+		    		    		  console.log(data.companyperson[0]);
+		    		    		  console.log(data.companyperson[0].id);
+		    		    		  console.log(data.companyperson[0].companySummon.companyName);  */// Retrving Data from Json Object 
+		    		    		  
+		    		    		  
+		    		    		  //console.log(data.createdBy[1].createdBy.userId);
+		    		    		 // console.log(data.compDto[6].id);
+		    		    		 // console.log(data[2].fullName);
+		    		    		  
+		    		    		  
+		    		    		 if(data.isApproved==true || data.isApproved==false){		
+		    		    			 if(data.personID == personId){
+		 		    		    	//alert("same pan number");			
+		    		    			 }		 
+		    		    			 
+		    		    		 else{	
+		    		    			$.confirm({
+		    				  		    title: '',
+		    				  		    content: 'This pan number is already available with Name "'+data.fullName+'"  For Company ->  "'+data.companyperson[0].companySummon.companyName+'" ',
+		    				  		    type: 'green',
+		    				  		    typeAnimated: true,	
+		    				  		  buttons: {
+		    						        
+		    						        close: function () { 
+		    						        }
+		    						    }
+		    						});
+		    					  $("#updateperoncomp").attr("disabled", true);
+		    					  $("#updatecomp").attr("disabled", true);
+		    				  		    
+		    		    		 }
+		    		    		 }	
+		    		    		 
+		    		    		 // Today Change	
+		    		    		 else{
+			    		    		  $("#updateperoncomp").attr("disabled", false);
+			    		    	  }	//
+			    		    	  
+		    		    	  }
+		    		    	  else{
+		    		    		  $("#updateperoncomp").attr("disabled", false);
+		    		    	  }		    		    	 
+		    	  		    },
+		    		    	
+		    		      error : function(xhr, status, error) {
+		    		    	  $("#updateperoncomp").attr("disabled", false);
+		    				  
+		    			  		 $('#compnayBlock').show(); 
+		    					 
+		    			      }
+		    		    }); 
+		    	}
+		      },
+		      
+		});
+		
+		//alert("Hello Saurabh"+personId);
+	 
+	
+		 
+	 });
+	 
+	 
+	 
+	 $("input[name='isDummy']").change(function() { 
+			
+				
+				$('#aisadummy').val($('input:radio[name=isDummy]:checked').val());	
+			}); 
+	 
+	
+	 
+	 </script>
+		<script type="text/javascript" src="js/customValidation.js"></script>
+
+	</div>
+</body>
+</html>
+
+

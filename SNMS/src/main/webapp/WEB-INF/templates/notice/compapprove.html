@@ -1,0 +1,362 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Case Details</title>
+</head>
+<style type="text/css">
+.formFieldError {
+	color: red;
+}
+
+.loading {
+	color: red;
+}
+</style>
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page"></li>
+				</ol>
+			</div>
+		</div>
+
+
+		<form th:action="@{/updateCompanyDetails}" th:id="companyApproval"
+			class="needs-validation" th:object="${caseDetails}" method="post">
+
+			<div th:if="${message}" class="alert alert-success alert-dismissible"
+				role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<div class="alert-icon">
+					<i class="fa fa-check"></i>
+				</div>
+				<div class="alert-message">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+			<!-- 			<input type="hidden" th:field="*{id}"> <input type="hidden"
+				th:field="*{caseId}" /> <input type="hidden"
+				th:field="*{caseTitle}" /> <input type="hidden"
+				th:field="*{mcaOrderFile}"> <input type="hidden"
+				name="newIOorder" th:id="newIOorder"> <input type="hidden"
+				name="radioValue"> -->
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-briefcase"></i> Company Approval
+							</h4>
+
+							<div class="form-group row">
+
+								<label class="col-sm-2 col-form-label"> Case No : </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.caseId}"></span>
+								</label> <label class="col-sm-2 col-form-label">Financial Year :</label>
+								<label class="col-sm-4 col-form-label text-primary"><span
+									th:text="${caseDetails.financeYear}"></span>
+								</label>
+								
+
+
+							</div>
+							<div class="form-group row">
+
+								<label class="col-sm-2 col-form-label"> Case Title : </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.caseTitle}"></span>
+								</label> <label class="col-sm-2 col-form-label">Investigation
+									Order Type : </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.radioValue}"></span>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.mcaOrderNo != '' }"
+								class="form-group row" id="mcaDiv">
+
+								<label class="col-sm-2 col-form-label">MCA Order No : </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.mcaOrderNo}"></span>
+								</label> <label class="col-sm-2 col-form-label">MCA Order Date :
+								</label> <label class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${#dates.format(caseDetails.mcaOrderDate, 'dd/MM/yyyy')}"></span>
+								</label>
+
+							</div>
+
+							<div
+								th:if="${caseDetails.courtOrderNo != null and caseDetails.courtOrderNo!=''}"
+								class="form-group row" id="courtDiv">
+
+								<label class="col-sm-2 col-form-label">Court Order No :
+								</label> <label class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.courtOrderNo}"></span>
+								</label> <label class="col-sm-2 col-form-label">Court Order Date
+									: </label> <label class="col-sm-4 col-form-label text-primary">
+									<span
+									th:text="${#dates.format(caseDetails.courtOrderDate, 'dd/MM/yyyy')}"></span>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.mcaOrderFile != null}"
+								class="form-group row" id="mcaFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Communication received from MCA : </label> <label
+									class="col-sm-6 col-form-label text-primary"> <a
+									th:target="_blank"
+									th:href="@{|/downloadFiles?fileName=${caseDetails.mcaOrderFile}|}"><span
+										th:text="${caseDetails.mcaOrderFile}"></span></a>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.courtOrderFile != null}"
+								class="form-group row" id="courtFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Order received from Court : </label> <label
+									class="col-sm-6 col-form-label text-primary"> <span
+									th:text="${caseDetails.courtOrderFile}"></span>
+								</label>
+
+							</div>
+
+
+							<div th:if="${caseDetails.legacyOrderFile != null}"
+								class="form-group row" id="orderFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of running office Order uploaded : </label> <label
+									class="col-sm-6 col-form-label text-primary"> <a
+									th:target="_blank"
+									th:href="@{|/downloadFiles?fileName=${caseDetails.legacyOrderFile}|}"><span
+										th:text="${caseDetails.legacyOrderFile}"></span></a>
+								</label>
+
+							</div>
+
+
+							<div th:if="${caseDetails.mcaSubmissionDate != null}"
+								class="form-group row">
+
+								<label class="col-sm-4 col-form-label">Date of
+									Submission of Report to MCA: </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${#dates.format(caseDetails.mcaSubmissionDate, 'dd/MM/yyyy')}"></span>
+								</label>
+							</div>
+
+
+
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-users"></i>Investigation Team
+
+							</h4>
+
+
+							<div class="form-group row">
+
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Sr. No.</th>
+											<th style="width: 700px">Name</th>
+											<th>Case Designation</th>
+											<!-- <th>Investigation Officer</th> -->
+										</tr>
+									</thead>
+									<tbody>
+
+										<tr th:if="${inspList.empty}">
+											<td colspan="3">No Data Available</td>
+										</tr>
+										<tr th:each="insp : ${inspList}">
+											<td th:text="${insp.srNo}"></td>
+											<td th:text="${insp.inspName}"></td>
+
+											<th:block
+												th:if="${insp.isIO() == true and insp.isAdo() == true }">
+												<td>IO and Addl.</td>
+											</th:block>
+											<th:block
+												th:if="${insp.isIO() == true and insp.isAdo() == false }">
+												<td>IO</td>
+											</th:block>
+											<th:block
+												th:if="${insp.isAdo() == true and insp.isIO() == false}">
+												<td>Addl.</td>
+											</th:block>
+
+											<th:block
+												th:if="${insp.isIO() == false and insp.isAdo() == false}">
+												<td>Inspector</td>
+											</th:block>
+
+											<!--<td th:text="${insp.isIO() == true} ?  ' IO' : 'Inspector'"><td>
+											<!-- <th:block th:if="${#strings.equlas(ioName,insp.inspName)}">
+												<td th:text="${insp.inspName}"><span>-IO</span></td>
+											</th:block>
+											<th:block th:if="${#!strings.equlas(ioName,insp.inspName)}">
+												<td th:text="${insp.inspName}"></td>
+											</th:block> -->
+											<!-- <td th:text="${insp.inspName}"></td> -->
+											<!-- <td th:text="${insp.inspName}"> - Investigating Officer</td> -->
+
+											<!-- <td th:text="${insp.inspName}"></td> -->
+											<!-- <td th:text="${insp.isIO}"></td> -->
+										</tr>
+
+									</tbody>
+
+
+								</table>
+
+
+							</div>
+
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-industry"></i> Company ( under Section 219) <span
+									class="text-danger">*</span>
+							</h4>
+
+
+
+
+							<div class="form-group row" id="companyDiv">
+
+
+
+								<table id="myTable" class="table table-primary table-responsive">
+									<thead>
+										<tr>
+											<th>Sr NO</th>
+											<th>Company Name</th>
+											<th>Status</th>
+											<th>Options</th>
+											<!-- <th>E-mail</th>
+									<th>Mobile</th> -->
+										</tr>
+									</thead>
+
+									<tbody id="companyTable">
+										<tr th:if="${comList.empty}">
+											<td colspan="5">No Data Available</td>
+										</tr>
+										<tr th:each="comp,stats : ${comList}">
+											<td th:text="${stats.count}"></td>
+											<td th:text="${comp.name}"></td>
+
+											<td><th:block th:if="${comp.approved_status == 1L}">
+
+													<span> Pending for approval</span>
+
+												</th:block> <th:block th:if="${comp.approved_status == 2L}">
+													<span> Approved</span>
+												</th:block> <th:block th:if="${comp.approved_status == 3L}">
+													<span> Rejected</span>
+												</th:block></td>
+											<td>
+											
+													<button type="button" class="btn btn-danger  float-right" th:value="${comp.id}" th:onclick="'javascript:rejectComp(\'' + ${comp.id} +'\');'">Reject</button>
+											</td><td>
+												<button type="submit" class="btn btn-success"
+													th:name="CompApprove" th:value="${comp.id}">
+													Approve</button>
+											</td>
+										</tr>
+									</tbody>
+
+								</table>
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Reason For Reject </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+            <form th:action="@{/rejComp}" method="post">
+      <div class="modal-body">
+
+         <div class="form-group">
+         <input type="hidden" name="compId" id="compId" value="" style="display:none;">
+       
+            <label for="recipient-name" class="col-form-label">Remark :</label>
+            <input type="text" name = "remark" placeholder="Enter Reject Reason " maxlength="50"   class="form-control" id="review">
+              <span class="text-danger" style="display: none"  id="reviewError">Please Enter Reason </span>
+          </div>
+         
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button"  class="btn btn-primary"  onClick ="CompanyRejected();">Save</button>
+      </div>
+      </form>
+      
+    </div>
+  </div>
+</div>
+			</div>
+
+		</form>
+
+      
+
+
+		<script th:inline="javascript">
+			function rejectComp( id ) {
+				
+		
+				$("input[id=compId]").val(id)
+			/* 	$("#exampleModal").show(); */
+				$('#exampleModal').modal('toggle');
+			}
+			
+			function CompanyRejected () {
+                var reviewRemark = $('#review').val();
+				
+				if(reviewRemark ===  ""){
+					$('#reviewError').show();
+				}else{
+					$('#reviewError').hide();
+					$('#companyApproval').attr('action', 'companyRejected');
+		    			
+		    			$('#companyApproval').submit();
+				}
+			}
+		</script>
+
+		<script type="text/javascript" src="js/customValidation.js"></script>
+	</div>
+
+
+
+</body>
+</html>

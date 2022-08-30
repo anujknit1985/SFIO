@@ -1,0 +1,35 @@
+.cap-ref
+{
+	width:25px;
+	height:25px;
+}
+/************nav bar************/
+.nav-color{
+ background-color: #0b586d;
+}
+.active {
+  background-color: black;
+} 
+.logo {
+	padding-top: 15px;
+	padding-bottom: 0px;
+	padding-left: 32px;
+	display: block;
+}
+.logo h3 {
+	margin: 0;
+	font-weight: bold;
+	font-size: 25px;
+	padding-top: 22px;
+}
+
+.logo img {
+	float: left;
+	margin-right: 10px;
+	margin-top: -10px;
+	margin-bottom: 15px;
+} 
+
+.externalPage-color{
+	background-color:#fff;
+}

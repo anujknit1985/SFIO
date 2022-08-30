@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Login</title>
+<!-- loader-->
+<link href="css/pace.min.css" rel="stylesheet" />
+<script src="js/pace.min.js"></script>
+<script type="text/javascript" src="js/crypto-js.min.js"></script>
+<!-- <script src="js/bCrypt.js"></script> -->
+<!--     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script> -->
+<!--favicon-->
+<link rel="icon" href="images/India_flag.png" type="image/x-icon" />
+<!-- Bootstrap core CSS-->
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<!-- animate CSS-->
+<link href="css/animate.css" rel="stylesheet" type="text/css" />
+<!-- Icons CSS-->
+<link href="css/icons.css" rel="stylesheet" type="text/css" />
+<!-- Custom Style-->
+<link href="css/app-style.css" rel="stylesheet" />
+<!-- custom external css -->
+<link href="css/customExternal.css" rel="stylesheet" />
+
+<!-- <script type="text/javascript">
+	function reloadCaptcha() {
+		var token = $("input[name=_csrf]").val();
+		var header = 'X-CSRF-TOKEN';
+		$.ajax({
+			type : "POST",
+			url : 'refreshCaptcha',
+			cache : false,
+			async : false,
+			processData : false,
+			timeout : 600000,
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			success : function(data) {
+
+				var captcha = '/SNMS/images/myCaptcha/captcha.png?'
+						+ new Date().getTime();
+				$("#captchaId").attr("src", captcha);
+				
+			},
+			error : function(e) {
+
+				console.log("ERROR : ", e);
+
+			}
+		});
+
+	}
+	
+	
+	
+</script> -->
+
+</head>
+<body>
+
+	<!-- Start wrapper-->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="logo">
+					<img src="images/emblem-dark.png">
+					<h3>
+						Summon And Notices Management System<br>Serious Fraud
+						Investigation Office
+					</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="wrapper">
+		<nav class="navbar navbar-expand-lg navbar-light nav-color">
+			<div class="container">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item"><a class="nav-link text-white"
+							href="index">Home</a></li>
+						<li class="nav-item active"><a class="nav-link text-white"
+							href="login">Sign In</a></li>
+						<!-- <li class="nav-item"><a class="nav-link text-white"
+							href="forgotPass">Forgot Password</a></li> -->
+						<!--  <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li> -->
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="d-flex align-items-center justify-content-center"
+			style="margin-top: 20px;">
+			<div class="card card-authentication1 mb-1 externalPage-color">
+				<div class="card-body">
+					<div class="card-content p-2">
+						<div class="text-center"></div>
+						<div class="card-title text-center py-3">
+							Summon and Notices Management System <br>
+							<div class="mt-3" th:if="${error}">
+								<span th:text="${error}" class="text-danger text-lowercase"></span>
+							</div>
+							<div class="mt-3" th:if="${logout}">
+								<span th:text="${logout}" class="text-danger text-lowercase"></span>
+							</div>
+							<div class="mt-3" th:if="${successForgotmsg}">
+								<span th:text="${successForgotmsg}" class="text-danger "></span>
+							</div>
+						</div>
+
+						<form name='f' th:action="@{/securityCheck}" method="post">
+							<!--  <form name='f'  th:action="@{/login}" method="post"> -->
+							<div class="form-group">
+								<label for="exampleInputUsername" class="sr-only">Username</label>
+								<div class="position-relative has-icon-right">
+									<input type="text" id="username" name="username" onkeypress="return enterKeyPressed(event)"
+										class="form-control input-shadow" placeholder="Enter Username"
+										autocomplete="off"> <span id="usernameErr"
+										class="text-danger"></span>
+									<div class="form-control-position">
+										<i class="icon-user"></i>
+									</div>
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="exampleInputPassword" class="sr-only">Password</label>
+								<div class="position-relative has-icon-right">
+									<input type="password" id="password" name="password" onkeypress="return enterPassPressed(event)"
+										class="form-control input-shadow" placeholder="Enter Password"
+										autocomplete="off" onblur="passHashhhh()" /> <span
+										id="passwordErr" class="text-danger"></span>
+									<div class="form-control-position">
+										<i class="icon-lock"></i>
+									</div>
+
+								</div>
+							</div>
+
+						 <div class="form-group">
+								<label for="exampleInputcaptcha" class="sr-only">Security
+									Code</label>
+								<div class="position-relative has-icon-right">
+									<span class="col-sm-3 text-center"> <img id="cImg"
+										class="text-left" alt="not-load"></span>
+									<div class="form-control-position">
+										<a href="#" id="refreshCaptcha" class="refresh-captcha"><img
+											class="cap-ref" alt="refresh" src="images/refresh.png" /></a>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="exampleInputPassword" class="sr-only">Security
+									Code</label>
+								<div class="position-relative has-icon-right">
+									<input type="text" id="captcha" name="captcha"
+										class="form-control input-shadow"
+										placeholder="Enter Security Code" maxlength="6"
+										autocomplete="off">
+									<div class="form-control-position">
+										<i class="icon-lock"></i>
+									</div>
+									<span id="captchaErr" class="text-danger"></span>
+								</div>
+							</div> 
+							<!-- <div class="form-row">
+							<div class="form-group col-3"></div>
+							<div class="form-group col-4">
+
+								<img alt="" th:id="captchaId"
+									th:src="@{/images/myCaptcha/captcha.png}">
+
+
+							</div>
+
+							<div class="form-group col-2">
+								<div class="position-relative has-icon-right">
+									<a href="javascript:;" title="change captcha text"
+										onclick="reloadCaptcha()"> <img style="width: 30%"
+										alt="refresh" src="images/refresh1.png" />
+									</a>
+
+								</div>
+							</div>
+
+
+						</div>
+
+
+
+						<div class="form-row">
+							<div class="form-group col-3"></div>
+							<div class="form-group col-6">
+
+								<div class="position-relative has-icon-right">
+									<input type="TEXT" id="captcha" th:name="captcha"
+										autocomplete="off" class="form-control input-shadow"
+										placeholder="Enter Security Code">
+									<div class="form-control-position">
+										<i class="icon-lock"></i>
+									</div>
+								</div>
+							</div>
+						</div> -->
+							<input type="hidden" id="key" name = "key" th:value="${session.key}" /> <input
+								type="submit" id="login-submit" class="btn btn-danger"
+								value="Sign In" />
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--Start Back To Top Button-->
+		<a href="javaScript:void();" class="back-to-top"><i
+			class="fa fa-angle-double-up"></i> </a>
+		<!--End Back To Top Button-->
+
+	</div>
+	<!--wrapper-->
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="js/jquery.min.js"></script>
+
+	<!-- Javascript Bcrypt -->
+<script type="text/javascript">
+console.log("crypto-js", CryptoJS);
+function enterKeyPressed() {
+	
+$("#usernameErr").empty();
+}
+
+function enterPassPressed() {
+	$("#passwordErr").empty();
+}
+</script>
+
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/customValidation.js"></script>
+	<!-- <script type="text/javascript">
+	var password = "test";
+	var salt = "$2a$08$b0MHMsT3ErLoTRjpjzsCie";
+	function result(newhash){
+		console.log(newhash);
+	}
+	hashpw(password, salt, result, function() {});
+</script> -->
+	<!-- sidebar-menu js -->
+	<script src="js/sidebar-menu.js"></script>
+
+	<!-- Custom scripts -->
+	<script src="js/app-script.js"></script>
+
+</body>
+
+</html>

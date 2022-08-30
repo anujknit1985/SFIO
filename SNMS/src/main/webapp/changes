@@ -1,0 +1,10 @@
+caesDetailsView.html
+CaseController.java --> caseAndOfficeOrdDetail(method)
+All office order, notice and summon html - Alert pop up
+
+Legacy Changes -- 02-06-20
+
+CaseController.java
+OfficeOrderRepository.java
+Sidebar.html
+legacyOrder.html

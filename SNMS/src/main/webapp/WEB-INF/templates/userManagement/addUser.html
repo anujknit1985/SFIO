@@ -1,0 +1,352 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Add New User</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Add New
+						User</li>
+				</ol>
+			</div>
+		</div>
+
+		<div th:if="${message}" class="alert alert-success alert-dismissible"
+			role="alert">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class="alert-icon">
+				<i class="fa fa-check"></i>
+			</div>
+			<div class="alert-message">
+				<span th:text="${message}"></span>
+			</div>
+		</div>
+
+
+		<form th:action="@{/addNewUser}" method="post"
+			class="needs-validation" th:object="${userDetails}"
+			autocomplete="off">
+
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-address-book-o"></i> Personal Information
+							</h4>
+							<div class="form-group row">
+
+								<label for="input-10" class="col-sm-2 col-form-label">Salutation
+									<span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<select class="form-control" th:field="*{salutation}">
+										<option value="Mr">Mr</option>
+										<option value="Ms">Ms</option>
+										<option value="Mrs">Mrs</option>
+									</select> <span class="text-danger" th:errors="*{salutation}"></span>
+								</div>
+
+
+
+								<label for="input-10" class="col-sm-2 col-form-label">First
+									Name <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" autocomplete="off"
+										id="firstName" name="firstName" th:field="*{firstName}"
+										placeholder="Enter First Name" maxlength="50"> <span
+										class="text-danger" th:errors="*{firstName}"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="input-11" class="col-sm-2 col-form-label">Middle
+									Name </label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" autocomplete="off"
+										id="middleName" name="middleName" th:field="*{middleName}"
+										placeholder="Enter Middle Name" maxlength="50"><span
+										class="text-danger" th:errors="*{middleName}"></span>
+								</div>
+
+								<label for="input-12" class="col-sm-2 col-form-label">Last
+									Name</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" autocomplete="off"
+										id="lastName" name="lastName" th:field="*{lastName}"
+										placeholder="Enter Last Name" maxlength="50"> <span
+										class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+										th:errors="*{lastName}"></span>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+
+								<!-- <label for="input-13" class="col-sm-2 col-form-label">
+											Gender</label>
+										<div class="col-sm-4">
+											<select class="form-control" th:field="*{gender}">
+												<option value="M">Male</option>
+												<option value="F">Female</option>
+											</select>
+										</div> -->
+
+								<label for="input-16" class="col-sm-2 col-form-label">Date
+									of Birth <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" th:field="*{uiDob}"
+										id="uiDob" name="uiDob" placeholder="DD/MM/YYYY"
+										maxlength="10"> <span class="text-danger"
+										th:if="${#fields.hasErrors('uiDob')}" th:errors="*{uiDob}"></span>
+								</div>
+
+								<label for="input-16" class="col-sm-2 col-form-label">Mobile
+									Number <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control"
+										th:field="*{primaryMobile}" name="contactnumber" id="mobileNo"
+										placeholder="Enter Mobile No" maxlength="10"
+										onblur="checkMobile()"> <span class="text-danger"
+										th:if="${#fields.hasErrors('primaryMobile')}"
+										th:errors="*{primaryMobile}"></span> <span id="MobileErr"
+										class="text-danger"></span>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="input-16" class="col-sm-2 col-form-label">Alternate
+									Number</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control"
+										th:field="*{alternateNo}" name="contactnumber"
+										id="alternateNo" placeholder="Enter Alternate Number"
+										maxlength="10" onblur="checkMobile_alternate()"> <span
+										id="passwordErr" class="text-danger"></span> <span
+										class="text-danger"
+										th:if="${#fields.hasErrors('alternateNo')}"
+										th:errors="alternateNo"></span>
+								</div>
+
+								
+							</div>
+
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-envelope-o"></i> Official Information
+							</h4>
+
+							<div class="form-group row">
+
+								<label for="input-15" class="col-sm-2 col-form-label">SFIO
+									EMP ID</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" th:field="*{sfioEmpId}"
+										id="sfioEmpId" placeholder="Enter SFIO EMP ID" maxlength="20">
+									<span class="text-danger"
+										th:if="${#fields.hasErrors('sfioEmpId')}"
+										th:errors="*{sfioEmpId}"></span>
+								</div>
+
+								<label for="input-15" class="col-sm-2 col-form-label">Designation
+									<span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+
+									<select class="form-control" th:field="*{designationId}">
+										<option value="0">Choose Designation</option>
+										<option th:each="design: ${designationList}"
+											th:value="${design.id}" th:utext="${design.designation}" />
+									</select> <span class="text-danger"
+										th:if="${#fields.hasErrors('designation')}"
+										th:errors="*{designation}"></span>
+								</div>
+
+
+
+							</div>
+
+							<div class="form-group row">
+								<label for="input-14" class="col-sm-2 col-form-label">Official
+									Email ID <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" th:field="*{email}"
+										id="email" name="email" placeholder="Enter Official Email ID">
+									<span class="text-danger" th:if="${#fields.hasErrors('email')}"
+										th:errors="*{email}" maxlegth="100"></span>
+								</div>
+
+								<label for="input-15" class="col-sm-2 col-form-label">Joining
+									Date <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control"
+										th:field="*{uiJoiningDate}" id="uiJoiningDate"
+										placeholder="DD/MM/YYYY" maxlength="10"> <span
+										class="text-danger"
+										th:if="${#fields.hasErrors('uiJoiningDate')}"
+										th:errors="*{uiJoiningDate}"></span>
+								</div>
+
+							</div>
+
+
+							<div class="form-group row">
+								<label for="input-15" class="col-sm-2 col-form-label">Prosecution/Investigation
+									Unit<span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<select class="form-control" th:field="*{unitId}">
+										<option th:each="ulist: ${unitList}"
+											th:value="${ulist.unitId}" th:utext="${ulist.unitName}" />
+									</select> <span class="text-danger" th:if="${#fields.hasErrors('unit')}"
+										th:errors="*{unit}"></span>
+								</div>
+								<label for="input-15" class="col-sm-2 col-form-label">Assign
+									Role<span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<select class="form-control" th:field="*{roleId}">
+										<option th:each="ulist: ${roleList}"
+											th:value="${ulist.roleId}" th:utext="${ulist.roleName}" />
+									</select> <span class="text-danger" th:errors="*{roleId}"></span>
+								</div>
+							</div>
+
+							<div class="form-footer">
+								<button type="reset" class="btn btn-danger">
+									<i class="fa fa-times"></i> Reset
+								</button>
+								<button type="submit" class="btn btn-success" id="update_btn">
+									<i class="fa fa-check-square-o"></i> SAVE
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-user"></i> User Details
+						</h4>
+						<div class="form-group row">
+							<table class="table table-responsive" id="userTable">
+								<thead class="bg-info text-white">
+									<tr>
+										<th>S.No.</th>
+										<th>Name</th>
+										<th>Email Id</th>
+										<th>Mobile No.<br>Alternate No.
+										</th>
+										<th>SFIO Emp Id</th>
+										<th>Date Of Joining</th>
+										<th>Designation</th>
+										<th>Unit Name</th>
+										<!-- <th>Role</th> -->
+										<th>Created Date</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="p,stats: ${userList}">
+										<td th:text="${stats.count}"></td>
+										<td><th:block th:if="${p.firstName != null}">
+												<span class="text-wrap" th:text="${p.firstName}"></span>
+											</th:block> <th:block th:if="${p.middleName != null}">
+												<span class="text-wrap" th:text="${p.middleName}"></span>
+											</th:block> <th:block th:if="${p.lastName != null}">
+												<span class="text-wrap" th:text="${p.lastName}"></span>
+											</th:block></td>
+										<td class="text-wrap"><span th:text="${p.email}"></span></td>
+										<td><span th:text="${p.primaryMobile}"></span><br>
+										<span th:text="${p.alternateNo}"></span></td>
+										<td class="text-wrap" th:text="${p.sfioEmpId}"></td>
+										<td class="text-wrap"
+											th:text="${#dates.format(p.joiningDate,'dd/MM/yyyy')}"></td>
+										<td class="text-wrap" th:text="${p.designation.designation}"></td>
+										<td class="text-wrap" th:text="${p.unit.unitName}"></td>
+										<!-- <td class="text-wrap" th:text="${p.role}"></td> -->
+										<td class="text-wrap"
+											th:text="${#dates.format(p.createdDate,'dd/MM/YYYY HH:mm:ss')}"></td>
+										<td>
+											<form th:action="@{/editUser}" method="post"
+												autocomplete="off">
+
+
+												<button type="submit" th:name="edituser"
+													class="btn btn-success text-wrap" th:value="${p.id}">Edit</button>
+											</form>
+										</td>
+										<!-- 		<td><a th:href="@{/edit/{id}(id=${p.id})}">Edit</a></td> -->
+
+									</tr>
+								</tbody>
+
+							</table>
+						</div>
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+		
+		$(document).ready(function(){
+			 var table = $('#userTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+		});
+		
+			$('#uiDob').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+
+			$('#uiJoiningDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			
+			
+			
+		</script>
+
+		<script type="text/javascript" src="js/customValidation.js"></script>
+
+
+
+
+	</div>
+
+</body>
+</html>

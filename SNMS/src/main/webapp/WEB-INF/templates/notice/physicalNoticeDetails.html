@@ -1,0 +1,499 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Complete Case Details</title>
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+<link href="css/bootstrap-datetimepicker-build.css" rel="stylesheet"/>
+</head>
+<body>
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="getCompleteCase">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Complete
+						Case Details</li>
+				</ol>
+			</div>
+		</div>
+		<form th:action="@{/genPhysicalNoticesendAs}" method="post" id="caseByIdFrom"
+						class="needs-validation" th:object="${NoticeStatus}" enctype="multipart/form-data">
+						
+			<input type="hidden" th:field="*{id}" name="id"></input>			
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-briefcase"></i> Notice Details
+						</h4>
+
+						<h5 class="form-header">
+							<i class="zmdi zmdi-layers"></i> Case Details
+						</h5>
+
+						<div class="form-group row">
+							<input type="hidden" th:value="${id}" id="caseId" name="caseId" />
+							
+							<label for="input-13" class="col-sm-2 col-form-label">Case
+								ID : </label>
+							<div class="col-sm-3">
+								<span th:text="${NoticeStatus.caseDetails.caseId}"></span>
+							</div>
+
+							<label for="input-10" class="col-sm-2 col-form-label">Financial
+								Year : </label>
+							<div class="col-sm-4">
+								<span
+									th:text="${caseDetails.financeYear}"></span>
+								
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">Case
+								Title : </label>
+							<div class="col-sm-10">
+								<span th:text="${NoticeStatus.caseDetails.caseTitle}"></span>
+							</div>
+
+						</div>
+
+						<div class="form-group row">
+
+							<label class="col-sm-4 col-form-label">Investigation
+								Order Received From : </label> <label class="col-sm-6 col-form-label">
+								<span th:text="${NoticeStatus.caseDetails.radioValue}"></span>
+							</label>
+
+						</div>
+
+						<div th:if="${NoticeStatus.caseDetails.mcaOrderNo != '' }"
+							class="form-group row" id="mcaDiv">
+
+							<label class="col-sm-2 col-form-label">MCA Order No : </label> <label
+								class="col-sm-4 col-form-label"> <span
+								th:text="${NoticeStatus.caseDetails.mcaOrderNo}"></span>
+							</label> <label class="col-sm-2 col-form-label">MCA Order Date :
+							</label> <label class="col-sm-4 col-form-label"> <span
+									th:text="${#dates.format(NoticeStatus.caseDetails.mcaOrderDate,'dd/MM/yyyy')}"></span>
+							</label>
+
+						</div>
+
+						<div th:if="${NoticeStatus.caseDetails.courtOrderNo != ''}"
+							class="form-group row" id="courtDiv">
+
+							<label class="col-sm-2 col-form-label">Court Order No : </label>
+							<label class="col-sm-4 col-form-label"> <span
+								th:text="${NoticeStatus.caseDetails.courtOrderNo}"></span>
+							</label> <label class="col-sm-2 col-form-label">Court Order Date
+								: </label> <label class="col-sm-4 col-form-label"> <span
+								th:text="${#dates.format(NoticeStatus.caseDetails.courtOrderDate,'dd/MM/yyyy')}"></span>
+							</label>
+
+						</div>
+
+						<div th:if="${NoticeStatus.caseDetails.mcaOrderFile != ''}"
+							class="form-group row" id="mcaFileDiv">
+
+							<label for="input-11" class="col-sm-6 col-form-label">Copy
+								of the Communication received from MCA : </label> <label
+								class="col-sm-6 col-form-label"> <a th:target="_blank"
+								th:href="@{|/downloadFiles?fileName=${NoticeStatus.caseDetails.mcaOrderFile}|}"><span
+									th:text="${NoticeStatus.caseDetails.mcaOrderFile}"></span></a>
+							</label>
+
+						</div>
+
+						<div th:if="${NoticeStatus.caseDetails.courtOrderFile != ''}"
+							class="form-group row" id="courtFileDiv">
+
+							<label for="input-11" class="col-sm-6 col-form-label">Copy
+								of the Order received from Court : </label> <label
+								class="col-sm-6 col-form-label"> <span
+								th:text="${NoticeStatus.caseDetails.courtOrderFile}"></span>
+							</label>
+
+						</div>
+
+
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-industry"></i> Company Under Investigation
+						</h4>
+
+						<div class="form-group row">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Sr. No.</th>
+										<th>Company Name</th>
+										
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:if="${comList.empty}">
+										<td colspan="2">No Data Available</td>
+									</tr>
+									<tr th:each="insp,stats : ${comList}">
+										<td th:text="${stats.index+1}"></td>
+										<td th:text="${insp.name}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+
+
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-users"></i>Investigation Team
+						</h4>
+
+						<div class="form-group row">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Sr. No.</th>
+										<th>Name</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:if="${inspList.empty}">
+										<td colspan="3">No Data Available</td>
+									</tr>
+									<tr th:each="insp,stats : ${inspList}">
+										<td th:text="${stats.index+1}"></td>
+										<td th:text="${insp.inspName}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- <th:block th:if="${caseDetails.caseStage == 2}">
+						<label for="input-13" class="col-form-label text-danger" style="font-size: large; color: red;">
+								This case has been  transfered  to   prosecution unit. You can't Generate Summon/Notice's </label>
+						</th:block> -->
+						<!-- <div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Company Name <span class="text-danger">*</span>
+							</label>
+							<div class="col-sm-6">
+								
+								<span th:text="${NoticeStatus.caseDetails.caseTitle}"></span>
+							
+							</div>
+						</div> -->
+						
+						
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Individual Type  <span class="text-danger">*</span>
+							</label>
+							<div class="col-sm-6">
+								
+								<span th:text="${NoticeStatus.summonType.individualType.individualName}"></span>
+							
+							</div>
+						</div>
+						 
+						<h6 class="form-header">
+							<i class="zmdi zmdi-layers"></i> <span id="labelDir">Details</span>
+						</h6>
+					   	<th:block th:if="${NoticeStatus.summonType.individualType.individualId==1 or NoticeStatus.summonType.individualType.individualId==2}">
+						<div class="form-group row">
+								<label for="input-13" class="col-sm-2 col-form-label">
+									DIN <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+								<span th:text="${NoticeStatus.summonType.fdirReg_no}"></span>
+								</div>
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Name <span class="text-danger">*</span>
+								</label>
+							    <div class="col-sm-4">
+							    <span th:text="${NoticeStatus.summonType.fdirName}"></span>
+								</div>
+							
+						</div>
+							<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Date of Joining </label>
+							<div class="col-sm-4">
+							<span  th:text="${#dates.format(NoticeStatus.summonType.offJoinDate ,'dd/MM/yyyy')}"></span>
+							</div>
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Address <span class="text-danger">*</span></label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.fdirAddr}"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Mobile/Telephone No.<span class="text-danger" id="dinMob"></span></label>
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.fdirMobile}"></span>
+								</div>
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Email Address </label>
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.fdirEmail}"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Passport Number <span class="text-danger" id="dinpass"></span></label>
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.fdirpassport}"></span>
+							</div>
+							<label for="input-13" class="col-sm-2 col-form-label">Pan Number  </label>
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.fdirpanNumber}"></span>
+							</div>
+						</div>
+							
+						</th:block>
+						<th:block th:if = "${NoticeStatus.summonType.individualType.individualId==3 or NoticeStatus.summonType.individualType.individualId==4}" >
+					   <div id="EmployeeDetail">
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Name <span class="text-danger">*</span></label>
+							
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.empName}"></span>
+							</div>
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Designation <span class="text-danger">*</span></label>
+								<div class="col-sm-4">
+							   <span th:text="${NoticeStatus.summonType.empdesgi}"></span>
+								</div>
+						</div>
+						
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label">Sex <span class="text-danger">*</span></label>
+								<div class="col-sm-4">
+								  <span th:text="${NoticeStatus.summonType.empsex}"></span>	
+								</div>
+								<label for="input-13" class="col-sm-2 col-form-label">
+								DOB </label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.empsex}"></span>	
+							</div>
+							</div>
+							
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Nationality <span class="text-danger"></span></label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.empNation}"></span>	
+							</div>
+						 </div>
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Passport No. </label>
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.empPassport}"></span>	
+							</div>
+							
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Issue Date</label>
+							<div class="col-sm-4">
+								<span  th:text="${#dates.format(NoticeStatus.summonType.empPassDate ,'dd/MM/yyyy')}"></span>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Place of Issue </label>
+							<div class="col-sm-4">
+								<span th:text="${NoticeStatus.summonType.empissuplace}"></span>	
+							</div>
+							<label for="input-13" class="col-sm-2 col-form-label">Pan Number  </label>
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.empPanNumber}"></span>	
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Date of Joining </label>
+							<div class="col-sm-4">
+								<span  th:text="${#dates.format(NoticeStatus.summonType.empoffdate ,'dd/MM/yyyy')}"></span>
+							</div>
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Address <span class="text-danger">*</span></label>
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.empAddress}"></span>	
+								</div>
+						</div>
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Mobile/Telephone No.<span class="text-danger" id="dinMob"></span></label>
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.empMobile}"></span>	
+							</div>
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Email Address </label>
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.empemail}"></span>	
+							</div>
+						</div>
+						
+						</div>
+						</th:block>
+						
+						<th:block th:if = "${NoticeStatus.summonType.individualType.individualId ==7}">
+					<div id="outsiderDet">
+						<div class="form-group row">
+								<label class="col-sm-3 col-form-label">If CIN is available?<span class="text-danger">*</span></label>
+								<div class="col-sm-4">
+						           	<span th:text="${NoticeStatus.summonType.isOCin}"></span>	
+								</div>
+							</div>	
+							<div class="form-group row" id="cinBlock">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								CIN <span class="text-danger">*</span></label>
+								
+							<div class="col-sm-4">
+							 	<span th:text="${NoticeStatus.summonType.othRegno}"></span>
+							</div>
+						  </div>
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Name<span class="text-danger">*</span></label>
+							  <div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.othName}"></span>
+							 </div>
+						
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Relation with company <span class="text-danger">*</span></label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.othRelation}"></span>
+													   </div>
+						</div>
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Email Address <span class="text-danger"></span></label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.othEmail}"></span>
+							 </div>
+						   <label for="input-13" class="col-sm-2 col-form-label">
+								Mobile/Telephone No.<span class="text-danger"></span></label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.othMobile}"></span>
+								</div>
+						</div>
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Address <span class="text-danger">*</span></label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.othAddress}"></span>
+								</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Passport Number <span class="text-danger" id="dinpass"></span></label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.othpassport}"></span>
+							</div>
+							<label for="input-13" class="col-sm-2 col-form-label">Pan Number  </label>
+							<div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.othpanNumber}"></span>
+							</div>
+						</div>
+					</div>
+					</th:block>
+		            
+		            
+		            <th:block th:if = "${NoticeStatus.summonType.individualType.individualId  ==5 or NoticeStatus.summonType.individualType.individualId ==6}" >
+					<div id="secretaryDet">
+					
+					<div class="form-group row"  id ="cinAgent">
+								<label class="col-sm-3 col-form-label">If CIN is available?<span class="text-danger">*</span></label>
+								<div class="col-sm-4">
+								<span th:text="${NoticeStatus.summonType.isACin}"></span>
+								</div>
+							</div>	
+							<div class="form-group row" id="AcinBlock">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								CIN <span class="text-danger">*</span></label>
+							 <div class="col-sm-4">
+							<span th:text="${NoticeStatus.summonType.agentRegno}"></span>
+							</div>
+			        	     </div>
+					      <div class="form-group row">
+						    <label for="input-13" class="col-sm-2 col-form-label">
+								Name of the Person to be summoned/Notice to be issued<span class="text-danger">*</span></label>
+							  <div class="col-sm-4">
+							  <span th:text="${NoticeStatus.summonType.agentName}"></span>
+							</div>
+                             <label for="input-13" class="col-sm-2 col-form-label">
+								Name of the company <span class="text-danger">*</span></label>
+								       
+							<div class="col-sm-4">
+							  <span th:text="${NoticeStatus.summonType.agentcompany}"></span>
+								</div>
+						     </div>
+						<div class="form-group row">
+						 <label for="input-13" class="col-sm-2 col-form-label">
+								Email Address <span class="text-danger"></span></label>
+							<div class="col-sm-4">
+						     <span th:text="${NoticeStatus.summonType.agentEmail}"></span>
+						   </div>
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Mobile/Telephone No.<span class="text-danger"></span></label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.agentMobile}"></span>
+								</div>
+						  </div>
+						<div class="form-group row">
+						<label for="input-13" class="col-sm-2 col-form-label">
+								Address <span class="text-danger">*</span></label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.agentAddress}"></span>
+						     </div>
+						
+						</div>
+					</div>
+						
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Passport Number <span class="text-danger" id="dinpass"></span></label>
+							<div class="col-sm-4">
+								 <span th:text="${NoticeStatus.summonType.agentpassport}"></span>
+									</div>
+							<label for="input-13" class="col-sm-2 col-form-label">Pan Number  </label>
+							<div class="col-sm-4">
+							 <span th:text="${NoticeStatus.summonType.agentpanNumber}"></span>
+								</div>
+						</div>
+						</th:block>
+					
+							<div class = "form-group row">
+							<label class="col-sm-6 col-form-label">Upload Physically Sent Notice's  Document having DIN Number : <span th:text="${NoticeStatus.noticeDin}" class="text-danger" style="font-weight: bold; text-decoration: underline;" ></span> <span class="text-danger">*</span></label>
+						    <input type ="file"  autocomplete="off"  th:field="*{noticePhysicallyFile}" th:name = "noticePhysicallyFile"  th:id="noticePhysicallyFile" required="required">
+						   <span id="noticePhysicallyFileErr" class="text-danger" th:errors="*{noticePhysicallyFile}"></span>
+						  </div>
+						  
+						  <button type="submit"  class="btn btn-primary"
+								id="forwardButton">
+								<i class="fa fa-check-square-o"></i> Forward
+							</button>
+			</div>
+		</div>
+
+	</div>
+	</div>
+	</form>
+	
+	<script th:inline="javascript">
+	</script>
+	<script src="js/moment.min.js"></script>
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+<script src="js/bootstrap-filestyle.min.js"></script>
+	</div>
+</body>
+</html>

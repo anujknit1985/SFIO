@@ -1,0 +1,538 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Add Persons</title>
+</head>
+<body>
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-8">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="getCaseList">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Add
+						Person</li>
+				</ol>
+			</div>
+		</div>
+		<form th:action="@{/updatePersonPan}" method="post"
+			th:object="${summonDetails}" id="createpersonForm">
+			<input type="hidden" th:field="*{editperson}" th:id="editperson">
+			<input type="hidden" th:id="prcId"
+				th:field="*{personDetails.compDto.id}" name="prcId"> <input
+				type="hidden" th:id="isApproved"
+				th:field="*{personDetails.isApproved}" name="isApproved"> <input
+				type="hidden" th:id="caseId" th:field="*{caseId}" /> <input
+				type="hidden" name="editDeleteId" id="editDeleteId" /> <input
+				type="hidden" name="compId" id="compId" /> <input type="hidden"
+				name="dataId" id="dataId" /> <input type="hidden" id="personId"
+				th:field="*{personDetails.personID}" />
+
+			<div class="form-group row" th:if="${errorCaseID}">
+				<span th:text="${errorCaseID}" class="text-danger "></span>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-briefcase"></i> Edit Pan Details
+							</h4>
+
+
+
+							<input type="hidden" th:field="*{id}" /> <input type="hidden"
+								th:id="caseId" th:field="*{caseId}" /> <input type="hidden"
+								th:id="personId" th:field="*{personDetails.personID}" /> <input
+								type="hidden" th:id="pcompId"
+								th:field="*{personDetails.compDto.id}" />
+
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Case
+									ID : </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${caseDetails.caseId}"></span>
+									</label>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">Case
+									Title : </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${caseDetails.caseTitle}"></span>
+									</label>
+
+								</div>
+
+							</div>
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Name:
+								</label>
+								<div class="col-sm-4">
+
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.fullName}"></span>
+									</label>
+								</div>
+								<label for="input-10" class="col-sm-2 col-form-label">Gender:
+								</label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.Gender}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.Gender}"></span>
+										</label>
+									</th:block>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">
+									FATHER'S NAME </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.RelationName}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.RelationName}"></span>
+										</label>
+									</th:block>
+								</div>
+								<label for="input-16" class="col-sm-2 col-form-label">Date
+									of Birth </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span
+											th:text="${	#dates.format(summonDetails.personDetails.dob,'dd/MM/YYYY ')}"></span>
+										</label>
+
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span
+											th:text="${	#dates.format(summonDetails.personDetails.dob,'dd/MM/YYYY ')}"></span>
+										</label>
+									</th:block>
+								</div>
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-16" class="col-sm-2 col-form-label">
+									Address </label>
+								<div class="col-sm-4">
+									<th:block th:if="*{personDetails.isApproved == true}">
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.address}"></span>
+										</label>
+									</th:block>
+									<th:block th:if="*{personDetails.isApproved == false}">
+
+										<label class="col-sm-10 col-form-label text-primary">
+											<span th:text="${summonDetails.personDetails.address}"></span>
+										</label>
+
+
+
+									</th:block>
+								</div>
+
+								<label for="input-16" class="col-sm-2 col-form-label">OFFICIAL
+									EMAIL ID </label>
+								<div class="col-sm-4">
+
+
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										id="email" th:text="${summonDetails.personDetails.email}"></span>
+									</label>
+
+								</div>
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-16" class="col-sm-2 col-form-label">
+									Mobile NO </label>
+								<div class="col-sm-4">
+
+
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.primaryMobile}"></span>
+									</label>
+
+								</div>
+
+								<label for="input-16" class="col-sm-2 col-form-label">Pan
+									Number </label>
+								<div class="col-sm-4">
+
+									<!--  <th:block th:if="*{personDetails.isApproved == true}">	 -->
+
+									<input type="text" class="form-control" name="panNumber"
+										th:field="*{personDetails.panNumber}" id="panNumber"
+										onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 47 && event.charCode < 58)"
+										placeholder="Enter Pan Number " maxlength="10"> <span
+										class="text-danger" th:errors="*{personDetails.panNumber}"></span>
+
+									<!-- </th:block>	 -->
+
+									<!--  <th:block th:if="*{personDetails.isApproved == false}">
+                                 										
+									
+									<th:block th:if="*{personDetails.isDummy == true}">
+									<input type="text" class="form-control" name="panNumber"
+											th:field="*{personDetails.panNumber}" id="panNumber"
+											onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 47 && event.charCode < 58)"
+											placeholder="Enter Pan Number " maxlength="10"> <span
+											class="text-danger" th:errors="*{personDetails.panNumber}"></span>
+									</th:block>
+									
+									</th:block> -->
+								</div>
+
+
+							</div>
+
+
+							<!-- 	// Changes Start -->
+
+
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Company
+									Name: </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.companySummon.companyName}"></span>
+									</label>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">CIN:
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.companySummon.cin}"></span>
+									</label>
+
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Email:
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.companySummon.email}"></span>
+									</label>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">Address:
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.companySummon.address}"></span>
+									</label>
+
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Company
+									Type: </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.companySummon.companyType.name}"></span>
+									</label>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">Designation
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${summonDetails.personDetails.compDto.designation.designation}"></span>
+									</label>
+								</div>
+
+							</div>
+
+
+					
+						
+
+						<div class="form-footer">
+							<button type="submit" name="caseDetails" id="caseId"
+									class="btn btn-danger" th:value="${caseDetails.id}">Back</button>
+
+
+							<button type="button" class="btn btn-success" 
+								id="updateperoncomp" th:id = "savePan">
+								<i class="fa fa-check-square-o"></i>Update
+							</button>
+
+
+
+							<span></span>
+						</div>
+
+
+
+
+					</div>
+				</div>
+			</div>
+	
+
+
+	</form>
+
+  <link rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script src="js/jquery-confirm.js"></script>
+		<script th:inline="javascript">
+
+			
+		/* $('#panNumber').blur(function(){
+			
+			 alert("hi");
+				 
+				
+			 var token = $("input[name=_csrf]").val();
+			 var header = 'X-CSRF-TOKEN';
+
+			var panNumber = $("#panNumber").val();
+			
+			debugger 
+			var personId = $("#personId").val();
+			if(panNumber ==''){
+				
+				alert("Enter Pan NUmber")
+			}
+			
+			 $(document).ajaxSend(function(e, xhr, options)
+						{
+						    xhr.setRequestHeader(header, token);
+						}),
+			$.ajax({
+			      type : "post",
+			      url : "getValidPan?pan="+panNumber,
+//			      data : {editDeleteId:id},
+			      contentType : "application/json; charset=utf-8",
+			      success : function(data) {
+			    	//alert(data);
+			    	
+			    	if(data==false){
+			    		swal("Required!", "Invalid Pan Number", "error");
+			    		
+			    		$("#updateperoncomp").attr("disabled", 'disabled');
+			    		//$("#updateperoncomp").prop( "disabled", true);
+			    		  //$("#updateperoncomp").removeAttr("disabled");
+			    	}
+			    	else{
+			    		
+			    		$.ajax({
+			    			 crossDomain: true,
+			    		      type : "post",
+			    		      url : "getpanDetailsAccept?panNumber="+panNumber,
+//			     		      data : {editDeleteId:id},
+			    		      contentType : "application/json; charset=utf-8",
+			    		      success : function(data) {
+			    		    	  debugger;
+			    		    	  alert(data); 
+			    		    	  console.log(data);
+			    		    	  
+			    		    	  if(data!=''){
+			    		    		// if(data.isApproved==true || data.isApproved==false){		
+			    		    			 if(data.personID == personId){
+			 		    		    	alert("same pan number");
+			 		    		    	
+			 		    		    	 $("#updateperoncomp").attr("disabled", true);
+			    		    			 }		 
+			    		    			 
+			    		    		 else{	
+			    		    			$.confirm({
+			    				  		    title: '',
+			    				  		    content: 'This pan number is already availbale with Name '+data.fullName,
+			    				  		    type: 'green',
+			    				  		    typeAnimated: true,	
+			    				  		  buttons: {
+			    						        
+			    						        close: function () {
+			    						        }
+			    						    }
+			    						});
+			    		    			$("#updateperoncomp").attr("disabled", true);	 	  		    
+			    		    		 }
+			    		    	  }
+			    		    	  else{
+			    		    		  $("#updateperoncomp").attr("disabled", false);
+			    		    	  }		    		    	 
+			    	  		    },
+			    		    	
+			    		      error : function(xhr, status, error) {
+			    		    	  $("#updateperoncomp").attr("disabled", false);
+			    				  
+			    			  		 //$('#compnayBlock').show(); 
+			    					 
+			    			      }
+			    		    });  // Ajax closing
+			    	}
+			      },
+			});
+			});
+ */	
+	// when click on save button
+	 $('#savePan').click(function(){
+
+		 debugger;
+		 var personId = $("#personId").val();
+		 var panNumber = $('#panNumber').val();
+	//	 alert($('#email').val());
+	
+			$.ajax({
+			      type : "post",
+			      url : "getValidPan?pan="+panNumber,
+//	 		      data : {editDeleteId:id},
+			      contentType : "application/json; charset=utf-8",
+			      success : function(data) {
+			    	//alert(data);
+			    	
+			    	
+			    	if(data==false){
+			    	
+			    		swal("Required!", "Invalid Pan Number", "error");
+			    		$("#updateperoncomp").attr("disabled", true);	 	
+				
+			    	} 	
+			    	else
+			    	{     
+			    		
+			    		
+			    		 var token = $("input[name=_csrf]").val();
+						 var header = 'X-CSRF-TOKEN';
+						 
+						 $(document).ajaxSend(function(e, xhr, options)
+									{
+									    xhr.setRequestHeader(header, token);
+									}),
+			    		$.ajax({
+			    			  type : "post",
+			    		      url : "getpanDetailsAccept?panNumber="+panNumber,
+//			     		      data : {editDeleteId:id},
+			    		      contentType : "application/json; charset=utf-8",
+			    		      success : function(data) {
+			    		    	  
+			    		    	  
+			    		    	  if(data!=''){
+			    		    			 if(data.personID == personId){
+			 		    		    	$.confirm({
+			 					  		    title: '',	
+			 					  		    content: 'Please verify before you proceed further.',
+			 					  		    type: 'green',
+			 					  		    typeAnimated: true,
+			 					  		    buttons: {
+			 					  		        tryAgain: {
+			 					  		            text: 'Continue',
+			 					  		            btnClass: 'btn-Success',
+			 					  		            action: function(){
+			 					  		            	$('#createpersonForm').attr('action', 'updatePersonPan');
+			 					  		  		 	
+			 					  						$('#createpersonForm').submit();
+			 					  		    	   }
+			 					  		        },
+			 					  		        Cancel: function () {
+			 					  		        }
+			 					  		    }
+			 					  		});		    	
+			    		    			 }		 
+			    		    			 
+			    		    			 
+			    		    		 else{	
+			    		    			$.confirm({
+			    				  		    title: '',
+			    				  		    content: 'This pan number is already available with Name "'+data.fullName+'"  For Company ->  "'+data.companyperson[0].companySummon.companyName+'" ',
+			    				  		    type: 'green',
+			    				  		    typeAnimated: true,	
+			    				  		  buttons: {
+			    						        
+			    						        close: function () {
+			    						        }
+			    						    }
+			    						});
+			    		    			$("#updateperoncomp").attr("disabled", true);  // Already Avaiable Pan 	  	  		    
+			    		    		 }
+			    		    			 
+			    		    	  }
+			    		    	  else{
+			    		    		  $.confirm({
+			 					  		    title: '',	
+			 					  		    content: 'Please verify before you proceed further.',
+			 					  		    type: 'green',
+			 					  		    typeAnimated: true,
+			 					  		    buttons: {
+			 					  		        tryAgain: {
+			 					  		            text: 'Continue',
+			 					  		            btnClass: 'btn-Success',
+			 					  		            action: function(){
+			 					  		            	$('#createpersonForm').attr('action', 'updatePersonPan');
+			 					  		  		 	
+			 					  						$('#createpersonForm').submit();
+			 					  		    	   }
+			 					  		        },
+			 					  		        Cancel: function () {
+			 					  		        }
+			 					  		    }
+			 					  		});		    	
+			    		    	  }		    		    	 
+			    	  		    },
+			    		    	
+			    		      error : function(xhr, status, error) {
+			    		    	  $("#updateperoncomp").attr("disabled", false);
+			    				  
+			    			  		 //$('#compnayBlock').show(); 
+			    					 
+			    			      }
+			    		    });  // Ajax closing
+			    		
+			    		    
+			    		
+			    		    
+			    		
+					
+			    	}
+			      }
+			});
+						 
+		  		
+	 });
+
+	 
+	 </script>
+	<script type="text/javascript" src="js/customValidation.js"></script>
+
+	</div>
+</body>
+</html>
+
+

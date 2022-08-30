@@ -1,0 +1,237 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Add New Unit</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Add New
+						Unit</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<form th:action="@{/addNewUnit}" method="post"
+			class="needs-validation" th:object="${unitDetails}"
+			autocomplete="off">
+<input type="hidden" th:field="*{unitId}">
+			<div th:if="${message}" class="alert alert-success alert-dismissible"
+				role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<div class="alert-icon">
+					<i class="fa fa-check"></i>
+				</div>
+				<div class="alert-message">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-address-book-o"></i> Unit Information
+							</h4>
+							<div class="form-group row">
+
+								<label for="input-10" class="col-sm-2 col-form-label">Unit
+									Name <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" th:field="*{unitName}"
+										autocomplete="off" placeholder="Enter Unit Name"
+										maxlength="20"> <span class="text-danger"
+										th:if="${#fields.hasErrors('unitName')}"
+										th:errors="*{unitName}">Unit Name Error</span>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">
+									Unit Location <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" autocomplete="off"
+										id="location" name="location" th:field="*{location}"
+										placeholder="Enter Location" maxlength="40"> <span
+										class="text-danger" th:if="${#fields.hasErrors('location')}"
+										th:errors="*{location}">Unit Location Error</span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="input-11" class="col-sm-2 col-form-label">
+									Unit Address <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" autocomplete="off"
+										id="address" name="address" th:field="*{address}"
+										placeholder="Enter Unit Address" maxlength="200"> <span
+										class="text-danger" th:if="${#fields.hasErrors('address')}"
+										th:errors="*{address}">Address Error</span>
+								</div>
+
+
+								<label for="input-11" class="col-sm-2 col-form-label">
+									Unit Address Hindi <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" autocomplete="off"
+										onkeypress="return ((event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 8 || event.charCode == 32 || (event.charCode >= 48 && event.charCode <= 57));"
+										id="address_hi" name="address_hi" th:field="*{address_hi}"
+										placeholder="Enter Unit Address" maxlength="200"> <span
+										class="text-danger" th:if="${#fields.hasErrors('address_hi')}"
+										th:errors="*{address_hi}">Address Error</span>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-16" class="col-sm-2 col-form-label">Telephone
+									No <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control"
+										th:field="*{telephoneNo}" id="telephoneNo" name="telephoneNo"
+										placeholder="Enter Telephone No" maxlength="12"> <span
+										class="text-danger"
+										th:if="${#fields.hasErrors('telephoneNo')}"
+										th:errors="*{telephoneNo}">Unit Name Error</span>
+								</div>
+
+								<label for="input-16" class="col-sm-2 col-form-label">Fax
+									Number <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" th:field="*{faxNo}"
+										id="faxNo" name="faxNo" placeholder="Enter Fax No"
+										maxlength="12"> <span class="text-danger"
+										th:if="${#fields.hasErrors('faxNo')}" th:errors="*{faxNo}">Fax
+										Error</span>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="input-16" class="col-sm-2 col-form-label">Office
+									E-mail</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" th:field="*{eMail}"
+										id="eMail" name="eMail" placeholder="Enter E-Mail"
+										maxlength="50"> <span class="text-danger"
+										th:if="${#fields.hasErrors('eMail')}" th:errors="*{eMail}">Email
+										Error</span>
+								</div>
+							</div>
+
+							<div class="form-footer">
+								<button type="submit" class="btn btn-danger">
+									<i class="fa fa-times"></i> CANCEL
+								</button>
+								<button type="submit" class="btn btn-success">
+									<i class="fa fa-check-square-o"></i> SAVE
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-user"></i> Unit Details
+						</h4>
+						<div class="form-group row">
+							<table class="table table-responsive" id="unitTable">
+								<thead class="bg-info text-white">
+									<tr>
+										<th>S.No.</th>
+										<th>Name</th>
+										<th>Location</th>
+										<th>Address</th>
+										<th>Address Hindi</th>
+										<th>Official Email</th>
+										<th>Contact No.</th>
+										<th>Fax No.</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="p,stats: ${unitList}">
+										<td th:text="${stats.count}"></td>
+										<td class="text-wrap" th:text="${p.unitName}"></td>
+										<td class="text-wrap" th:text="${p.location}"></td>
+										<td class="text-wrap" th:text="${p.address}"></td>
+										<td class="text-wrap" th:text="${p.address_hi}"></td>
+										<td class="text-wrap" th:text="${p.eMail}"></td>
+										<td class="text-wrap" th:text="${p.telephoneNo}"></td>
+										<td class="text-wrap" th:text="${p.faxNo}"></td>
+										<td>
+											<form th:action="@{/editUnit}" method="post"
+												autocomplete="off">
+												<button class="btn btn-success text-wrap" type="submit"
+													th:name="editunit" th:value="${p.unitId}">Edit</button>
+											</form>
+										</td>
+									</tr>
+								</tbody>
+
+							</table>
+						</div>
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<!-- <script type="text/javascript">
+			$('#dob').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+
+			$('#joiningDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+		</script> -->
+
+
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+				var table = $('#unitTable').DataTable({
+					//		 	        lengthChange: false,
+					buttons : [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+				});
+			});
+		</script>
+
+
+	</div>
+
+</body>
+</html>

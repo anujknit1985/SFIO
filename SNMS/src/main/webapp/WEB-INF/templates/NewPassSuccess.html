@@ -1,0 +1,80 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Case Success Page</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="text-center">
+
+					<div th:if="${NewPassChange}"
+						class="alert alert-success alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						<div class="alert-icon">
+							<i class="fa fa-check"></i>
+						</div>
+						<div class="alert-message">
+							<span th:text="${NewPassChange}"></span>
+						</div>
+					</div>
+
+
+					<form th:action="@{/}" method="post"
+						class="needs-validation" th:object="${caseDetails}">
+
+						
+							
+						<!-- <div class="form-group row">
+							<div class="col-sm-4">
+								<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="id" th:field="*{id}" name="id" required />
+								<input type="hidden" name="sectionClause" id="sectionClause"/>
+							</div>
+							<div class="col-sm-4">
+								<label for="input-13" class="col-sm-12 col-form-label">
+									Select Clause of section 212 (1)<span class="text-danger">*</span>
+								</label>
+								<div>
+									<input type="checkbox" name="clause" value="(a)"/> (a)
+									<input type="checkbox" name="clause" value="(b)"/> (b)
+									<input type="checkbox" name="clause" value="(c)"/> (c)
+								</div>
+							</div>
+						</div> -->
+
+					<div class="form-group row">
+						<div class="col-sm-4"></div>
+						<div class="col-sm-4">
+
+					<a href="login" class="btn btn-dark"> Login </a>
+			
+							
+							</div></div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+
+<script th:inline="javascript">
+	function setclause(){
+		var clause="";
+		$('input:checkbox[name=clause]:checked').each(function(i,v){  clause = clause + v.value+',' });
+		clause = clause.substring(0,clause.lastIndexOf(','))
+		$('#sectionClause').val(clause);
+	}
+</script>
+
+	</div>
+
+</body>
+</html>

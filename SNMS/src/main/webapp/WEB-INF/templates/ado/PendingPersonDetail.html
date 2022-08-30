@@ -1,0 +1,422 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>>View Details</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">View
+						Details</li>
+				</ol>
+			</div>
+		</div>
+
+		<div th:if="${message}" class="alert alert-success alert-dismissible"
+			role="alert">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class="alert-icon">
+				<i class="fa fa-check"></i>
+			</div>
+			<div class="alert-message">
+				<span th:text="${message}"></span>
+			</div>
+		</div>
+
+
+		<form th:action="@{/PersonReject}" method="post"
+			class="needs-validation" th:object="${pca}" autocomplete="off"
+			th:id="approvePersoncomp">
+			<input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{rpc.id}"> 
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-address-book-o"></i> Personal Information
+							</h4>
+
+							<div class="form-group row">
+
+								<label for="input-10" class="col-sm-2 col-form-label">Company
+									Name </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.companySummon.companyName}"></span>
+									</label>
+
+								</div>
+								<label for="input-10" class="col-sm-2 col-form-label">CIN
+									 </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.companySummon.cin}"></span>
+									</label>
+
+								</div>
+							</div>
+							<div class="form-group row">
+
+								<label for="input-10" class="col-sm-2 col-form-label">Full
+									Name </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.personDetails.fullName}"></span>
+									</label>
+
+								</div>
+								<label for="input-10" class="col-sm-2 col-form-label">
+									Gender </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.personDetails.Gender}"></span>
+									</label>
+
+								</div>
+							</div>
+
+
+
+							<div class="form-group row">
+
+
+								<label for="input-10" class="col-sm-2 col-form-label">
+									FATHER'S NAME </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.personDetails.RelationName}"></span>
+									</label>
+								</div>
+
+
+								<label for="input-16" class="col-sm-2 col-form-label">Date
+									of Birth </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${	#dates.format(pca.rpc.personDetails.dob,'dd/MM/YYYY ')}"></span>
+
+									</label>
+
+
+
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-10" class="col-sm-2 col-form-label">Designation
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.designation.designation}"></span>
+									</label>
+								</div>
+								<label for="input-10" class="col-sm-2 col-form-label">
+									Address </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.personDetails.address}"></span>
+									</label>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-16" class="col-sm-2 col-form-label">OFFICIAL
+									EMAIL ID </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.personDetails.email}"></span>
+
+									</label>
+								</div>
+								<label for="input-16" class="col-sm-2 col-form-label">
+									Mobile NO </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.personDetails.primaryMobile}"></span>
+									</label>
+
+								</div>
+
+
+							</div>
+
+
+
+							<div class="form-group row">
+
+								<label for="input-14" class="col-sm-2 col-form-label">Pan
+									Number </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.personDetails.panNumber}"></span>
+									</label>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">
+									FRN </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.frn}"></span>
+									</label>
+								</div>
+
+
+
+							</div>
+
+							<div class="form-group row">
+								<label for="input-16" class="col-sm-2 col-form-label">IEC
+									Number </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.Iec}"></span>
+									</label>
+
+								</div>
+
+								<label for="input-16" class="col-sm-2 col-form-label">
+									Investigation Status</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${pca.rpc.status.statusName}"></span>
+									</label>
+								</div>
+
+							</div>
+
+
+
+							<div class="form-group row"> 
+
+								<label for="input-14" class="col-sm-2 col-form-label">Pan
+									Number </label>
+
+								<div class="col-sm-4">
+									<th:block th:if="${pca.rpc.personDetails.isDummy==true}">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="Dummy"></span></label>
+									</th:block>
+									<th:block th:if="${pca.rpc.personDetails.isDummy == false}">
+										<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="Original"></span></label>
+									</th:block>
+
+								</div>
+							</div>
+
+
+
+
+
+							<div class="form-footer">
+
+									<button type="button" class="btn btn-success btn-round m-1 "
+										th:onclick="'approvecomp(\'' + ${pca.id} +'\');'"
+										th:value="${pca.id}">Approve</button>
+
+									<button type="button"
+										class="btn btn-info btn-round m-1 float-right"
+										data-toggle="modal" data-target="#exampleModal"
+										data-whatever="@mdo" th:value="${pca.id}">Sent Back
+										to Review</button>
+
+
+									<button type="button"
+										class="btn btn-danger btn-round m-1 float-right"
+										data-toggle="modal" data-target="#exampleModal1"
+										data-whatever="@mdo" th:value="${pca.id}">Rejected</button>
+								</div>
+
+
+							</div>
+						</div>
+
+				</div>
+				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Reason For Sending Back </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Remark :</label>
+            <input type="text" th:field="*{remark}" placeholder="Enter Reject Reason " maxlength="50" class="form-control" id="review">
+              <span class="text-danger" style="display: none"  id="reviewError">Please Enter Reason </span>
+          </div>
+         
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary"  onclick="personSendBack();"   >Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Reason For Reject </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Remark :</label>
+            <input type="text" th:field="*{rejectRemark}" placeholder="Enter Reject Reason "  onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32) || (event.charCode==46)"
+            maxlength="50"   class="form-control" id="deleteRemark">
+            <span class="text-danger" style="display: none"  id="deleteError">Please Enter Reason </span>
+          </div>
+         
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button"  th:name = "reject"  onclick="personDeleted();" class="btn btn-primary" >Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+			</div>
+		</form>
+		<link rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script src="js/jquery-confirm.js"></script>
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var table = $('#userTable').DataTable({
+					//		 	        lengthChange: false,
+					buttons : [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+				});
+			});
+
+			$('#dob').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+
+			$('#applicationDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+
+			$('#uploadDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+
+			$('#statusDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			$('#lastPassportDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			
+			function approvecomp(compid) {
+				
+			//	alert("id is   "+compid)
+				$.confirm({
+		  		    title: '',
+		  		    content: 'Are You sure you want to approve ? ',
+		  		    type: 'green',
+		  		    typeAnimated: true,
+		  		    buttons: {
+		  		        tryAgain: {
+		  		            text: 'Yes',
+		  		            btnClass: 'btn-Success',
+		  		            action: function(){
+		  		            	
+
+		  		    			$('#approvePersoncomp').attr('action', 'companyapproval');
+		  		    			
+		  		    			$('#approvePersoncomp').submit();
+		  		            }
+		  		        },
+		  		        close: function () {
+		  		        }
+		  		    }
+		  		});
+		  		
+
+				
+			}
+			
+
+			
+			function personDeleted() {
+				var deleteRemark = $('#deleteRemark').val();
+				
+				if(deleteRemark ===  ""){
+					$('#deleteError').show();
+				}else{
+					$('#approvePersoncomp').attr('action', 'PersonRejected');
+		    			
+		    			$('#approvePersoncomp').submit();
+				}
+			}
+			
+			function personSendBack () {
+                var reviewRemark = $('#review').val();
+				
+				if(reviewRemark ===  ""){
+					$('#reviewError').show();
+				}else{
+					$('#reviewError').hide();
+					$('#approvePersoncomp').attr('action', 'PersonSendBack');
+		    			
+		    			$('#approvePersoncomp').submit();
+				}
+			}
+		</script>
+
+		<script type="text/javascript" src="js/customValidation.js"></script>
+
+
+
+
+	</div>
+
+</body>
+</html>

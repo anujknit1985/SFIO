@@ -1,0 +1,237 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Summon/Notice as on</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<script type="text/javascript">
+		function getCompletCase(id)
+	  	{
+	  		$('#id').val(id);
+	        $('#getCompleteCase').attr("action", "getApprovedOrder");
+	        $('#getCompleteCase').submit();  		
+	  	}
+		</script>
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Notice Status Report
+						Report</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> Notice Status Report Generated on <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span>
+						</h4>
+
+						<!-- <form th:action="@{/createNotice}" method="post"
+							class="needs-validation" th:object="${caseDetails}"> -->
+
+						<span th:text="${errorEsign}" class="text-danger text-lowercase"></span>
+
+						<div class="form-group row">
+							<table class="table table-respnsive table-bordered" id="approvedOrderTable" >
+								<thead class="bg-info text-white">
+									<tr class="text-center">
+										<th>S.No.</th>
+										<!-- <th>UnitNo</th> -->
+										<th>Unit Name</th>
+										
+										<th>Notice</th>
+										<th>Physically Sent  Notice</th>
+																			
+									</tr>
+								</thead>
+									<tbody class="text-center">
+									<td></td>
+									<td></td>
+									<td>
+									<table>
+									<tr class="text-center">
+										<th>Notices Pending for Approval</th>
+									    <th>Unsigned Notices</th>
+									    <th>Signed Notices</th>
+									</tr>
+									</table>
+									</td>
+									</tbody>
+
+
+							</table>
+						</div>
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<form method="post" id="getCompleteCase" target="_self">
+			<input id="id" name="id" type="hidden" /> <input type="hidden"
+				th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+		</form>
+
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.buttons.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/jszip.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/pdfmake.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/vfs_fonts.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.html5.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.print.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.colVis.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				 var table = $('#approvedOrderTable').DataTable( {
+//			 	        lengthChange: false,
+                dom: 'Bfrtip',
+                "scrollX": true,
+                "ordering": false,
+                "pageLength": 50,
+				buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ],
+				 
+				 "footerCallback": function ( row, data, start, end, display ) {
+			            var api = this.api(), data;
+			            
+			// alert(data);
+			            // converting to interger to find total
+			            var intVal = function ( i ) {
+			                return typeof i === 'string' ?
+			                    i.replace(/[\$,]/g, '')*1 :
+			                    typeof i === 'number' ?
+			                        i : 0;
+			            };
+			 
+			            // computing column Total of the complete result 
+			            
+			              var tn = api
+			                .column( 2 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+				
+			            var monTotal = api
+			                .column( 3 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+						
+							
+				    var tueTotal = api
+			                .column( 4 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+							
+			            var wedTotal = api
+			                .column( 5 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+							
+				     var thuTotal = api
+			                .column( 6 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+							
+				     var friTotal = api
+			                .column( 7 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+				     var satTotal = api
+		                .column( 8 )
+		                .data()
+		                .reduce( function (a, b) {
+		                    return intVal(a) + intVal(b);
+		                }, 0 );
+							
+			            // Update footer by showing the total with the reference of the column index 
+				    $( api.column( 0 ).footer() ).html("Total");
+				   	    $( api.column( 2 ).footer() ).html(tn);
+			            $( api.column( 3 ).footer() ).html(monTotal);
+			            $( api.column( 4 ).footer() ).html(tueTotal);
+			            $( api.column( 5 ).footer() ).html(wedTotal);
+			            $( api.column( 6 ).footer() ).html(thuTotal);
+			            $( api.column( 7 ).footer() ).html(friTotal);
+			            $( api.column( 8 ).footer() ).html(satTotal);
+			        },
+					
+					  buttons: {
+					    buttons: [{
+					      extend: 'excel',
+					      text: '<i class="fa fa-print"></i> Excel',
+					      title: $('h4').text(),
+					      exportOptions: {
+					        columns: ':not(.no-print)'
+					      },
+					      footer: true,
+					      autoPrint: false
+					    },
+					    {
+						      extend: 'print',
+						      text: '<i class="fa fa-print"></i> Print',
+						      title: $('h4').text(),
+						      exportOptions: {
+						        columns: ':not(.no-print)'
+						      },
+						      footer: true,
+						      autoPrint: false
+						    },{
+					      extend: 'pdf',
+					      text: '<i class="fa fa-file-pdf-o"></i> PDF',
+					      title: $('h4').text(),
+					      exportOptions: {
+					        columns: ':not(.no-print)'
+					      },
+					      footer: true
+					    }],
+					    
+					    
+					    dom: {
+					      container: {
+					        className: 'dt-buttons'
+					      },
+					      button: {
+					        className: 'btn btn-default'
+					      }
+					    }
+					  }
+			        
+			   
+					/*  buttons: [
+					        {
+					            extend: 'print',
+					            text: 'Print current page',
+					            autoPrint: false
+					        }
+					    ] */
+				      } );
+			});
+		</script>
+
+	</div>
+
+</body>
+</html>

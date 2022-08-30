@@ -1,0 +1,100 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Complete Case Details</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<script type="text/javascript">
+		function getCompletCase(id)
+	  	{
+	  		$('#id').val(id);
+	        $('#getCompleteCase').attr("action", "getCompleteCaseByIdForOffline");
+	        $('#getCompleteCase').submit();  		
+	  	}
+		</script>
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Complete Case Details</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> Complete Case Details
+						</h4>
+						<div class="form-group row">
+								<div th:if="${invalidId}"><span class="text-danger" th:text="${invalidId}"></span></div>
+								
+								<div th:if="${caseStrId}"><span class="text-danger" th:text="${caseStrId}"></span></div>
+								
+								<div th:if="${dateOfapper}"><span class="text-danger" th:text="${dateOfapper}"></span></div>
+								<div th:if="${isSensitive}"><span class="text-danger" th:text="${isSensitive}"></span></div>
+								<div th:if="${summonNo}"><span class="text-danger" th:text="${summonNo}"></span></div>
+								<div th:if="${dateOfIssue}"><span class="text-danger" th:text="${dateOfIssue}"></span></div>
+						        <div th:if="${summonDin}"><span class="text-danger" th:text="${summonDin}"></span></div>
+		                         <div th:if="${summonofflineFile}"><span class="text-danger" th:text="${summonofflineFile}"></span></div>
+	
+							</div>
+						<!-- <form th:action="@{/createNotice}" method="post"
+							class="needs-validation" th:object="${caseDetails}"> -->
+							<div class="form-group row">
+								<table class="table table-respnsive" id="summonDetailsTable">
+									<thead class="bg-info text-white">
+										<tr>
+											<th>S.No.</th>
+											<th>Case Id</th>
+											<th>Case Title</th>
+											<th>Action</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+									 <tr th:each="p,stats: ${caseList}">
+											 <td th:text="${stats.count}"></td> 
+											<td th:text="${p.caseStrId}"></td>
+											<td th:text="${p.caseTitle}"></td>
+											<td><a href="#" th:onclick="'javascript:getCompletCase(\'' + ${p.caseId} +'\');'" class="btn btn-danger">Get Details</a></td>
+										</tr> 
+									</tbody>
+
+								</table>
+							</div>
+					
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<form method="post" id="getCompleteCase" target="_self">
+		<input id="id" name="id" type="hidden" />
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		</form>
+<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+			
+			 var table = $('#summonDetailsTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+		});
+		
+		</script>	
+
+	</div>
+
+</body>
+</html>

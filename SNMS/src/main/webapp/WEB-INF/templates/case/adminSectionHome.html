@@ -1,0 +1,73 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Case Details</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+	    <div class="row mt-3">
+    <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card">
+      <div class="card-body">
+          <p class="mb-0 ">Office Order <span class="float-right badge badge-primary">Pending For Approval (1)</span></p>
+           <div class="">
+           <h4 class="mb-0 py-3 text-primary">2<span class="float-right"> <a href="showPendingOfficeOrderStage1" class="btn btn-success">View <i class="fa fa-eye"></i></a></span></h4>
+           </div>
+           <div class="progress-wrapper">
+            <div class="progress" style="height:5px;">
+            <div class="progress-bar bg-primary" style="width:60%"></div>
+             </div>
+          </div>
+        </div>
+      </div>
+     </div>
+
+
+     <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card">
+      <div class="card-body">
+          <p class="text-success mb-0">Notices <span class="float-right badge badge-success">Pending (0)</span></p>
+           <div class="">
+           <h4 class="mb-0 py-3 text-success">5 <span class="float-right"><i class="fa fa-search"></i></span></h4>
+           </div>
+           <div class="progress-wrapper">
+            <div class="progress" style="height:5px;">
+            <div class="progress-bar bg-success" style="width:80%"></div>
+             </div>
+          </div>
+        </div>
+      </div>
+     </div>
+
+     <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card">
+      <div class="card-body">
+          <p class="text-danger mb-0">Summons  <span class="float-right badge badge-danger">Pending (0)</span></p>
+           <div class="">
+           <h4 class="mb-0 py-3 text-danger">3 <span class="float-right"><i class=""></i></span></h4>
+           </div>
+           <div class="progress-wrapper">
+            <div class="progress" style="height:5px;">
+            <div class="progress-bar bg-danger" style="width:45%"></div>
+             </div>
+          </div>
+        </div>
+      </div>
+     </div>
+
+   </div>
+
+
+	</div>
+
+</body>
+</html>

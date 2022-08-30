@@ -1,0 +1,484 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Complete Case Details</title>
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+<link href="css/bootstrap-datetimepicker-build.css" rel="stylesheet"/>
+</head>
+<body>
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Complete
+						Case Details</li>
+				</ol>
+			</div>
+		</div>
+		<form th:action="@{/genNoticeAs}" method="post" id="caseByIdFrom"
+						class="needs-validation" th:object="${caseDet}">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-briefcase"></i> Add Notice/Summon Details
+						</h4>
+
+						<h5 class="form-header">
+							<i class="zmdi zmdi-layers"></i> Case Details
+						</h5>
+
+						<div class="form-group row">
+							<input type="hidden" th:value="${id}" id="caseId" name="caseId" />
+							
+							<label for="input-13" class="col-sm-2 col-form-label">Case
+								ID : </label>
+							<div class="col-sm-3">
+								<span th:text="${caseDetails.caseId}"></span>
+							</div>
+
+							<label for="input-10" class="col-sm-2 col-form-label">Financial
+								Year : </label>
+							<div class="col-sm-4">
+								<span
+									th:text="${caseDetails.financeYear}"></span>
+								
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">Case
+								Title : </label>
+							<div class="col-sm-10">
+								<span th:text="${caseDetails.caseTitle}"></span>
+							</div>
+
+						</div>
+
+						<div class="form-group row">
+
+							<label class="col-sm-4 col-form-label">Investigation
+								Order Received From : </label> <label class="col-sm-6 col-form-label">
+								<span th:text="${caseDetails.radioValue}"></span>
+							</label>
+
+						</div>
+
+						<div th:if="${caseDetails.mcaOrderNo != '' }"
+							class="form-group row" id="mcaDiv">
+
+							<label class="col-sm-2 col-form-label">MCA Order No : </label> <label
+								class="col-sm-4 col-form-label"> <span
+								th:text="${caseDetails.mcaOrderNo}"></span>
+							</label> <label class="col-sm-2 col-form-label">MCA Order Date :
+							</label> <label class="col-sm-4 col-form-label"> <span
+									th:text="${#dates.format(caseDetails.mcaOrderDate,'dd/MM/yyyy')}"></span>
+							</label>
+
+						</div>
+
+						<div th:if="${caseDetails.courtOrderNo != ''}"
+							class="form-group row" id="courtDiv">
+
+							<label class="col-sm-2 col-form-label">Court Order No : </label>
+							<label class="col-sm-4 col-form-label"> <span
+								th:text="${caseDetails.courtOrderNo}"></span>
+							</label> <label class="col-sm-2 col-form-label">Court Order Date
+								: </label> <label class="col-sm-4 col-form-label"> <span
+								th:text="${#dates.format(caseDetails.courtOrderDate,'dd/MM/yyyy')}"></span>
+							</label>
+
+						</div>
+
+						<div th:if="${caseDetails.mcaOrderFile != ''}"
+							class="form-group row" id="mcaFileDiv">
+
+							<label for="input-11" class="col-sm-6 col-form-label">Copy
+								of the Communication received from MCA : </label> <label
+								class="col-sm-6 col-form-label"> <a th:target="_blank"
+								th:href="@{|/downloadFiles?fileName=${caseDetails.mcaOrderFile}|}"><span
+									th:text="${caseDetails.mcaOrderFile}"></span></a>
+							</label>
+
+						</div>
+
+						<div th:if="${caseDetails.courtOrderFile != ''}"
+							class="form-group row" id="courtFileDiv">
+
+							<label for="input-11" class="col-sm-6 col-form-label">Copy
+								of the Order received from Court : </label> <label
+								class="col-sm-6 col-form-label"> <span
+								th:text="${caseDetails.courtOrderFile}"></span>
+							</label>
+
+						</div>
+
+
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-industry"></i> Company Under Investigation
+						</h4>
+
+						<div class="form-group row">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Sr. No.</th>
+										<th>Company Name</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:if="${comList.empty}">
+										<td colspan="2">No Data Available</td>
+									</tr>
+									<tr th:each="insp,stats : ${comList}">
+										<td th:text="${stats.index+1}"></td>
+										<td th:text="${insp.name}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+
+
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-users"></i>Investigation Team
+						</h4>
+
+						<div class="form-group row">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Sr. No.</th>
+										<th>Name</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:if="${inspList.empty}">
+										<td colspan="3">No Data Available</td>
+									</tr>
+									<tr th:each="insp,stats : ${inspList}">
+										<td th:text="${stats.index+1}"></td>
+										<td th:text="${insp.inspName}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Company Name <span class="text-danger">*</span>
+							</label>
+							<div class="col-sm-6">
+								<select class="custom-select" id="compName" name="chooseComapny">
+									<option th:each="insp : ${comList}" th:value="${insp.name}"
+										th:text="${insp.name}"></option>
+								</select>
+								 <div th:if="${chooseComapnyErr}">		
+										<span th:text="${chooseComapnyErr}" class="text-danger"></span>
+								</div>
+							</div>
+						</div>
+						
+					<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Type <span
+								class="text-danger">*</span></label>
+							<div class="col-sm-4">
+								<div class="icheck-inline">
+									<input type="radio" id="inline-radio-primary" name="noticeType" 
+										value="notice" onchange="checkDraft();"/> <label for="inline-radio-primary">Notice</label>
+								</div>
+								<div class="icheck-inline">
+									<input type="radio" id="inline-radio-danger" name="noticeType" 
+										value="summon"  onchange="checkDraft();"/> <label for="inline-radio-info">Summon</label>
+								</div>
+								
+								<input type="hidden" id="noticeType" name="type">
+<!-- 								<input type="hidden" id="summontypeid" name="summontypeid"> -->
+								
+								
+								<div th:if="${typeErr}">		
+										<span th:text="${typeErr}" class="text-danger"></span>
+								</div> 
+							</div>
+						</div>
+						
+						<div style="display:none;" id="indiDiv">
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">Individual Type <span
+								class="text-danger">*</span></label>
+							<div class="col-sm-6">
+								<select class="custom-select" name="individualType" onchange="getInvidualType();"
+									id="type">
+									<option value="0">choose</option>
+									<option value="official">Official/Individual (CUI)</option>
+									<option value="vendor">Other than CUI</option>
+									<option value="auditor">Auditor</option>
+									<option value="secretary">Company Secretary</option>
+								</select>
+								<div th:if="${individualTypeErr}">
+									<span class="text-danger" th:text="${individualTypeErr}"></span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Notice/Summon No. <span class="text-danger">*</span>
+							</label>
+							<div class="col-sm-6">
+								<input type="text" placeholder="Enter Notice/Summon No." class="inputTxt form-control" name="summonNo" value="SFIO/INV/2020/"/>
+							
+							</div>
+							<div th:if="${summonNoErr}">		
+										<span th:text="${summonNoErr}" class="text-danger"></span>
+							</div> 
+						</div>
+						</div>
+						<div class="form-group col-md-12" style="display:none;" id="indiTableDiv">
+									<table id="indiTable"class="table table-bordered table-responsive-lg">
+										<thead class="bg-success text-white">
+											<tr class="bg-info">
+												<th colspan="6">Case Id : <span th:text="${caseDetails.caseId}"></span></th>
+											</tr>
+											<tr>
+											<!-- <th>S.No.</th> -->
+											<th>Check</th> 
+											<!-- <th>Individual Type</th> -->
+											<th>Company Name</th>
+											<th id="col3"></th>
+											<th id="col4"></th>
+											<th id="col5"></th>
+											</tr>
+										</thead>
+										<tbody>
+							</tbody></table>
+							<div th:if="${summonTypeErr}">		
+										<span th:text="${summonTypeErr}" class="text-danger"></span>
+							</div> 
+					</div>
+					<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label" id="dateSubmitAppear">
+								Date of Appearance <span class="text-danger">*</span>
+							</label>
+							<div class="col-sm-6">
+								<input type="text" placeholder="Enter Date of Appearance" 
+								class="inputTxt form-control dateOfAppear" name="dateOfAppear" onkeydown="return false;"/>
+							</div>
+							<div th:if="${dateofAppearErr}">		
+										<span th:text="${dateofAppearErr}" class="text-danger"></span>
+							</div> 
+						</div>
+						<div class="form-footer row">
+								<div class="col-md-5">
+								<button type="submit" th:name="draft" id="draftBtn"
+									class="btn btn-success">
+									<i class="fa fa-check-square-o"></i> Draft already available
+								</button>
+								
+								</div>
+								<div class="col-md-6"><button type="submit" th:name="save" id="saveBtn"
+									class="btn btn-danger">
+									<i class="fa fa-check-square-o"></i> Create Notice/Summon
+								</button></div>
+							</div>
+				</div>
+			</div>
+		</div>
+
+	</div></form>
+	
+	<script th:inline="javascript">
+	
+		$(document).ready(function() {
+		$("input[name='noticeType']").change(function() {
+			$('#noticeType').val($('input:radio[name=noticeType]:checked').val());
+// 			if ($('input:radio[name=noticeType]:checked').val() == 'summon') {
+				$('#indiDiv').show();
+			/* }
+			else{
+				$('#indiDiv').hide();
+			} */
+			
+			if ($('input:radio[name=noticeType]:checked').val() == 'summon') {
+				$('#dateSubmitAppear').text('Date of Appearance');
+			}
+			else if ($('input:radio[name=noticeType]:checked').val() == 'notice') {
+				$('#dateSubmitAppear').text('Date of Submission of Documents');
+			} 
+			
+			});
+		
+		$("input[name='summontypeid']").click(function() {
+			alert();
+			$('#summontypeid').val($('input:radio[name=summontypeid]:checked').val());
+		});
+		
+		$('.dateOfAppear').datetimepicker({
+			 format: 'DD-MMM-YYYY hh:mm A',
+			 minDate:new Date()
+	 });
+       
+		     $('#saveBtn').click(function(e) {
+		    	if($('input:radio[name=noticeType]:checked').val()=='summon')
+			    {
+			    	$('#caseByIdFrom').attr('action', 'genSummonAs');
+			    	$('#caseByIdFrom').submit();
+					
+			    }
+			    else
+			    {
+			    	$('#caseByIdFrom').attr('action', 'genNoticeAs');
+			    	$('#caseByIdFrom').submit();
+			    }
+		    }); 
+		     
+		     $('#draftBtn').click(function(e) {
+			    	if($('input:radio[name=noticeType]:checked').val()=='summon')
+				    {
+				    	$('#caseByIdFrom').attr('action', 'openDraftSummon');
+				    	$('#caseByIdFrom').submit();
+						
+				    }
+				    else
+				    {
+				    	$('#caseByIdFrom').attr('action', 'openDraftNotice');
+				    	$('#caseByIdFrom').submit();
+				    }
+			    }); 
+		     
+		     
+		});
+		function getInvidualType()
+		{
+		    var type = $("#type").val();
+		    var caseId=$('#caseId').val();
+		    var company=$('#compName').val();
+		    $.ajax({
+		      type : "GET",
+		      url : "getCompByType?type=" + type+"&id="+caseId+"&comp="+company,
+		      success : function(data) {
+		    	  
+		    	  $('#indiTableDiv').show();
+		    	  
+		    	  $("#indiTable tbody tr").remove();
+		    	  
+		    	  if(type=='auditor')
+		    	  {
+		    		  $('#col3').text("Registration No.");
+		    		  $('#col4').text("Auditor Name");
+		    		  $('#col5').text("Email Address");
+		    	  }
+		    	  else if(type=='vendor')
+		    	  {
+		    		  $('#col3').text("Name");
+		    		  $('#col4').text("Relation with company");
+		    		  $('#col5').text("Email Address");
+		    	  }
+		    	  else if(type=='secretary')
+		    	  {
+		    		  $('#col3').text("Member Ship No.");
+		    		  $('#col4').text("Member Name");
+		    		  $('#col5').text("Email Address");
+		    	  }
+		    	  else if(type=='official')
+		    	  {
+		    		  //alert('ok label');
+		    		  $('#col3').text("Name");
+		    		  $('#col4').text("DIN/Designation");
+		    		  $('#col5').text("Email Address");
+		    	  }
+		    	  for(var i = 0; i < data.length; i++) {
+		    		  var row = $('<tr>');
+		    		  row.append($('<td>').html('<input type="radio" name="summontypeid" onchange="checkDraft()" value='+data[i][14]+'>'));
+		    		  //row.append($('<td>').html(data[i][0]));
+		    		  row.append($('<td>').html(data[i][1]));
+		    		  if(type=='auditor')
+		    		  {
+		    			  row.append($('<td>').html(data[i][2]));
+		    			  row.append($('<td>').html(data[i][3]));
+		    			  row.append($('<td>').html(data[i][4]));
+		    		  }
+		    		  else if(type=='vendor')
+		    		  {
+		    			  row.append($('<td>').html(data[i][5]));
+		    			  row.append($('<td>').html(data[i][6]));
+		    			  row.append($('<td>').html(data[i][7]));
+		    		  }
+		    		  else if(type=='secretary')
+		    		  {
+		    			  row.append($('<td>').html(data[i][15]));
+		    			  row.append($('<td>').html(data[i][16]));
+		    			  row.append($('<td>').html(data[i][17]));
+		    		  }
+		    		  else if(type=='official'){
+		    			  //alert(data[i][13])
+		    			  if(data[i][13] =='Y')
+		    			  { //alert('ok if');
+		    				  row.append($('<td>').html(data[i][8]));
+		    			  	  row.append($('<td>').html(data[i][10]));
+		    			  }
+		    			  else if(data[i][13] =='N')
+		    			  {	
+		    			    //alert('ok else');
+		    			  	row.append($('<td>').html(data[i][9]));
+		    			  	row.append($('<td>').html(data[i][11]));
+		    			  }
+		    			  row.append($('<td>').html(data[i][12]));
+		    		  }
+		    		 
+		    	      //row.append($('<td>').html(data[i][1]));
+		    	      
+		    	      $('#indiTable tbody').append(row);
+		    	  } 
+		        
+		      },
+		      error : function(jqXHR, textStatus, errorThrown) {
+		          alert('unable to get data');
+		        }
+		    });
+		}
+		$('#draftBtn').hide();
+		function checkDraft(){
+			 var type = $('input:radio[name=noticeType]:checked').val();
+			 var caseId=$('#caseId').val();
+			 var summontypeid = $('input:radio[name=summontypeid]:checked').val();
+			 var token = [[${_csrf.token}]];
+			 var header = [[${_csrf.headerName}]];
+			 $(document).ajaxSend(function(e, xhr, options)
+			{
+			    xhr.setRequestHeader(header, token);
+			}),
+			$.ajax({
+			      type : "POST",
+			      url : "checkDraftForNoticeSummon?type=" + type+"&caseId="+caseId+"&summontypeid="+summontypeid,
+			      success : function(data) {
+			    	  if(data==100){
+			    	  	$('#saveBtn').hide();
+			    	  	$('#draftBtn').show();
+			    	  }else if(data==101){
+			    		  $('#saveBtn').hide();
+				    	  $('#draftBtn').hide();
+				    	  alert('Summon/Notice is already in progress for this type');
+			    	  }else if(data==102 || data==0){
+			    		  $('#saveBtn').show();
+				    	  	$('#draftBtn').hide();
+			    	  }
+			      },
+			      error : function(jqXHR, textStatus, errorThrown) {
+			          console.log('unable to get data');
+			        }
+			});
+			
+		}
+		
+	</script>
+	<script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+<script src="js/bootstrap-filestyle.min.js"></script>
+	</div>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Add New Unit</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Add New
+						Financial Year</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<form th:action="@{/addfinanceYear}" method="post"
+			class="needs-validation" th:object="${financeDetails}"
+			autocomplete="off">
+
+			<div th:if="${message}" class="alert alert-success alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<div class="alert-icon">
+					<i class="fa fa-check"></i>
+				</div>
+				<div class="alert-message">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-address-book-o"></i> Financial Year Information
+							</h4>
+							<div class="form-group row">
+
+								<label for="input-10" class="col-sm-2 col-form-label">From
+									Year (YYYY) <span class="text-danger" >*</span></label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" th:field="*{fromY}"
+										autocomplete="off" placeholder="From Year" maxlength="4">
+									<span class="text-danger"
+										th:if="${#fields.hasErrors('fromY')}"
+										th:errors="*{fromY}">fromY Error</span>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">
+									To Year (YYYY) <span class="text-danger" >*</span> </label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" autocomplete="off"
+										id="location" name="location" th:field="*{toY}"
+										placeholder="To Year" maxlength="4"> <span
+										class="text-danger" th:if="${#fields.hasErrors('toY')}"
+										th:errors="*{toY}">To Year error</span>
+								</div>
+							</div>
+							 <!-- <div class="form-group row">
+								<label for="input-11" class="col-sm-2 col-form-label">
+									Reset DIN Sequence <span class="text-danger" >*</span></label>
+								<div class="col-sm-4">
+								
+								<input type="checkbox" th:name="resetDin" checked="checked"/>
+									<input type="text" class="form-control" autocomplete="off"
+										id="address" name="address" t`h:field="*{address}"
+										placeholder="Enter Unit Address" maxlength="200"> <span
+										class="text-danger" th:if="${#fields.hasErrors('address')}"
+										th:errors="*{address}">Address Error</span>
+								</div>
+
+							</div>  -->
+
+							<!-- <div class="form-group row">
+
+								<label for="input-16" class="col-sm-2 col-form-label">Telephone
+									No <span class="text-danger">*</span></label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control"
+										th:field="*{telephoneNo}" id="telephoneNo" name="telephoneNo"
+										placeholder="Enter Telephone No" maxlength="10"> <span
+										class="text-danger"
+										th:if="${#fields.hasErrors('telephoneNo')}"
+										th:errors="*{telephoneNo}">Unit Name Error</span>
+								</div>
+
+								<label for="input-16" class="col-sm-2 col-form-label">Fax
+									Number <span class="text-danger" >*</span></label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" th:field="*{faxNo}"
+										id="faxNo" name="faxNo" placeholder="Enter Fax No" maxlength="10"> <span
+										class="text-danger" th:if="${#fields.hasErrors('faxNo')}"
+										th:errors="*{faxNo}">Fax Error</span>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="input-16" class="col-sm-2 col-form-label">Office
+									E-mail <span class="text-danger" >*</span></label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" th:field="*{eMail}"
+										id="eMail" name="eMail" placeholder="Enter E-Mail" maxlength="50"> <span
+										class="text-danger" th:if="${#fields.hasErrors('eMail')}"
+										th:errors="*{eMail}" >Email Error</span>
+								</div>
+							</div> -->
+
+							<div class="form-footer">
+								<button type="submit" class="btn btn-danger" onclick="this.form.action='home'">
+									<i class="fa fa-times"></i> CANCEL
+								</button>
+								<button type="submit" class="btn btn-success">
+									<i class="fa fa-check-square-o"></i> SAVE
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-user"></i> Financial Year List
+						</h4>
+							<div class="form-group row">
+								<table class="table" id="financeTable">
+									<thead class="bg-info text-white">
+										<tr>
+											<th>S.No.</th>
+											<th>Financial Year</th>
+<!-- 											<th>To Year</th> -->
+											<th>Is Active</th>
+<!-- 											<th>Din Sequence</th> -->
+											
+										</tr>
+									</thead>
+									<tbody>
+									 <tr th:each="p,stats: ${fincanceList}">
+											<td th:text="${stats.count}"></td> 
+											<td class="text-wrap" th:text="${p.fromY}+'-'+${p.toY}"></td>
+<!-- 											<td class="text-wrap" th:text="${p.toY}"></td> -->
+											<td class="text-wrap" th:text="${p.active}"></td>
+<!-- 											<td class="text-wrap" th:text="${p.sequence}"></td> -->
+											
+										</tr> 
+									</tbody>
+
+								</table>
+							</div>
+					
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		
+	
+<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		 <script type="text/javascript">
+			$(document).ready(function(){
+				 var table = $('#financeTable').DataTable( {
+//			 	        lengthChange: false,
+				        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+				      } );
+			});
+		</script>
+
+
+
+
+
+	</div>
+
+</body>
+</html>

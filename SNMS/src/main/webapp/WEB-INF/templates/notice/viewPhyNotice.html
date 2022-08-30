@@ -1,0 +1,127 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Preview Summons</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-8">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="approvedSummonUsr">Homed</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Preview
+						Notice</li>
+				</ol>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<div th:if="${regDscmsg}">
+							<span th:text="${regDscmsg}" class="text-danger"></span>
+						</div>
+						<div th:if="${isValidDsc}">
+							<span th:text="${isValidDsc}" class="text-danger"></span>
+						</div>
+							<div class="form-group row">
+					
+						<label class="col-sm-6 col-form-label">Physically Sent Notice's  Document having DIN Number : <span th:text="${noticeStatus.noticeDin}" class="text-danger" style="font-weight: bold; text-decoration: underline;" ></span> <span class="text-danger">*</span></label>
+					</div>	
+						<div class="form-group row">
+							<div class="col-md-7">
+								<iframe th:src="${ooFile}" width="700px" height="600px"
+									id="iframefile"></iframe>
+
+							</div>
+							<div class="col-md-5">
+								<form th:action="@{ApprocvedPhyNotice}" method="post"
+									th:object="${noticeStatus}">
+									<input type="hidden" th:field="*{id}" />
+									<!-- 								<input type="submit" value="e-Sign with DSC" class="btn btn-danger"> -->
+									<span th:if="${privilege}"> <input type="button"
+										value="e-Sign" class="btn btn-danger"
+										onclick="displayeSignBlock();"><br>
+									</span> <span sec:authorize="hasRole('ROLE_USER')"><a
+										href="userHome" class="btn btn-dark">Home</a></span>
+									<button type="submit"  th:name ="approvedNotice"class="btn btn-info">Approve</button>
+									<button type="button"
+										class="btn btn-danger btn-round m-1 float-right"
+										data-toggle="modal" data-target="#exampleModal"
+										data-whatever="@mdo" th:value="${noticeStatus.id}">Sent
+										Back to Review</button>
+
+									<div class="modal fade" id="exampleModal" tabindex="-1"
+										role="dialog" aria-labelledby="exampleModalLabel"
+										aria-hidden="true">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLabel">Reason
+														For Sending Back</h5>
+													<button type="button" class="close" data-dismiss="modal"
+														aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+													<div class="form-group">
+														<label for="recipient-name" class="col-form-label">Remark
+															:</label> <input type="text" th:field="*{remark}"
+															placeholder="Enter Reject Reason " maxlength="50"
+															
+															class="form-control" id="recipient-name">
+													</div>
+
+
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary"
+														data-dismiss="modal">Close</button>
+													<button type="submit" class="btn btn-primary" onclick="rmarkfunction()">Save</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script th:inline="javascript">
+			$('#iframefile').load(function(){
+				/* alert("hello") */
+			    $('#iframefile').contents().find("#toolbarViewerRight").hide();
+			});
+			$('#consent').change(function(){
+				 if(this.checked) {
+					$('#signButton').attr("disabled",false);
+// 			            $(this).prop("checked", returnVal);
+			        }else{
+			        	$('#signButton').attr("disabled","disabled");
+			        }
+			});
+			
+			function rmarkfunction() {
+				alert("hello")
+			}
+			
+			function displayeSignBlock(){
+				$('#esignBlock').show();
+			}
+			function proceedToSign(){
+			function removeDiv(){
+				$('div').removeClass('loading');
+		    	 clearInterval(interval); 
+			}
+			</script>
+		</div>
+	</div>

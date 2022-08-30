@@ -1,0 +1,204 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Change Password</title>
+
+<style type="text/css">
+
+
+.text-left {
+  margin-left: -15px;
+}
+.right {
+  float: right;
+}
+.block {
+  display: block !important;
+}
+.errMsg{color:red;}
+</style>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+	<script type="text/javascript" src="js/customValidation.js"></script>
+	<script type="text/javascript" src="js/crypto-js.min.js"></script>
+	<script type="text/javascript">
+  $(document).ready(function()
+      {
+          $("#password").prop("disabled", true);
+          $("#confirmPassword").prop("disabled", true);
+          $('#currentPass').focus(function()
+          {
+              $('#currentPassSymbolTrue').removeClass("block");
+              $('#currentPassSymbolFalse').removeClass("block");
+              $("#password").val('');
+              $("#confirmPassword").val('');
+              $("#password").prop("disabled", true);
+              $("#confirmPassword").prop("disabled", true);
+          });
+
+          $('#currentPass').blur(function()
+          {
+              if ($('#currentPass').val() == '')
+                  return false;
+              	var encryptedBase64Key = $('#key').val();
+				var parsedBase64Key = CryptoJS.enc.Base64.parse(encryptedBase64Key);
+				var encryptedData = CryptoJS.AES.encrypt($('#currentPass').val(), parsedBase64Key, {
+				mode : CryptoJS.mode.ECB,
+				padding : CryptoJS.pad.Pkcs7
+				});
+				$('#currentPass').val(encryptedData.toString());
+              	var currPass = $('#currentPass').val();
+              	 var key = $('#key').val();
+              var token = $("input[name=_csrf]").val();
+			  var header = 'X-CSRF-TOKEN';
+              $(document).ajaxSend(function(e, xhr, options)
+              {
+                  xhr.setRequestHeader(header, token);
+              }), $.ajax({
+                  type : "POST",
+                  url : "passwordCheck",
+                  data : {
+                      current_password : currPass,
+                      key : key,
+                      _token : token
+                  },
+                  success : function(data)
+                  {
+                      if (data == "true") {
+                    	  //alert('true');
+                         /*  $('#currentPassSymbolTrue').addClass("block");
+                          $('#currentPassSymbolFalse').removeClass('block'); */
+                          $("#password").prop("disabled", false);
+                          $("#password").focus();
+                          $("#confirmPassword").prop("disabled", false);
+                          $("#msgcurrenrpasswrong").removeClass("text-danger");
+                          $("#msgcurrenrpasswrong").text('Entered password is correct');
+                          $("#msgcurrenrpasswrong").addClass("text-success");
+                      } else {
+                    	  //alert('false');
+                         /*  $('#currentPassSymbolTrue').removeClass("block");
+                          $('#currentPassSymbolFalse').addClass('block'); */
+                          $("#password").prop("disabled", true);
+                          $("#confirmPassword").prop("disabled", true);
+                          $("#msgcurrenrpasswrong").removeClass("text-success");
+                          $("#msgcurrenrpasswrong").text('Please enter correct password')
+                          $("#msgcurrenrpasswrong").addClass("text-danger");
+                      }
+                      $('#passResult').val(data);
+                  },
+                  error : function()
+                  {
+                	  console.log('error')
+                  }
+              });
+          });
+      });
+  
+	
+
+  </script>
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Update
+						New Password</li>
+				</ol>
+			</div>
+		</div>
+
+		 <input type="hidden" id="passResult" />
+		<form th:action="@{/saveChangePassword1}" method="post"
+			class="needs-validation" th:object="${userForm}">
+			<input id="usrId" type="hidden" th:field=*{id}/>
+			<div th:if="${message}" class="alert alert-success alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<div class="alert-icon">
+					<i class="fa fa-check"></i>
+				</div>
+				<div class="alert-message">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-tasks"></i> Update
+						New Password
+							</h4>
+							
+						<div th:if="${unknownUser}">
+                   			<span class="text-danger" th:text="${unknownUser}"></span>
+               			</div>
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-3 col-form-label">Current Password <span class="text-danger">*</span></label>
+								<div class="col-sm-6">
+									<input type="password" class="inputTxt form-control"
+										autocomplete="off" id="currentPass" name="currentPass"
+										th:field="*{password}" placeholder="Enter Current Password" required maxlength="20"/>
+										
+										<span class="text-danger" id="currentPassErr"
+										th:errors="*{password}"></span>
+										<span id="msgcurrenrpasswrong"></span> 
+								</div>
+							</div>
+							
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-3 col-form-label">New Password <span class="text-danger">*</span></label>
+								<div class="col-sm-6">
+									<input type="password" class="inputTxt form-control"
+										autocomplete="off" id="password" name="password"
+										th:field="*{changePassword}" placeholder="Enter New Password" required maxlength="20" onblur="changePasswordHash(1);"/>
+										
+										<span class="text-danger errMsg" id="passwordErr"
+										th:errors="*{changePassword}"></span>
+										<span id="msgnewpasswrong" class="text-danger errMsg"></span> 
+								</div>
+							</div>
+							
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-3 col-form-label">Confirm Password <span class="text-danger">*</span></label>
+								<div class="col-sm-6">
+									<input type="password" class="inputTxt form-control"
+										autocomplete="off" id="confirmPassword" name="confirmPassword"
+										th:field="*{confirmPassword}" placeholder="Enter Confirm Password" required maxlength="20" onblur="changePasswordHash(2);"/>
+										
+										<span class="text-danger errMsg" id="confirmPasswordErr"
+										th:errors="*{confirmPassword}"></span>
+										<span id="msgconfpasswrong" class="text-danger errMsg"></span> 
+								</div>
+							</div>
+							
+							<div class="form-footer">
+								<button type="reset" class="btn btn-danger">
+									<i class="fa fa-times"></i> Clear
+								</button>
+								<input type="hidden" id="key" th:value="${key}" name="key" />
+								<input type="submit" id="updatePassword" value="Update Password" class="btn btn-success"/>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</form>
+
+
+
+
+
+
+	</div>
+
+</body>
+</html>

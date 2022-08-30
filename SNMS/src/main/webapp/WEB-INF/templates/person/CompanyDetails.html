@@ -1,0 +1,186 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Add New User</title>
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+<link href="css/bootstrap-datetimepicker-build.css" rel="stylesheet" />
+</head>
+
+<body>
+
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Company Details</li>
+				</ol>
+			</div>
+		</div>
+
+
+
+
+		<form th:action="@{/addNewApplicant}" method="post"
+			class="needs-validation" id="NewApplicantForm" autocomplete="off">
+
+			<div th:if="${message}" class="alert alert-success alert-dismissible"
+				role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<div class="alert-icon">
+					<i class="fa fa-check"></i>
+				</div>
+				<div class="alert-message">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-address-book-o"></i> Company Information
+							</h4>
+
+
+							<div class="form-group row">
+								<th:block
+									th:if="${companyData.companySummon.companyType.id !=3}">
+									<label for="input-10" class="col-sm-2 col-form-label">CIN
+									</label>
+								</th:block>
+								<th:block
+									th:if="${companyData.companySummon.companyType.id ==3}">
+									<label for="input-10" class="col-sm-2 col-form-label">LLPIN
+									</label>
+								</th:block>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${companyData.companySummon.cin}"></span>
+									</label>
+
+								</div>
+								<label for="input-10" class="col-sm-2 col-form-label">COMPANY
+									NAME </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${companyData.companySummon.companyName}"></span>
+									</label>
+
+								</div>
+							</div>
+
+
+
+							<div class="form-group row">
+
+
+								<label for="input-10" class="col-sm-2 col-form-label">COMPANY
+									TYPE<span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${companyData.companySummon.companyType.name}"></span>
+									</label>
+								</div>
+
+
+								<label for="input-10" class="col-sm-2 col-form-label">
+									DESIGNATION NAME </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${companyData.designation.designation}"></span>
+									</label>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">
+									FRN </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${companyData.frn}"></span>
+									</label>
+								</div>
+								<label for="input-16" class="col-sm-2 col-form-label">
+									IEC NUMBER </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${companyData.Iec}"></span>
+									</label>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="input-16" class="col-sm-2 col-form-label">
+									DATE OF APPOINTMENT<span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${	#dates.format(companyData.dateAppointment,'dd/MM/YYYY ')}"></span>
+									</label>
+
+								</div>
+
+								<label for="input-14" class="col-sm-2 col-form-label">DATE
+									OF CESSATION 
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${	#dates.format(companyData.dateCessation,'dd/MM/YYYY ')}"></span>
+									</label>
+								</div>
+							</div>
+
+
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">
+									Case Id </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${companyData.caseDetails.caseId}"></span>
+									</label>
+								</div>
+
+
+								<label for="input-16" class="col-sm-2 col-form-label">INVESTIGATION
+									STATUS <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${companyData.status.statusName}"></span>
+									</label>
+
+								</div>
+							</div>
+
+
+
+
+
+							<div class="form-footer">
+								<a href="PersonStatus" class="btn btn-danger">Back</a>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>
+

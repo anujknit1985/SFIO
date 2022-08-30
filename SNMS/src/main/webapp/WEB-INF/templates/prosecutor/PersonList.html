@@ -1,0 +1,97 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+  <link href="plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+<title>All Created Cases</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">List of KMP's
+						</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i>List of KMP's
+							
+						</h4>
+
+
+						<form th:action="@{/personStatusUpdate}" method="post"
+							class="needs-validation" th:object="${personList}">
+
+							<div class="form-group row">
+								<table class="table table-striped" id="userTable">
+									<thead>
+										<tr style="background-color: blueviolet; color: white;">
+											<th>Sr No</th>
+											<th>Person</th>
+											<th>Case Title</th>
+											<th></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="detail,iStat :${personList}">
+											<td th:text="${iStat.count}"></td>
+											<td th:class = "text-wrap" th:text="${detail.fullName}"></td>
+											<td th:text="${detail.panNumber}"></td>
+											
+											<td><button type="submit" th:name="updateStatus" th:id="personId" class="btn btn-info"
+													th:value="${detail.personID}">Update Person Status</button></td>
+										   </tr>
+
+
+									</tbody>
+
+								</table>
+							</div>
+						</form>
+
+
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+			
+			 var table = $('#userTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+		});
+		
+		</script>
+
+	</div>
+
+</body>
+</html>

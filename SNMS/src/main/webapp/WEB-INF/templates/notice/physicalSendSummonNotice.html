@@ -1,0 +1,153 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Add New Designation</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Upload Physically sent Summons/Notice</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<form th:action="@{/PysicatDetails}" method="post"
+			class="needs-validation" th:object="${summonStatus}">
+
+			<div th:if="${message}" class="alert alert-success alert-dismissible"
+				role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<div class="alert-icon">
+					<i class="fa fa-check"></i>
+				</div>
+				<div class="alert-message">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-sitemap"></i> Upload Physically sent Summons/Notice
+							</h4>
+
+							<div class="form-group row">
+                             	<div class="col-sm-4">
+									<div class="icheck-inline">
+									<label for="inline-radio-primary">Summon</label>
+										<input type="radio" id="SummonY"
+											name="aifcin" value="S"  required="required" /> 
+									</div>
+									<div class="icheck-inline">
+										<label for="inline-radio-info">Notice</label>
+										<input type="radio" id="NoticeN"
+										name="aifcin" value="N" /> 
+									</div>
+									 <input type="hidden" th:field="*{Type}"
+										th:id="aisCin"> 
+									<span id="isCinErr" class="text-danger" th:errors="*{Type}"></span>
+								</div>
+                                 </div>
+                                 <div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">Enter DIN Number <span class="text-danger">*</span></label>
+								<div class="col-sm-4">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" id="dinNumber" name="designation"
+										th:field="*{DinNumber}" placeholder="DIN NUMBER"
+										 required="required" maxlength="18"/>
+										
+										<span class="text-danger" id="dinErr"
+										th:if="${#fields.hasErrors('DinNumber')}"
+										th:errors="*{DinNumber}">Din Number</span>
+								</div>
+							</div>	
+				               <div class="col-sm-4">
+                                <button type="submit" class="btn btn-success" th:onclick="'javascript:getDetails();'">
+										<i class="fa fa-plus"></i> Search
+									</button>  
+									
+									 <a href="PhysicallysentList" class="btn btn-danger">BACK </a>	    
+								</div>
+								</div>
+					</div>
+				</div>
+			</div>
+
+		</form>
+        <script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+			//alert($('#aisCin').val())
+			
+			var radioval =$('#aisCin').val();
+			 var $radios = $('input:radio[name=aifcin]');
+			 
+			 
+			    if($radios.is(':checked') === false) {
+			        $radios.filter('[value=S]').prop('checked', true);
+			        $('#aisCin').val($('input:radio[name=aifcin]:checked').val());
+			    }
+			    
+			    if(radioval=='N'){
+			    	  $radios.filter('[value=N]').prop('checked', true);
+				        $('#aisCin').val($('input:radio[name=aifcin]:checked').val());
+			    }
+			    if(radioval=='S'){
+			    	  $radios.filter('[value=S]').prop('checked', true);
+				        $('#aisCin').val($('input:radio[name=aifcin]:checked').val());
+			    }
+			    
+			 $("input[name='aifcin']").change(function() { 
+				 $('#aisCin').val($('input:radio[name=aifcin]:checked').val());
+			  });
+			 var table = $('#desigTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+		});
+		
+		
+		function getDetails() {
+			
+		}
+		
+		
+		 $("#dinNumber").keypress(function (e) {
+	            var keyCode = e.keyCode || e.which;
+	 
+	            $("#dinErr").html("");
+	 
+	            //Regex for Valid Characters i.e. Alphabets and Numbers.
+	            var regex = /^[A-Za-z0-9]+$/;
+	 
+	            //Validate TextBox value against the Regex.
+	            var isValid = regex.test(String.fromCharCode(keyCode));
+	            if (!isValid) {
+	                $("#dinErr").html("Only Alphabets and Numbers allowed.");
+	            }
+	 
+	            return isValid;
+	        });
+		</script>	
+
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,162 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link
+	href="plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css"
+	rel="stylesheet" type="text/css">
+<link href="plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css"
+	rel="stylesheet" type="text/css">
+<title>All Users</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Person
+						Details</li>
+				</ol>
+			</div>
+		</div>
+		<div th:if="${message}" class="alert alert-danger alert-dismissible"
+			role="alert">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class="alert-icon">
+				<i class="fa fa-check"></i>
+			</div>
+			<div class="alert-message">
+				<span th:text="${message}"></span>
+			</div>
+		</div>
+		<form th:action="@{/Personsearch}" method="post"
+			class="needs-validation" th:object="${PersonDetails}"
+			id="viewDetails" autocomplete="off">
+			<input type="hidden" name="personId" id="personId" /> <input
+				type="hidden" name="compId" id="compId" />
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-user"></i> Personal Details
+							</h4>
+							<div>
+
+								<div class="row align-items-center justify-content-center">
+
+								</div>
+									<table id="userTable2">
+
+									<tbody>
+										<tr>
+
+											<td><label>Passport No</label> <input type="text"
+												th:field="*{passportNumber}"></td>
+											
+											<td><label>PAN No</label> <input type="text"
+												th:field="*{panNumber}"></td>
+											<td>
+												<button type="submit" th:name="searchperson"
+													class="btn btn-success">Search</button>
+											</td>
+										</tr>
+									</tbody>
+
+								</table>
+							</div>
+							<br>
+							<div class="col-md-12">
+
+								<table class="table table-bordered table-responsive-lg"
+									id="userTable">
+										<thead class="bg-success text-white">
+										<tr class="bg-info">
+											<!-- <th>S.No.</th> -->
+											<th>Person Details</th>
+											<th>Company Name</th>
+											<th>Case Id</th>
+											<th>Current Case Status</th>
+											<th>prev status Details</th>
+
+
+
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="companylist,stats : ${companyList}"
+											th:if="${companylist.isApproved == true}">
+											<!-- <td th:text="${stats.count}"></td> -->
+											<td><a href="#"
+												th:onclick="'showDetails(\'' + ${companylist.personDetails.personID} +'\');'">
+												
+														<span class="text-wrap"
+															th:text="${companylist.personDetails.fullName}"></span>
+												
+											</a></td>
+											<td><a href="#"
+												th:onclick="'showCompDetails(\'' + ${companylist.id} +'\');'">
+													<span th:text="${companylist.companySummon.companyName}"></span>
+											</a></td>
+											<td><span th:text="${companylist.caseDetails.caseId}"></span></td>
+
+											<td><span th:text="${companylist.status.statusName}"></span></td>
+											
+													<td>
+											<a href="#"
+												th:onclick="'showCompStatusDetails(\'' + ${companylist.id} +'\');'">
+													<span> Prev.Status Details</span>
+											</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+
+
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+				 var table = $('#userTable').DataTable( {
+//			 	        lengthChange: false,
+				        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+				      } );
+			});
+			
+
+			function showDetails(personDataid) {
+				$('#viewDetails').attr('action', 'personalDetails');
+				$('#personId').val(personDataid);
+				$('#viewDetails').submit();
+			}
+
+			function showCompDetails(compId) {
+				$('#viewDetails').attr('action', 'CompanyDetails');
+				$('#compId').val(compId);
+				$('#viewDetails').submit();
+			}
+			function showCompStatusDetails(compId) {
+				$('#viewDetails').attr('action', 'CompanyStatusDetails');
+				$('#compId').val(compId);
+				$('#viewDetails').submit();
+			}
+		</script>
+	</div>
+
+</body>
+</html>

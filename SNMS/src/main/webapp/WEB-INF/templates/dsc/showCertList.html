@@ -1,0 +1,126 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Register DSC</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<form th:action="@{/saveCert}" method="post" th:object="${dscRegForm}">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header">
+								<i class="fa fa-usb"></i> Register Digital Signature Certificate
+							</h4>
+							<div class=" form-body form-group row">
+								<div class="col-md-12">
+									<table id="Table1" class="table table-responsive">
+										<thead class="bg-success text-white">
+											<tr>
+												<th></th>
+												<th>#</th>
+												<th>Serial Number</th>
+												<th>Issued By</th>
+												<th>Issued To</th>
+												<th>Validity</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><input type="hidden" th:field="*{serialNo}" id="serialNo"/></td>
+												<td><input type="hidden" th:field="*{validity}" id="notAfter" /></td>
+											</tr>
+											<tr th:if="${certList.empty}">
+												<td colspan="2">Data Not Available</td>
+											</tr>
+
+											<tr th:each="list,stats : ${certList}">
+												<td><input type="radio" value="true" class="chkbx"
+													th:field="*{check}" /></td>
+												<td><span th:text="${stats.index+1}"></span></td>
+												<td><span th:text="${list.serialNumber}"></span></td>
+												<td class="text-wrap"><span th:text="${list.issuedBy }"></span></td>
+												<td class="text-wrap"><span th:text="${list.issuedTo }"></span></td>
+												<td class="text-wrap"><span th:text="${list.notAfter }"></span></td>
+											</tr>
+											
+										</tbody>
+									</table>
+								</div><div class="col-md-5"></div>
+								<div class="col-md-3">
+								<input type="submit" class="btn btn-block btn-danger" value="Proceed To Register" id="GetSelected" style="margin-top: 20px;">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			
+			var errorDSCReg='[[${errorDSCReg}]]';
+			if (errorDSCReg === '' || errorDSCReg == null
+					|| errorDSCReg.length === 0) {
+
+			} else {
+				alert(errorDSCReg);
+			}
+			var isValid='[[${isValid}]]';
+			if (isValid === '' || isValid == null
+					|| isValid.length === 0) {
+
+			} else {
+				alert(isValid);
+			}
+			
+		});
+		
+	$('#GetSelected').click(function(e){
+			//Reference the Table.
+			//debugger;
+			var isValid = [];
+			/* var checked = isRadioChecked('.chkbx', '#checkErr',
+					'Required Field'); */
+			
+			if (true) {
+				var grid = document.getElementById("Table1");
+
+				var serNo;
+				var validity;
+				var arr1 = [];
+				var arr2 = [];
+				var arr3 = [];
+
+				//Loop through the CheckBoxes.
+				for (var i = 0; i < $('.chkbx').length; i++) {
+					if ($('.chkbx')[i].checked) {
+						var row = $('.chkbx')[i].parentNode.parentNode;
+						serNo = row.cells[2].innerText;
+						validity = row.cells[5].innerText;
+						
+						$("#serialNo").val(serNo);
+						$("#notAfter").val(validity);
+					}
+				}
+			} else{
+				e.preventDefault();
+			}
+
+	});
+	</script>
+	</div>
+
+	
+</body>
+</html>

@@ -1,0 +1,122 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Case Details</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+	    <div class="row mt-3">
+
+
+     <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card">
+      <div class="card-body">
+          <p class="text-danger mb-0">Notices <span class="float-right badge badge-danger">Pending For Approval</span></p>
+           <div class="">
+           <h4 class="mb-0 py-3 text-danger"><span th:text="${totlaPendNotice}"></span><span class="float-right"> <a href="showPendNoticeStage1" class="btn btn-info">View <i class="fa fa-eye"></i></a></span></h4>
+           </div>
+           <div class="progress-wrapper">
+            <div class="progress" style="height:5px;">
+            <div class="progress-bar bg-danger" style="width:80%"></div>
+             </div>
+          </div>
+        </div>
+      </div>
+     </div>
+
+     <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card">
+      <div class="card-body">
+          <p class="text-danger mb-0">Summons  <span class="float-right badge badge-danger">Pending For Approval</span></p>
+           <div class="">
+           <h4 class="mb-0 py-3 text-danger"><span th:text="${totlaPendSummon}"></span><span class="float-right"><a href="showPendSummonStage1" class="btn btn-info">View <i class="fa fa-eye"></i></a></span></h4>
+           </div>
+           <div class="progress-wrapper">
+            <div class="progress" style="height:5px;">
+            <div class="progress-bar bg-danger" style="width:45%"></div>
+             </div>
+          </div>
+        </div>
+      </div>
+     </div>
+
+  <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card">
+      <div class="card-body">
+          <p class="text-danger mb-0">KMP's,SA's and Director   <span class="float-right badge badge-danger">Pending For Approval</span></p>
+           <div class="">
+           <h4 class="mb-0 py-3 text-danger"><span th:text="${totlagamsperson}"></span><span class="float-right"><a href="showPendpersonStage1" class="btn btn-info">View <i class="fa fa-eye"></i></a></span></h4>
+           </div>
+           <div class="progress-wrapper">
+            <div class="progress" style="height:5px;">
+            <div class="progress-bar bg-danger" style="width:45%"></div>
+             </div>
+          </div>
+        </div>
+      </div>
+     </div>
+     
+     <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card">
+      <div class="card-body">
+          <p class="text-danger mb-0">  Physically Sent summons   <span class="float-right badge badge-danger">Pending For Verification</span></p>
+           <div class="">
+           <h4 class="mb-0 py-3 text-danger"><span th:text="${totlaPenPhySummon}"></span><span class="float-right"><a href="showPendPhypersonStage1" class="btn btn-info">View <i class="fa fa-eye"></i></a></span></h4>
+           </div>
+           <div class="progress-wrapper">
+            <div class="progress" style="height:5px;">
+            <div class="progress-bar bg-danger" style="width:45%"></div>
+             </div>
+          </div>
+        </div>
+      </div>
+     </div>
+     
+      <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card">
+      <div class="card-body">
+          <p class="text-danger mb-0"> Physically Sent Notice   <span class="float-right badge badge-danger">Pending For Verification</span></p>
+           <div class="">
+           <h4 class="mb-0 py-3 text-danger"><span th:text="${totlaPenPhyNotice}"></span><span class="float-right"><a href="showPendPhyNoticeStage1" class="btn btn-info">View <i class="fa fa-eye"></i></a></span></h4>
+           </div>
+           <div class="progress-wrapper">
+            <div class="progress" style="height:5px;">
+            <div class="progress-bar bg-danger" style="width:45%"></div>
+             </div>
+          </div>
+        </div>
+      </div>
+     </div>
+     
+     
+     <div class="col-12 col-lg-6 col-xl-4">
+      <div class="card">
+      <div class="card-body">
+          <p class="text-danger mb-0"> Cases under which Company has been added  <span class="float-right badge badge-danger">Pending For Approval</span></p>
+           <div class="">
+           <h4 class="mb-0 py-3 text-danger"><span th:text="${totalpenCompanyByCase}"></span><span class="float-right"><a href="showPendcompStage1" class="btn btn-info">View <i class="fa fa-eye"></i></a></span></h4>
+           </div>
+           <div class="progress-wrapper">
+            <div class="progress" style="height:5px;">
+            <div class="progress-bar bg-danger" style="width:45%"></div>
+             </div>
+          </div>
+        </div>
+      </div>
+     </div>
+   </div>
+
+
+	</div>
+
+</body>
+</html>

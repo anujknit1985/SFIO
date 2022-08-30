@@ -1,0 +1,315 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Approve Office Order</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Approve
+						Office Order</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<form th:action="@{/approveOfficeOrderStage1}" method="post"
+			class="needs-validation" th:object="${caseDto}">
+			<input type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="caseId" th:field="*{caseId}" name="caseId" required /> <input
+				type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="caseStrId" th:field="*{caseStrId}" name="caseStrId" required />
+
+			<div class="row text-black">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-briefcase"></i> Office Order Details
+							</h4>
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<label th:text="*{headerText}"></label><br> <label
+										th:text="*{headerText1}"></label><br> <label
+										th:text="*{headerText2}"></label><br> <label
+										th:text="*{headerText3}"></label><br> <label
+										th:text="*{headerText4}"></label><br>
+
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<div class="col-lg-3">
+									<label th:text="*{caseNo}"></label>
+								</div>
+								<div class="col-lg-6"></div>
+
+								<div class="col-lg-3" align="right">
+									<label th:text="*{date}"></label>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<label class="text-center"
+										style="text-decoration: underline; font-size: 20px; font-weight: bold;"
+										th:text="*{order}"></label>
+
+								</div>
+							</div>
+
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para1}" th:id="para1"></textarea>
+								</div>
+
+							</div>
+
+
+							<div class="form-group row">
+
+								<div class="col-lg-1"></div>
+								<div class="col-lg-6">
+
+									<table class="">
+
+										<tr th:if="${listCom.empty}">
+											<td colspan="2">No Data Available</td>
+										</tr>
+										<tr th:each="list : ${listCom}">
+											<td th:text="${list.id}"></td>
+											<td th:text="${list.name}"></td>
+										</tr>
+									</table>
+
+
+								</div>
+
+							</div>
+
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para2}" th:id="para2"></textarea>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para3}" th:id="para3"></textarea>
+								</div>
+							</div>
+							
+							<div class="form-group row">
+
+								<div class="col-lg-1"></div>
+								<div class="col-lg-6">
+								<table class="">
+
+										<tr th:if="${inspList.empty}">
+											<td colspan="2">No Data Available</td>
+										</tr>
+										<tr th:each="insp : ${inspList}">
+											<td th:text="${insp.srNo}"></td>
+											<td th:text="${insp.inspName}"></td>
+										</tr>
+									</table>
+								
+								
+								</div>
+								</div>
+								
+								
+									<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para4}" th:id="para4"></textarea>
+								</div>
+							</div>
+							
+								<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para5}" th:id="para5"></textarea>
+								</div>
+								</div>
+								
+								<div class="form-group row">
+								<div class="col-lg-12" align="right">
+								<label th:text="*{directorName}"> </label><br>
+								<label>(Director)</label>
+								</div>
+								</div>
+								
+								<div class="form-group row">
+								<div class="col-lg-12" >
+								<label>Copy To :</label>
+								</div>
+								</div>
+								
+								<div class="form-group row">
+
+								<div class="col-lg-1"></div>
+								<div class="col-lg-6">
+								<table class="">
+
+										<tr th:if="${copyToList.empty}">
+											<td colspan="2">No Data Available</td>
+										</tr>
+										<tr th:each="insp : ${copyToList}">
+											<td th:text="${insp.srNo}"></td>
+											<td th:text="${insp.inspName}"></td>
+										</tr>
+									</table>
+								
+								</div>
+								</div>
+
+
+							<div class="form-footer">
+								<!-- <button type="submit" class="btn btn-danger">
+									<i class="fa fa-times"></i> CANCEL
+								</button> -->
+
+								<a href="showPendingOfficeOrderStage1" class="btn btn-danger">
+									<i class="fa fa-times"></i> Return Back
+								</a>
+
+								<button type="button" th:name="save" th:id="saveBtn"
+									class="btn btn-success">
+									<i class="fa fa-check-square-o"></i> Approve
+								</button>
+								
+								<button type="button" th:name="saveDraft" th:id="saveDraft"
+									class="btn btn-success">
+									<i class="fa fa-check-square-o"></i> Save Draft
+								</button>
+
+								<button type="button" th:name="preview" th:id="previewBtn"
+									class="btn btn-info">
+									<i class="fa fa-check-square-o"></i> PREVIEW
+								</button>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+
+		<script>
+			/* $('#summernoteEditor').summernote({
+				height : 800,
+				tabsize : 3
+			}); */
+
+			 $("#saveDraft").click(function() {
+
+				 var token = $("input[name=_csrf]").val();
+				 var header = 'X-CSRF-TOKEN';
+				 var caseDetailsDto = {};
+				 caseDetailsDto["officeOrderId"] = $("#caseId").val();
+				 caseDetailsDto["para1"] = $("#para1").val();
+				 caseDetailsDto["para2"] = $("#para2").val();
+				 caseDetailsDto["para3"] = $("#para3").val();
+				 caseDetailsDto["para4"] = $("#para4").val();
+				 caseDetailsDto["para5"] = $("#para5").val();
+				 
+				 
+				 $.ajax({
+						type : "POST",
+						contentType : "application/json",
+						url : 'saveOrderDraft',
+						data : JSON.stringify(caseDetailsDto),
+						dataType : 'json',
+						cache : false,
+						async : false,
+						processData : false,
+						timeout : 600000,
+						beforeSend : function(xhr) {
+							xhr.setRequestHeader(header, token);
+						},
+						success : function(data) {
+
+							console.log("SUCCESS : ", data);
+							
+							alert('Draft Saved SuccessFully');
+
+						},
+						error : function(e) {
+
+							console.log("ERROR : ", e);
+
+						}
+					}); 
+				 
+				 
+			}); 
+
+			$("#previewBtn").click(function() {
+
+				var token = $("input[name=_csrf]").val();
+
+				var form = document.createElement("form");
+
+				form.method = "POST";
+				form.action = 'generatePDF1';
+				form.setAttribute("target", "_blank");
+
+				var element1 = document.createElement("input");
+				element1.type = "hidden";
+				element1.value = $('#caseId').val();
+				element1.name = "caseId";
+
+				var element2 = document.createElement("input");
+				element2.type = "hidden";
+				element2.value = token;
+				element2.name = "_csrf";
+
+				var element3 = document.createElement("input");
+				element3.type = "hidden";
+				element3.value = $('#caseStrId').val();
+				element3.name = "caseStrId";
+
+				form.appendChild(element1);
+				form.appendChild(element2);
+				form.appendChild(element3);
+
+				document.body.appendChild(form);
+
+				form.submit();
+
+			});
+		</script>
+
+	</div>
+
+
+
+</body>
+</html>

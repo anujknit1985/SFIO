@@ -1,0 +1,331 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Filter Cases</title>
+ <link href="plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+  <link href="plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">All Case Details
+						</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i>All Case Details 
+							
+						</h4>
+
+
+						<form th:action="@{/caseAndOffOrdDetail}" method="post" th:id="summonNoticeDraft"
+							class="needs-validation" th:object="${caseDetails}">
+
+<input type="hidden" name="individualType" value="test"/>
+<input type="hidden" name="dateOfAppear" value="08-06-20"/>
+<input type="hidden" name="summonNo" value="123"/>
+<input type="hidden" name="chooseComapny" value="" id="chooseComapny"/>
+
+
+
+							<div class="form-group row">
+
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Case ID <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<select class="form-control" name="caseId" onchange="getCompanyList(this.value);">
+										<option value="0">Select</option>
+										<option th:each="clist: ${lstCase}" 
+											th:value="${clist.caseId}" th:utext="${clist.caseStrId}" />
+									</select>
+								</div>
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Company <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<select class="form-control" name="comapny" id="company" 
+									onclick="getIndividualType(this.value);">
+										<option value="0">Select</option>
+									</select>
+								</div>
+								
+							</div>
+
+							<div class="form-group row">
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Individual Type <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<select class="form-control" name="summontypeid" id="indType">
+										<option value="0">Select</option>
+									</select>
+								</div>
+								<label for="input-10" class="col-sm-2 col-form-label">Notice/Summon
+									</label>
+								<div class="col-sm-4">
+									<select class="form-control" name="type" id="caseType">
+										<option value="0">Select</option>
+										<option value="notice">Notice</option>
+										<option value="summon">Summon</option>
+									</select>
+								</div>
+							</div>
+							
+							<input type="button" class="btn btn-info" value="Submit"
+							onclick="getSummonNoticeBySmnTypId();"/>
+
+						</form>
+						
+					</div>
+<div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-header"><i class="fa fa-table"></i> Data Exporting</div>
+            <div class="card-body">
+              <div class="table-responsive">
+              <table id="noticeSummonTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Summon/Notice No.</th>
+                        <th>Date of appear</th>
+                         <th>Is sensitive</th>
+                       <!--  <th>Is signed</th> -->
+                        <th>Type</th>
+                        <th>Action</th>
+                        <!--<th>Body Corporate Name</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+            </table>
+            </div>
+            </div></div></div></div>
+				</div>
+			</div>
+		</div>
+		 <script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+  <script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+<script th:inline="javascript">
+
+$(document).ready(function(){
+	 var table = $('#noticeSummonTable').DataTable( {
+//	        lengthChange: false,
+	        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+	      } );
+});
+
+
+	function getCompanyList(caseId){
+		var token = [[${_csrf.token}]];
+		 var header = [[${_csrf.headerName}]];
+		 $(document).ajaxSend(function(e, xhr, options)
+		{
+		    xhr.setRequestHeader(header, token);
+		}),
+		$.ajax({
+			 crossDomain: true,
+		        type: "post",
+		        url: "getCompanyListByCaseId?caseId="+caseId,
+		        contentType : "application/json; charset=utf-8",
+		        /* data:{caseId:caseId
+		        }, */
+		        cache: false,
+		        timeout: 600000,
+		        success: function(data){
+		        	var html = '';
+					var len = data.length;
+	 				html += '<option value="0">--Select Company --</option>';
+					for (var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].id + '">'
+								+ data[i].companyName + '</option>';
+					}
+		        	$('#company').html(html);
+		        	},
+		        	
+		 error : function(xhr, status, error) {
+	        alert('error in getting count');
+	      }
+		 });
+	}
+	
+	function getIndividualType(compId){
+		
+		var token = [[${_csrf.token}]];
+		 var header = [[${_csrf.headerName}]];
+		 $(document).ajaxSend(function(e, xhr, options)
+		{
+		    xhr.setRequestHeader(header, token);
+		}),
+		$.ajax({
+			 crossDomain: true,
+		        type: "post",
+		        url: "getIndividualType?compId="+compId,
+		        contentType : "application/json; charset=utf-8",
+		        /* data:{caseId:caseId
+		        }, */
+		        cache: false,
+		        timeout: 600000,
+		        success: function(data){
+		        	var html = '';
+					var len = data.length;
+	 				html += '<option value="0">--Select Individual Type --</option>';
+					for (var i = 0; i < len; i++) {
+						
+						var strName="";
+						if(data[i][0]!=null)
+							strName = data[i][0];
+						else if(data[i][1]!=null)
+							strName = data[i][1];
+						else if(data[i][2]!=null)
+							strName = data[i][2];
+						else if(data[i][3]!=null)
+							strName = data[i][3];
+						else if(data[i][5]!=null)
+							strName = data[i][5];
+						html += '<option value="' + data[i][4] + '">'
+								+ strName + '</option>';
+					}
+		        	$('#indType').html(html);
+		        	},
+		        	
+		 error : function(xhr, status, error) {
+	        alert('error in getting count');
+	      }
+		 });
+	}
+	
+	
+function getSummonNoticeBySmnTypId(){
+	 	var stypeId = $('#indType').val();
+		var type = $('#caseType').val();
+		var url="";
+		if(type==0){
+			alert("Please select Type");
+			return false;	
+		}
+		if(type=='notice')
+			url = "getNoticeBySmnTypId?stypeId=";
+		else if(type=='summon')	
+			url = "getSummonBySmnTypId?stypeId=";
+		var token = [[${_csrf.token}]];
+		 var header = [[${_csrf.headerName}]];
+		 $(document).ajaxSend(function(e, xhr, options)
+		{
+		    xhr.setRequestHeader(header, token);
+		}),
+		 
+		 $.ajax({
+//    		 crossDomain: true,
+   	        type: "POST",
+   	        url: url+stypeId,
+//    	        contentType : "application/json; charset=utf-8",
+   	        cache: false,
+   	        timeout: 600000,
+   	        success: function(data){
+   	           
+   	        table=$('#noticeSummonTable').dataTable( {
+        		'bProcessing': false,
+        		'bServerSide': false,
+        		'bJQueryUI': true,
+        		'destroy' : true,
+        		"autoWidth": false,
+        		"buttons": [ 'copy', 'excel', 'pdf', 'print', 'colvis' ],
+        		'language' : {
+        			'sLoadingRecords' : '<span style="width:100%;"><img src="resources/images/Spinner-1s-80px1.gif"></span>'
+        		},     
+        		'data': data,
+                'columns': [
+                           {'sDefaultContent':'', "mData" : function (mData, type, row, meta) {
+						        return meta.row + meta.settings._iDisplayStart + 1;}},
+                            {'sDefaultContent':'', 'mData':'summonNo'},
+                           {'sDefaultContent':'', 'mData':function ( data, type, row ) {
+                        	   return data.dateOfAppear;
+                           }},
+	                           {'sDefaultContent':'', 'mData':'isSensitive'},
+                           /* {'sDefaultContent':'', 'mData':function ( data, typ, row ) {
+                          	 if(data.isSigned==0)
+                     			return "Not Signed Yet";
+                         	 else if(data.isSigned==1)
+                         		 return "Digitally Signed";
+                        }}, */
+                             {'sDefaultContent':'', 'mData':function ( data, typ, row ) {
+                            	 if(type=='notice')
+                        			return '<a  href=filterNoticePdf?summontypeid='+data.id+' target="_blank" class="btn btn-danger">Notice</a>';
+                            	 else if(type=='summon')
+                            		 return '<a  href=filterSummonPdf?summontypeid='+data.id+' target="_blank" class="btn btn-danger">Summon</a>';
+                           }},
+                           
+                           {'sDefaultContent':'', 'mData':function ( data, typ, row ) {
+                          	 if(type=='notice')
+                          		return '<a  href="#" class="btn btn-danger" onclick="openNoticeDraft()">Open Draft</a>';
+                          	 else if(type=='summon')
+                          		 return '<a  href="#" class="btn btn-danger" onclick="openSummonDraft()">Open Draft</a>';
+                         }},
+                         
+                           /*      {'sDefaultContent':'', 'mData':function ( data, type, row ) {
+                        		return "<a href='#' onclick=verifyUsers("+data.id+")>Verify</a>"; 
+                           }},
+                           {'sDefaultContent':'', 'mData':function ( data, type, row ) {
+                        	   if(data.accountStatus==0)
+                        	   	return "Pending";
+                        	   if(data.accountStatus==1)
+	                        	   	return "Approved";
+                        	   if(data.accountStatus==2)
+	                        	   	return "Rejected";
+                        	   if(data.accountStatus==3)
+	                        	   	return "Clarification";
+                           }
+                           } */
+                           
+                    ],
+        	}); 
+   	        	},
+   	        	
+   	 error : function(xhr, status, error) {
+           alert('error in getting User List');
+         }
+   	 });
+		 
+	}
+	
+	function openSummonDraft(){
+		
+		$('#chooseComapny').val($('#company :selected').text());
+		$('#summonNoticeDraft').attr('action','genSummonAs');
+		$('#summonNoticeDraft').submit();
+	}
+	
+	function openNoticeDraft(){
+		$('#chooseComapny').val($('#company :selected').text());
+		$('#summonNoticeDraft').attr('action','genNoticeAs');
+		$('#summonNoticeDraft').submit();
+	}
+</script>
+	</div>
+	
+	
+
+</body>
+</html>

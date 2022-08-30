@@ -1,0 +1,259 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Summon/Notice as on</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<script type="text/javascript">
+		function getCompletCase(id)
+	  	{
+	  		$('#id').val(id);
+	        $('#getCompleteCase').attr("action", "getApprovedOrder");
+	        $('#getCompleteCase').submit();  		
+	  	}
+		</script>
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Summon Report</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> Summons Status Report Generated on <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span>
+						</h4>
+
+						<!-- <form th:action="@{/createNotice}" method="post"
+							class="needs-validation" th:object="${caseDetails}"> -->
+							
+							<span th:text="${errorEsign}" class="text-danger text-lowercase"></span>
+							
+							<div class="form-group row">
+								<table class="table table-respnsive" id="approvedOrderTable">
+									<thead class="bg-info text-white">
+										<tr class="text-center">
+											<th>S.No.</th>
+											<th>Case Id <br>
+											CaseTitle
+											 </th>
+											
+											<th>Total summons
+										<br>
+										SUM(S1+S2+S3+S4+S6)
+										</th>
+										<th class="text-wrap"> Summons Pending for Approval <br>
+										 <span>S1</span></th>
+										<th class="text-wrap">Unsigned Summons
+										 <br>
+										 <span>S2</span></th>
+										<th class="text-wrap">Signed Summons
+										 <br>
+										 <span>S3</span>
+										</th>
+										<th class="text-wrap">Signed Offline Summons
+										 <br>
+										 <span>S4</span>
+										</th>
+										<th class="text-wrap">Physically sent Summons Yet TO Upload
+										 <br>
+										 <span>S5</span>
+										</th>
+										<th class="text-wrap">Signed Physically sent Summons
+										 <br>
+										 <span>S6</span>
+										</th>
+ 
+										</tr>
+									</thead>
+									<tfoot class="table table-respnsive " align="center">
+		<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+	</tfoot>
+									 <tbody class="text-wrap">
+									<!--  <tr th:each="p,stats: ${UnitList}"> -->
+									<tr th:each="s,rowStat : ${stdList}" class="text-center" >
+									<td class="text-wrap" ><span th:text="${rowStat.index+1}" ></span></td>
+									<td><span th:text="${s.caseId}" th:class="text-wrap"> <br> <span th:text="${s.caseTittle}" th:class="text-wrap"></span> </span></td>
+								
+									<td th:text="${s.allSummonUnit}"><span th:text="${s.allSummonUnit}"></span></td>
+										<td th:text="${s.PendingSummonUnit1}"><span th:text="${s.PendingSummonUnit1}"></span></td>
+										<td th:text="${s.approvedSummonUnit1}"><span th:text="${s.approvedSummonUnit1}"></span></td>
+										<td th:text="${s.EsignedSummonUnit1}"><span th:text="${s.EsignedSummonUnit1}"></span></td>
+										<td th:text="${s.offlineSummon}"><span th:text="${s.offlineSummon}"></span></td>
+										<td th:text="${s.pendingPhySummon}"><span th:text="${s.pendingPhySummon}"></span></td>
+										<td th:text="${s.physummon}"><span th:text="${s.physummon}"></span></td>
+									 </tr> 
+									</tbody>
+<!-- <tfoot align="right">
+				<tr class="text-center">
+					<td colspan="1" class="text-wrap"  >  Generated on <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span>  </td>
+				</tr>
+			</tfoot>  -->
+								</table>
+							</div>
+					
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<form method="post" id="getCompleteCase" target="_self">
+		<input id="id" name="id" type="hidden" />
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		</form>
+		
+			<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.buttons.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/jszip.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/pdfmake.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/vfs_fonts.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.html5.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.print.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.colVis.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				 var table = $('#approvedOrderTable').DataTable( {
+//			 	        lengthChange: false,
+                dom: 'Bfrtip',
+                "scrollX": true,
+                "pageLength": 50,
+				buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ],
+				 
+				 "footerCallback": function ( row, data, start, end, display ) {
+			            var api = this.api(), data;
+			            
+			// alert(data);
+			            // converting to interger to find total
+			            var intVal = function ( i ) {
+			                return typeof i === 'string' ?
+			                    i.replace(/[\$,]/g, '')*1 :
+			                    typeof i === 'number' ?
+			                        i : 0;
+			            };
+			 
+			            // computing column Total of the complete result 
+			            
+			              var tn = api
+			                .column( 2 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+				
+			            var monTotal = api
+			                .column( 3 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+						
+							
+				    var tueTotal = api
+			                .column( 4 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+							
+			            var wedTotal = api
+			                .column( 5 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+							
+				     var thuTotal = api
+			                .column( 6 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+							
+				     var friTotal = api
+			                .column( 7 )
+			                .data()
+			                .reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+				     
+				     var satTotal = api
+		                .column( 8 )
+		                .data()
+		                .reduce( function (a, b) {
+		                    return intVal(a) + intVal(b);
+		                }, 0 );
+						
+							
+			            // Update footer by showing the total with the reference of the column index 
+				    $( api.column( 0 ).footer() ).html("Total");
+				   	    $( api.column( 2 ).footer() ).html(tn);
+			            $( api.column( 3 ).footer() ).html(monTotal);
+			            $( api.column( 4 ).footer() ).html(tueTotal);
+			            $( api.column( 5 ).footer() ).html(wedTotal);
+			            $( api.column( 6 ).footer() ).html(thuTotal);
+			            $( api.column( 7 ).footer() ).html(friTotal);
+			            $( api.column( 8 ).footer() ).html(satTotal);
+			        },
+				
+							  buttons: {
+							    buttons: [{
+							      extend: 'excel',
+							      text: '<i class="fa fa-print"></i> Excel',
+							      title: $('h4').text(),
+							      exportOptions: {
+							        columns: ':not(.no-print)'
+							      },
+							      footer: true,
+							      autoPrint: false
+							    },
+							    {
+								      extend: 'print',
+								      text: '<i class="fa fa-print"></i> Print',
+								      title: $('h4').text(),
+								      exportOptions: {
+								        columns: ':not(.no-print)'
+								      },
+								      footer: true,
+								      autoPrint: false
+								    },{
+							      extend: 'pdf',
+							      text: '<i class="fa fa-file-pdf-o"></i> PDF',
+							      title: $('h4').text(),
+							      exportOptions: {
+							        columns: ':not(.no-print)'
+							      },
+							      footer: true
+							    }],
+							    
+							    
+							    dom: {
+							      container: {
+							        className: 'dt-buttons'
+							      },
+							      button: {
+							        className: 'btn btn-default'
+							      }
+							    }
+							  }
+							
+				      } );
+			});
+		</script>
+
+	</div>
+
+</body>
+</html>

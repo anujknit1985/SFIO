@@ -1,0 +1,420 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<title>Add New Unit</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Activate
+						Link Officer</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<form th:action="@{/addLinkOfficer}" method="post"
+			class="needs-validation" th:object="${linkofficer}"
+			autocomplete="off">
+
+			<div th:if="${message}" class="alert alert-success alert-dismissible"
+				role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<div class="alert-icon">
+					<i class="fa fa-check"></i>
+				</div>
+				<div class="alert-message">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+             
+             <div th:if="${message1}" class="alert alert-danger alert-dismissible"
+				role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<div class="alert-icon">
+					<i class="fa fa-check"></i>
+				</div>
+				<div class="alert-message">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-address-book-o"></i> Link Officer
+							</h4>
+							<div class="form-group row">
+
+								<label for="input-15" class="col-sm-2 col-form-label">
+									Unit<span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<select class="form-control" th:field="*{unitId}" onchange="getinspectorList(this);">
+									  <option value="0">Select</option>
+										<option th:each="ulist: ${unitList}"
+											th:value="${ulist.unitId}" th:utext="${ulist.unitName}" />
+									</select> <span class="text-danger"
+										th:if="${#fields.hasErrors('unitId')}" th:errors="*{unitId}"></span>
+								</div>
+								<label for="input-15" class="col-sm-2 col-form-label">Regular Officer
+									 <span class="text-danger">*</span>
+								</label>
+
+								<div class="col-sm-3">
+								
+						      <select class="form-control"   th:id="inspList" th:field="*{regularId}">
+										
+									</select> <span class="text-danger"
+										th:if="${#fields.hasErrors('regularId')}"
+										th:errors="*{regularId}"></span>
+							</div>
+
+							</div>
+
+							<div class="form-group row">
+								<label for="input-15" class="col-sm-2 col-form-label">
+									Link Officer Unit<span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<select class="form-control" th:field="*{LinkunitId}" onchange="getLinkinspectorList(this);">
+									  <option value="0">Select</option>
+										<option th:each="ulist: ${unitList}"
+											th:value="${ulist.unitId}" th:utext="${ulist.unitName}" />
+									</select> <span class="text-danger"
+										th:if="${#fields.hasErrors('LinkunitId')}" th:errors="*{LinkunitId}"></span>
+								</div>
+								<label for="input-15" class="col-sm-2 col-form-label">Select
+									Link Officer <span class="text-danger">*</span>
+								</label>
+
+								<div class="col-sm-4">
+									<select class="form-control"   th:id="UserList" th:field="*{userDetails}" >
+										
+									</select> <span class="text-danger"
+										th:if="${#fields.hasErrors('userDetails')}"
+										th:errors="*{userDetails}"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="input-15" class="col-sm-2 col-form-label"
+									id="fromDate">Active From Date</label>
+								<div class="col-sm-4">
+									<input class="form-control" type="text" th:field="*{fromDate}"
+										placeholder="DD/MM/YYYY" id="startdate" required="required" />
+									<span class="text-danger"
+										th:if="${#fields.hasErrors('fromDate')}"
+										th:errors="*{fromDate}"></span>
+								</div>
+
+
+								<label for="input-15" class="col-sm-2 col-form-label"
+									id="toDate1">Active To Date </label>
+								<div class="col-sm-4">
+									<input class="form-control" th:field="*{toDate}" type="text"
+										placeholder="DD/MM/YYYY" id="enddate" required="required" />
+								</div>
+							</div>
+
+							<div class="form-footer">
+								<button type="reset" class="btn btn-danger">
+									<i class="fa fa-times"></i> Reset
+								</button>
+								<button type="submit" th:id="saveBtn" class="btn btn-success">
+									<i class="fa fa-check-square-o"></i> SAVE
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+				<script src="js/jquery-confirm.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				
+				
+				
+				
+				if($('#unitId').val()!=0){
+				var unitid = $('#unitId').val();
+
+				var token = $("input[name=_csrf]").val();
+				var header = 'X-CSRF-TOKEN';
+						$(document).ajaxSend(
+								function(e, xhr, options) {
+									xhr.setRequestHeader(
+											header, token);
+								}),
+						$
+								.ajax({
+									crossDomain : true,
+									type : "GET",
+									url : "getInspectorListReportByUnitId?unitId="
+											+ unitid,
+									contentType : "application/json; charset=utf-8",
+									/* data:{caseId:caseId
+									}, */
+									cache : false,
+									timeout : 600000,
+									success : function(data) {
+										//alert(data);
+										var html = '';
+										var len = data.length;
+										$("#inspList").empty();
+										$("#inspList")
+												.append(
+
+												"<option value='0'>Select</option>");
+										for (var i = 0; i < len; i++) {
+											var id = data[i]['userId'];
+											var name = data[i]['name'];
+
+											$("#inspList")
+													.append(
+
+															"<option value='"+id+"'>"
+																	+ name
+																	+ "</option>");
+
+										}
+									},
+									error : function(xhr,
+											status, error) {
+										alert('error in getting count');
+									}
+								});
+
+			}
+				
+				if($('#LinkunitId').val()!=0){
+				var unitid = $('#LinkunitId').val();
+
+				var token = $("input[name=_csrf]").val();
+				var header = 'X-CSRF-TOKEN';
+						$(document).ajaxSend(
+								function(e, xhr, options) {
+									xhr.setRequestHeader(
+											header, token);
+								}),
+						$
+								.ajax({
+									crossDomain : true,
+									type : "GET",
+									url : "getInspectorListReportByUnitId?unitId="
+											+ unitid,
+									contentType : "application/json; charset=utf-8",
+									/* data:{caseId:caseId
+									}, */
+									cache : false,
+									timeout : 600000,
+									success : function(data) {
+										//alert(data);
+										var html = '';
+										var len = data.length;
+										$("#UserList").empty();
+										$("#UserList")
+												.append(
+
+												"<option value='0'>Select</option>");
+										for (var i = 0; i < len; i++) {
+											var id = data[i]['userId'];
+											var name = data[i]['name']+ data[i]['designation'];
+
+											$("#UserList")
+													.append(
+
+															"<option value='"+id+"'>"
+																	+ name
+																	+ "</option>");
+
+										}
+									},
+									error : function(xhr,
+											status, error) {
+										alert('error in getting count');
+									}
+								});
+
+			}
+			
+				
+				$("#startdate").datepicker({
+					autoclose : true,
+					todayHighlight : true,
+					format : 'dd/mm/yyyy',
+					startDate: new Date(),
+				// autoclose: true,
+				}).on('changeDate', function(selected) {
+					var minDatee = new Date(selected.date.valueOf());
+					$('#enddate').datepicker('setStartDate', minDatee);
+				});
+
+				$("#enddate").datepicker({
+					format : 'dd/mm/yyyy',
+					
+
+				}).on('changeDate', function(selected) {
+					var minDatee = new Date(selected.date.valueOf());
+					$('#startdate').datepicker('setEndDate', minDatee);
+				});
+
+			});
+			function getinspectorList(unitid) {
+				//alert($('#unitId').val());
+
+				var unitid = $('#unitId').val();
+
+				var token = $("input[name=_csrf]").val();
+				var header = 'X-CSRF-TOKEN';
+						$(document).ajaxSend(
+								function(e, xhr, options) {
+									xhr.setRequestHeader(
+											header, token);
+								}),
+						$
+								.ajax({
+									crossDomain : true,
+									type : "GET",
+									url : "getInspectorListReportByUnitId?unitId="
+											+ unitid,
+									contentType : "application/json; charset=utf-8",
+									/* data:{caseId:caseId
+									}, */
+									cache : false,
+									timeout : 600000,
+									success : function(data) {
+										//alert(data);
+										var html = '';
+										var len = data.length;
+										$("#inspList").empty();
+										$("#inspList")
+												.append(
+
+												"<option value='0'>Select</option>");
+										for (var i = 0; i < len; i++) {
+											var id = data[i]['userId'];
+											var name = data[i]['name'];
+
+											$("#inspList")
+													.append(
+
+															"<option value='"+id+"'>"
+																	+ name
+																	+ "</option>");
+
+										}
+									},
+									error : function(xhr,
+											status, error) {
+										alert('error in getting count');
+									}
+								});
+
+			}
+			function getLinkinspectorList(unitid) {
+				//alert($('#unitId').val());
+
+			var unitid = $('#LinkunitId').val();
+
+				var token = $("input[name=_csrf]").val();
+				var header = 'X-CSRF-TOKEN';
+						$(document).ajaxSend(
+								function(e, xhr, options) {
+									xhr.setRequestHeader(
+											header, token);
+								}),
+						$
+								.ajax({
+									crossDomain : true,
+									type : "GET",
+									url : "getInspectorListReportByUnitId?unitId="
+											+ unitid,
+									contentType : "application/json; charset=utf-8",
+									/* data:{caseId:caseId
+									}, */
+									cache : false,
+									timeout : 600000,
+									success : function(data) {
+										//alert(data);
+										var html = '';
+										var len = data.length;
+										$("#UserList").empty();
+										$("#UserList")
+												.append(
+
+												"<option value='0'>Select</option>");
+										for (var i = 0; i < len; i++) {
+											var id = data[i]['userId'];
+											var name = data[i]['name']+ data[i]['designation'];
+
+											$("#UserList")
+													.append(
+
+															"<option value='"+id+"'>"
+																	+ name
+																	+ "</option>");
+
+										}
+									},
+									error : function(xhr,
+											status, error) {
+										alert('error in getting count');
+									}
+								});
+
+			}
+			
+			
+			 $('#UserList').blur(function(){
+			  var linkofficerid = 	 $("#UserList").val();
+			  var regularId     = $("#inspList").val();
+			  
+			  if(linkofficerid == regularId ){
+				  $.confirm({
+					    title: 'Error!',
+					    content: 'Link Officer and Regular Officer Cannot be same ',
+					    type: 'red',
+					    typeAnimated: true,
+					    buttons: {
+					        
+					        close: function () {
+					        }
+					    }
+					});
+				  $("#saveBtn").attr("disabled", true);
+			  }
+			  
+			  
+			  else{
+				  $("#saveBtn").attr("disabled", false);
+			  }
+			 })
+		</script>
+
+
+	</div>
+
+</body>
+</html>

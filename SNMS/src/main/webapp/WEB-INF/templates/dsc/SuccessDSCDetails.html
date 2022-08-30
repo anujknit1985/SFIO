@@ -1,0 +1,101 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Register DSC</title>
+
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header">
+							<i class="fa fa-usb"></i> Registered DSC details
+						</h4>
+						<div class=" form-body form-group row">
+							<div class="col-md-12">
+								<table class="table table-responsive">
+									<thead class="bg-success text-white">
+										<tr>
+											<th>Issued By</th>
+											<th>Issued To</th>
+											<th>Validity</th>
+											<th>Unregistered</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:if="${dsc ne null}">
+											<td class="text-wrap"><span th:text="${dsc.issuedBy }"></span></td>
+												<td class="text-wrap"><span th:text="${dsc.issuedTo }"></span></td>
+												<td class="text-wrap"><span th:text="${dsc.validity}"></span></td>
+												<td><a href="#" 
+												th:onclick="'javascript:unRegister(\'' + ${dsc.id } +'\');'">
+													<span>
+													<i class="fa fa-close" style="font-size: 35px;color:red;"></i>
+													</span></a></td>
+											</tr>
+											
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+  	function unRegister(id)
+  	{
+  		alert('are you sure?');
+  		//debugger;
+  		$('#id').val(id);
+        $('#dscRevoke').attr("action", "unregDSC");
+        $('#dscRevoke').submit();  		
+  	}
+  //errors
+  $(document).ready(
+  		function() {
+  			var invalid = '[[${invalid}]]';
+  			//console.log(invalid);
+  			if (invalid === '' || invalid == null
+  					|| invalid.length === 0) {
+
+  			} else {
+  				alert(invalid);
+  			}
+  			var unauthorized = '[[${unauthorized}]]';
+  			//console.log(unauthorized);
+  			if (unauthorized === '' || unauthorized == null
+  					|| unauthorized.length === 0) {
+
+  			} else {
+  				alert(unauthorized);
+  			}
+  			
+  			var successDSCMsg='[[${successDSCMsg}]]';
+  			if (successDSCMsg === '' || successDSCMsg == null
+  					|| successDSCMsg.length === 0) {
+
+  			} else {
+  				alert(successDSCMsg);
+  			}
+  		});
+  </script>
+		<form method="post" id="dscRevoke" target="_self">
+		<input id="id" name="id" type="hidden" />
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		</form>
+
+
+	</div>
+
+
+</body>
+</html>

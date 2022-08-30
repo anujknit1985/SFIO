@@ -1,0 +1,96 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Office Orders Pending For Approval</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+	<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					
+					<li class="breadcrumb-item active" aria-current="page"
+						th:if="${summon.size() > 0 }">Summon Status</li>
+				</ol>
+			</div>
+		</div>
+<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						
+						<h4 class="form-header text-uppercase"
+							th:if="${summon.size() > 0 }">
+							<i class="fa fa-address-book-o"></i> Summon Status
+						</h4>
+
+
+			<table class="table table-responsive" id="summonTable">
+								<thead class="bg-info text-white">
+									<tr>
+										<th>Sr.No.</th>
+										<th class="text-wrap">Case Id<br>Summon Id<i
+											class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i></th>
+										<th class="text-wrap">Case Title<i class="fa fa-arrow-up"></i>
+											<i class="fa fa-arrow-down"></i></th>
+										<th class="text-wrap">Details<i class="fa fa-arrow-up"></i>
+											<i class="fa fa-arrow-down"></i></th>
+										<th class="text-class">Date of Appearance<i
+											class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i></th>
+										<th class="text-wrap">Current Status<i
+											class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i></th>
+									</tr>
+			</thead>
+			<tbody>
+				<tr th:each="s : ${summon}">
+						<td th:text="${sStat.count}"></td>
+					<td th:text="${s.id}"></td>
+					<td th:text="${s.id}"></td>
+					<td> 
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div th:if = "${totalPages > 1}">
+			<div class = "row col-sm-12">
+				<div class = "col-sm-2">
+					Total Rows: [[${totalItems}]] 
+				</div>
+				<div class = "col-sm-1">
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}"  th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+				</div>
+				<div class = "col-sm-1">
+					<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+					<span th:unless="${currentPage < totalPages}">Next</span>
+				</div>
+				
+				 <div class="col-sm-1">
+    				<a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+					<span th:unless="${currentPage < totalPages}">Last</span>
+   				 </div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	
+</body>
+</html>

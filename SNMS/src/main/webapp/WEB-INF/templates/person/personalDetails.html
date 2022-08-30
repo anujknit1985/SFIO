@@ -1,0 +1,242 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>>View Person</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">View
+						Person</li>
+				</ol>
+			</div>
+		</div>
+
+		<div th:if="${message}" class="alert alert-success alert-dismissible"
+			role="alert">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class="alert-icon">
+				<i class="fa fa-check"></i>
+			</div>
+			<div class="alert-message">
+				<span th:text="${message}"></span>
+			</div>
+		</div>
+
+
+		<form th:action="@{/addNewApplicant}" method="post"
+			class="needs-validation" th:object="${applicantData}"
+			autocomplete="off">
+			
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-address-book-o"></i> Personal Information
+							</h4>
+					
+
+
+
+							<div class="form-group row">
+
+
+								<label for="input-10" class="col-sm-2 col-form-label">
+									Name </label>
+								<div class="col-sm-4">
+										<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.fullName}"></span>
+										</label>
+								</div>
+
+
+								<label for="input-10" class="col-sm-2 col-form-label">Fathers
+									Name </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.RelationName}"></span>
+									</label>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">
+									Gender </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.Gender}"></span>
+									</label>
+								</div>
+								<label for="input-16" class="col-sm-2 col-form-label">Date
+									of Birth </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${	#dates.format(applicantData.dob,'dd/MM/YYYY ')}"></span>
+									</label>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="input-16" class="col-sm-2 col-form-label">
+									Address </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.address}"></span>
+									</label>
+
+								</div>
+
+								<label for="input-14" class="col-sm-2 col-form-label">Official
+									Email ID </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.email}"></span>
+									</label>
+								</div>
+							</div>
+
+
+
+							<div class="form-group row">
+								<label for="input-10" class="col-sm-2 col-form-label">
+									Mobile No </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.primaryMobile}"></span>
+									</label>
+								</div>
+
+
+								<label for="input-16" class="col-sm-2 col-form-label">Phone
+
+								</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.alternateNo}"></span>
+									</label>
+
+								</div>
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-16" class="col-sm-2 col-form-label">Pan
+									Number</label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.panNumber}"></span>
+									</label>
+								</div>
+
+								<label for="input-16" class="col-sm-2 col-form-label">Passport
+									Number </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.passportNumber}"></span>
+									</label>
+								</div>
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-16" class="col-sm-2 col-form-label">Voter
+									Id Number </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.voterId}"></span>
+									</label>
+								</div>
+
+								<!-- <label for="input-16" class="col-sm-2 col-form-label">Aadhar
+									Number </label>
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${applicantData.aadharNo}"></span>
+									</label>
+								</div> -->
+							</div>
+
+
+							<div class="form-footer">
+								<a href="PersonStatus" class="btn btn-danger">Back</a>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				</div>
+		</form>
+
+
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+		
+		$(document).ready(function(){
+			 var table = $('#userTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+		});
+		
+			$('#dob').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+
+			$('#applicationDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			
+			
+
+			$('#uploadDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			
+			
+			
+
+			$('#statusDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			$('#lastPassportDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			
+			
+		</script>
+
+		<script type="text/javascript" src="js/customValidation.js"></script>
+
+
+
+
+	</div>
+
+</body>
+</html>

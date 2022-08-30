@@ -1,0 +1,360 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<link
+	href="plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css"
+	rel="stylesheet" type="text/css">
+<link href="plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css"
+	rel="stylesheet" type="text/css">
+<title>All Users</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Physically sent Summons/Notice</li>
+				</ol>
+			</div>
+		</div>
+		<div th:if="${message}" class="alert alert-danger alert-dismissible"
+			role="alert">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class="alert-icon">
+				<i class="fa fa-check"></i>
+			</div>
+			<div class="alert-message">
+				<span th:text="${message}"></span>
+			</div>
+		</div>
+		<form th:action="@{/}" method="post" class="needs-validation"
+			th:object="${applicantData}" id="viewAddPersonDetails" autocomplete="off">
+			<input type="hidden" name="caseId" id="caseId" /> <input
+				type="hidden" name="compName" id="compName" />
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-user"></i>Physically sent Summons/Notice List
+
+							</h4>
+							
+							<!--  <a href="getPhysicalsent" class="btn btn-success float-right">Physically sent Summon/Notice </a> -->
+							
+							<!-- <a
+							href="getPhysicalsent"><i class="btn btn-success"></i>
+								Physically sent Summon/Notice </a> -->
+							<div>
+
+								<div class="row align-items-center justify-content-center">
+
+								</div>
+									<div class="form-group row">
+                             	<div class="col-sm-4">
+									<div class="icheck-inline">
+									<label for="inline-radio-primary">Summon</label>
+										<input type="radio" id="SummonY"
+											name="aifcin" value="S"  required="required" /> 
+									</div>
+									<div class="icheck-inline">
+										<label for="inline-radio-info">Notice</label>
+										<input type="radio" id="NoticeN"
+										name="aifcin" value="N" /> 
+									</div>
+									 <!-- <input type="hidden" th:field="*{Type}"
+										th:id="aisCin"> 
+									<span id="isCinErr" class="text-danger" th:errors="*{Type}"></span> -->
+								</div>
+                                 </div>
+
+							</div>
+							<br>
+													<div class="form-group row" id="summonTable" >
+								<table class="table table-responsive" id="summonDetailsTable">
+									<thead class="bg-info text-white">
+										<tr>
+											<th>S.No.</th>
+											<th class="text-wrap">Document Identification Number </th>
+											<!-- <th>Summon Id</th> -->
+											<th>Case Title <br> Summon Id</th>
+											<th>Details</th>
+											<th>Date of Appearance</th>
+											<!-- <th>Remark</th> -->
+											 <th>Status</th>
+											
+										</tr>
+									</thead>
+									 <tbody>
+									 <tr th:each="p,stats: ${PhySummon}">
+											 <td th:text="${stats.count}"></td> 
+											 <td class ="text-wrap" th:text="${p.summonDin}"></td>
+											<!--  <td class ="text-wrap" th:text="${p.summonNo}"></td> -->
+											 <td class ="text-wrap"> <span  th:text="${p.caseDetails.caseTitle}"></span> <br> 
+											 <span  th:text="${p.summonNo}"></span>
+											 </td>
+													<th:block th:if="${p.summonType.individualType.IndividualId == 7}">
+												<td class="text-wrap">
+													 <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          										  <strong>If CIN is available ? : </strong><span th:text="${p.summonType.isCin}"></span>
+          											<th:block th:if="${p.summonType.isCin == 'Y'}" >
+          												<strong>CIN : </strong><span th:text="${p.summonType.Registration_no}"></span>
+          											</th:block>
+          										  <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										  <strong>Address : </strong><span th:text="${p.summonType.Address}"></span>
+          										  <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										   <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										   <strong>Relation With Company: </strong><span th:text="${p.summonType.relationwithcompany}"></span>
+          										 
+          									
+												</td>
+											</th:block>
+											<th:block th:if="${p.summonType.individualType.IndividualId == 5 or p.summonType.individualType.IndividualId == 6}" >
+												<td class="text-wrap">
+													 <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          									
+          										    <strong>If CIN is available ? : </strong><span th:text="${p.summonType.isCin}"></span>
+          											<th:block th:if="${p.summonType.isCin == 'Y'}" >
+          												<strong>CIN : </strong><span th:text="${p.summonType.Registration_no}"></span>
+          											</th:block>
+          											
+          											  <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										 	  <strong>Address : </strong><span th:text="${p.summonType.Address}"></span>
+          										      <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										      <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										      <strong>NameCompany: </strong><span th:text="${p.summonType.NameCompany}"></span>
+          										 
+												</td>
+											</th:block>
+											<th:block th:if="${p.summonType.individualType.IndividualId == 3 or p.summonType.individualType.IndividualId == 4}">
+												<td class="text-wrap">
+												 <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          									
+          										    <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										 	<strong>Designation : </strong><span th:text="${p.summonType.designation}"></span>
+          										 	<strong>sex : </strong><span th:text="${p.summonType.sex}"></span>
+          										 	<strong>DOB : </strong><span th:text="${#dates.format(p.summonType.dob, 'dd/MM/yyyy')}"></span>
+          										 	
+          										 	<strong>Nationality : </strong><span th:text="${p.summonType.nationality}"></span>
+          										 	<strong>National Id : </strong><span th:text="${p.summonType.nationalId}"></span>
+          										 	
+          										 	<strong>Passport No. : </strong><span th:text="${p.summonType.passport}"></span>
+          										 	<strong>Issue date : </strong><span th:text="${#dates.format(p.summonType.issueDate, 'dd/MM/yyyy')}"></span>
+          										 	<strong>Place of issues : </strong><span th:text="${p.summonType.placeof_issued}"></span>
+          										     <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										     <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										 
+          										 
+											</th:block>
+											<th:block th:if="${p.summonType.individualType.IndividualId == 1 or p.summonType.individualType.IndividualId == 2 }" >
+												<td class="text-wrap">
+												  <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          										
+												  <strong>DIN : </strong><span th:text="${p.summonType.Registration_no}"></span>
+          										  <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										  <strong>Date of joining  : </strong><span th:text="${#dates.format(p.summonType.offJoinDate, 'dd/MM/yyyy')}"></span>
+          										  <strong>Address : </strong><span th:text="${p.summonType.Address}"></span>
+          										  <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										   <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										 
+          										 </td>
+											</th:block>
+									     	 <td th:text="${p.dateOfAppear}"></td>
+											  <!-- <td th:text="${p.remark}"></td> -->
+											 <td><th:block th:if = "${p.aprrovalStage1== true and p.isRejected == false}">
+											 <span class="text-success">Approved</span>
+											 </th:block>
+											 <th:block th:if ="${p.aprrovalStage1== false and p.isRejected == true}">
+											  <span class="text-danger">Send Back for Review</span> <br>
+											     <strong>Remark : </strong><span th:text="${p.remark}"></span>
+											 </th:block>
+											  <th:block th:if ="${p.aprrovalStage1== false and p.isRejected == false and p.isSigned ==0}">
+											 <span class="text-primary">Pending For Verification</span>
+											 </th:block>
+											 </td>
+											<!-- <button type="submit" th:name="SummonOrders" class="btn btn-primary"
+													th:value="${p.id}">View physically sent  summon</button> -->
+											
+										</tr> 
+									</tbody>
+
+								</table>
+							</div>
+<div class="form-group row" id="noticetable" style="display: none;">
+								<table class="table table-responsive" id="PhyNoticeTable">
+									<thead class="bg-info text-white">
+										<tr>
+											<th>S.No.</th>
+											<th class="text-wrap">Document Identification Number </th>
+											<!-- <th>Summon Id</th> -->
+											<th>Case Title <br> Notice Id</th>
+											<th>Details</th>
+											<th>Date of Appearance</th>
+											<!-- <th>Remark</th> -->
+											<th>Status</th> 
+											
+										</tr>
+									</thead>
+									 <tbody>
+									 <tr th:each="p,stats: ${PhyNotice}">
+											 <td th:text="${stats.count}"></td> 
+											 <td class ="text-wrap" th:text="${p.noticeDin}"></td>
+											<!--  <td class ="text-wrap" th:text="${p.summonNo}"></td> -->
+											 <td class ="text-wrap"> <span  th:text="${p.caseDetails.caseTitle}"></span> <br> 
+											 <span  th:text="${p.summonNo}"></span>
+											 </td>
+													<th:block th:if="${p.summonType.individualType.IndividualId == 7}">
+												<td class="text-wrap">
+													 <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          										  <strong>If CIN is available ? : </strong><span th:text="${p.summonType.isCin}"></span>
+          											<th:block th:if="${p.summonType.isCin == 'Y'}" >
+          												<strong>CIN : </strong><span th:text="${p.summonType.Registration_no}"></span>
+          											</th:block>
+          										  <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										  <strong>Address : </strong><span th:text="${p.summonType.Address}"></span>
+          										  <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										   <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										   <strong>Relation With Company: </strong><span th:text="${p.summonType.relationwithcompany}"></span>
+          										 
+          									
+												</td>
+											</th:block>
+											<th:block th:if="${p.summonType.individualType.IndividualId == 5 or p.summonType.individualType.IndividualId == 6}" >
+												<td class="text-wrap">
+													 <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          									
+          										    <strong>If CIN is available ? : </strong><span th:text="${p.summonType.isCin}"></span>
+          											<th:block th:if="${p.summonType.isCin == 'Y'}" >
+          												<strong>CIN : </strong><span th:text="${p.summonType.Registration_no}"></span>
+          											</th:block>
+          											
+          											  <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										 	  <strong>Address : </strong><span th:text="${p.summonType.Address}"></span>
+          										      <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										      <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										      <strong>NameCompany: </strong><span th:text="${p.summonType.NameCompany}"></span>
+          										 
+												</td>
+											</th:block>
+											<th:block th:if="${p.summonType.individualType.IndividualId == 3 or p.summonType.individualType.IndividualId == 4}">
+												<td class="text-wrap">
+												 <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          									
+          										    <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										 	<strong>Designation : </strong><span th:text="${p.summonType.designation}"></span>
+          										 	<strong>sex : </strong><span th:text="${p.summonType.sex}"></span>
+          										 	<strong>DOB : </strong><span th:text="${#dates.format(p.summonType.dob, 'dd/MM/yyyy')}"></span>
+          										 	
+          										 	<strong>Nationality : </strong><span th:text="${p.summonType.nationality}"></span>
+          										 	<strong>National Id : </strong><span th:text="${p.summonType.nationalId}"></span>
+          										 	
+          										 	<strong>Passport No. : </strong><span th:text="${p.summonType.passport}"></span>
+          										 	<strong>Issue date : </strong><span th:text="${#dates.format(p.summonType.issueDate, 'dd/MM/yyyy')}"></span>
+          										 	<strong>Place of issues : </strong><span th:text="${p.summonType.placeof_issued}"></span>
+          										     <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										     <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										 
+          										 
+											</th:block>
+											<th:block th:if="${p.summonType.individualType.IndividualId == 1 or p.summonType.individualType.IndividualId == 2 }" >
+												<td class="text-wrap">
+												  <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          										
+												  <strong>DIN : </strong><span th:text="${p.summonType.Registration_no}"></span>
+          										  <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										  <strong>Date of joining  : </strong><span th:text="${#dates.format(p.summonType.offJoinDate, 'dd/MM/yyyy')}"></span>
+          										  <strong>Address : </strong><span th:text="${p.summonType.Address}"></span>
+          										  <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										   <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										 
+          										 </td>
+											</th:block>
+									     	 <td th:text="${p.dateOfAppear}"></td>
+											<!-- <td  th:text="${p.remark}"></td> -->
+											 <td><th:block th:if = "${p.aprrovalStage1== true and p.isRejected == false}">
+											 <span class="text-success">Approved</span>
+											 </th:block>
+											 <th:block th:if ="${p.aprrovalStage1== false and p.isRejected == true}">
+											  <span class="text-danger">Send Back for Review </span> <br>
+											     <strong>Remark : </strong><span th:text="${p.remark}"></span>
+											 </th:block>
+											  <th:block th:if ="${p.aprrovalStage1== false and p.isRejected == false and p.isSigned ==0}">
+											 <span class="text-primary">Pending For Verification</span>
+											 </th:block>
+											 </td>
+										</tr> 
+									</tbody>
+
+								</table>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</form>
+
+
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.buttons.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.bootstrap4.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/jszip.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/pdfmake.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/vfs_fonts.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.html5.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.print.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/buttons.colVis.min.js"></script>
+
+		<link rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script src="js/jquery-confirm.js"></script>
+		<script th:inline="javascript">
+		$(document).ready(function(){
+			 var $radios = $('input:radio[name=aifcin]');
+			    if($radios.is(':checked') === false) {
+			        $radios.filter('[value=S]').prop('checked', true);
+			        $('#aisCin').val($('input:radio[name=aifcin]:checked').val());
+			    }
+			    
+			 $("input[name='aifcin']").change(function() { 
+				 /* $('#aisCin').val($('input:radio[name=aifcin]:checked').val()); */
+			  });
+			 var table = $('#summonDetailsTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+			 
+			 var table = $('#PhyNoticeTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+		});
+		$('input[type="radio"]').click(function() {
+            var inputValue = $(this).attr("value");
+           // alert(inputValue)
+            if (inputValue == "S") {
+            	$('#noticetable').hide();
+            	$('#summonTable').show();
+            }else{
+            	$('#noticetable').show();
+            	$('#summonTable').hide();
+            }
+		})
+		</script>
+	</div>
+</body>
+</html>

@@ -1,0 +1,1987 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Add Persons</title>
+</head>
+<body>
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-8">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="getCaseList">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Add
+						Person</li>
+				</ol>
+			</div>
+		</div>
+		<form th:action="@{/addPersonNew}" method="post"
+			th:object="${summonDetails}" id="createpersonForm">
+			<input type="hidden" id="key" name="key" th:value="${session.key}" />
+			<div th:if="${message}" class="alert alert-success alert-dismissible"
+				role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<div class="alert-icon">
+					<i class="fa fa-check"></i>
+				</div>
+				<div class="alert-message">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+			<input type="hidden" th:field="*{editperson}" th:id="editperson">
+			<input type="hidden" th:id="prcId"
+				th:field="*{personDetails.compDto.id}" name="prcId"> <input
+				type="hidden" name="editDeleteId" id="editDeleteId" /> <input
+				type="hidden" name="compId" id="compId" /> 
+				<input type="hidden"
+				name="dataId" id="dataId" />
+				
+				<input type ="hidden" th:field="*{personDetails.isDummy}" />
+			<div class="form-group row" th:if="${errorCaseID}">
+				<span th:text="${errorCaseID}" class="text-danger "></span>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-briefcase"></i> Add KMP's ,SA's And Director of
+								CUI
+							</h4>
+
+							<h5 class="form-header">
+								<i class="zmdi zmdi-layers"></i> Case Details
+							</h5>
+							<div class="form-group row">
+
+								<input type="hidden" th:field="*{id}" /> <input type="hidden"
+									th:id="caseId" th:field="*{caseId}" /> <input type="hidden"
+									th:field="*{companySummonsDto.id}" /> <input type="hidden"
+									th:field="*{summonTypenewDto.id}" /> <input type="hidden"
+									th:field="*{id}" th:id="caseDetailsId" name="caseID" /> <input
+									type="hidden" th:field="*{caseId}" /> <label
+									class="col-sm-2 col-form-label"> Case No : </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.caseId}"></span>
+								</label> <label class="col-sm-2 col-form-label">Financial Year :</label>
+								<label class="col-sm-4 col-form-label text-primary"><span
+									th:text="${caseDetails.financeYear}"></span> </label>
+
+
+
+							</div>
+							<div class="form-group row">
+
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Case Title : </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.caseTitle}"></span>
+								</label> <label class="col-sm-2 col-form-label">Case Type </label>
+								<th:block th:if="${caseDetails.radioValue != 'MCA'}">
+									<label class="col-sm-4 col-form-label text-primary"> <span
+										th:text="${caseDetails.radioValue}"></span></label>
+								</th:block>
+								<th:block th:if="${caseDetails.radioValue == 'MCA'}">
+									<label class="col-sm-4 col-form-label text-primary"> <span>
+											System Genrated</span></label>
+								</th:block>
+								<!--  <label class="col-sm-2 col-form-label">DIN: </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${officeorder.ooDin}"></span>
+								</label> -->
+							</div>
+
+
+
+
+							<div th:if="${caseDetails.mcaOrderNo != '' }"
+								class="form-group row" id="mcaDiv">
+								<label class="col-sm-2 col-form-label">MCA Order No : </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.mcaOrderNo}"></span>
+								</label>
+								</th:block>
+								<label class="col-sm-2 col-form-label">MCA Order Date :
+								</label> <label class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${#dates.format(caseDetails.mcaOrderDate, 'dd/MM/yyyy')}"></span>
+								</label>
+
+							</div>
+
+							<div
+								th:if="${caseDetails.courtOrderNo != null and caseDetails.courtOrderNo!=''}"
+								class="form-group row" id="courtDiv">
+
+								<label class="col-sm-2 col-form-label">Court Order No :
+								</label> <label class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.courtOrderNo}"></span>
+								</label> <label class="col-sm-2 col-form-label">Court Order Date
+									: </label> <label class="col-sm-4 col-form-label text-primary">
+									<span
+									th:text="${#dates.format(caseDetails.courtOrderDate, 'dd/MM/yyyy')}"></span>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.mcaOrderFile != null}"
+								class="form-group row" id="mcaFileDiv">
+
+								<label for="input-11" class="col-sm-2 col-form-label">Copy
+									of the Communication received from MCA : </label> <label
+									class="col-sm-4 col-form-label text-primary"> <a
+									th:target="_blank"
+									th:href="@{|/downloadFiles?fileName=${caseDetails.mcaOrderFile}|}"><span
+										th:text="${caseDetails.mcaOrderFile}"></span></a>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.courtOrderFile != null}"
+								class="form-group row" id="courtFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Order received from Court : </label> <label
+									class="col-sm-6 col-form-label text-primary"> <span
+									th:text="${caseDetails.courtOrderFile}"></span>
+								</label>
+
+							</div>
+							<div
+								th:if="${caseDetails.radioValue == 'MCA' and officeorder != null}"
+								class="form-group row" id="mcaFileDiv">
+								<th:block th:if="${officeorder.isSigned==1}">
+									<label for="input-11" class="col-sm-2 col-form-label">Copy
+										of the Office Order : </label>
+									<label class="col-sm-4 col-form-label text-primary"> <a
+										th:target="_blank"
+										th:href="@{|/downloadFiles?fileName=${caseDetails.mcaOrderFile}|}"><span
+											th:text="${officeorder.signFile}"></span></a>
+									</label>
+
+
+
+									<label class="col-sm-2 col-form-label">Office Order
+										DIN: </label>
+									<label class="col-sm-4 col-form-label text-primary"> <span
+										th:text="${officeorder.ooDin}"></span>
+									</label>
+								</th:block>
+							</div>
+							<div th:if="${caseDetails.courtOrderFile != ''}"
+								class="form-group row" id="courtFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Order received from Court : </label> <label
+									class="col-sm-6 col-form-label"> <a th:target="_blank"
+									th:href="@{|/downloadFiles?fileName=${caseDetails.courtOrderFile}|}"><span
+										th:text="${caseDetails.courtOrderFile}"></span></a>
+								</label>
+
+							</div>
+
+
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-industry"></i> Company (IES)
+							</h4>
+
+							<div class="form-group row">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Sr. No.</th>
+											<th>Company Name</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:if="${comList.empty}">
+											<td colspan="2">No Data Available</td>
+										</tr>
+										<tr th:each="insp,stats : ${comList}">
+											<td th:text="${stats.index+1}"></td>
+											<td th:text="${insp.name}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+
+
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-users"></i>Investigation Team
+							</h4>
+
+							<div class="form-group row">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Sr. No.</th>
+											<th>Name</th>
+											<th>Case Designation</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:if="${inspList.empty}">
+											<td colspan="3">No Data Available</td>
+										</tr>
+										<tr th:each="insp,stats : ${inspList}">
+											<td th:text="${stats.index+1}"></td>
+											<td th:text="${insp.inspName}"></td>
+											<th:block
+												th:if="${insp.isIO() == true and insp.isAdo() == true }">
+												<td>IO and Addl.</td>
+											</th:block>
+											<th:block
+												th:if="${insp.isIO() == true and insp.isAdo() == false }">
+												<td>IO</td>
+											</th:block>
+											<th:block
+												th:if="${insp.isAdo() == true and insp.isIO() == false}">
+												<td>Addl.</td>
+											</th:block>
+
+											<th:block
+												th:if="${insp.isAdo() == false and insp.isAdo() == false}">
+												<td>Inspector</td>
+											</th:block>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<h5 class="form-header">
+								<i class="zmdi zmdi-layers"></i> Company details
+							</h5>
+
+							<div class="form-group row">
+
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Company Name <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-6">
+									<select class="custom-select"
+										th:field="*{companySummonsDto.companyName}" id="chooseComp">
+										<option value="0">Select Company</option>
+										<option th:each="insp : ${comList}" th:value="${insp.name}"
+											th:text="${insp.name}"></option>
+
+									</select> <span id="chooseCompErr" style="color: red;"
+										th:errors="*{companySummonsDto.companyName}"></span>
+								</div>
+							</div>
+							<div class="form-group row">
+
+								<label for="input-13" class="col-sm-2 col-form-label">Company
+									Type <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<select class="form-control"
+										th:field="*{companySummonsDto.companyType}" th:id="compType">
+
+										<option th:each="ulist: ${compTypeList}"
+											th:value="${ulist.id}" th:utext="${ulist.name}" />
+
+									</select> <span class="text-danger"
+										th:errors="*{companySummonsDto.companyType}"></span>
+
+								</div>
+
+							</div>
+							<div class="form-group row">
+
+
+
+								<label for="input-13" class="col-sm-2 col-form-label"
+									id="cinlabel"> CIN <span class="text-danger">*</span>
+								</label>
+
+								<div class="col-sm-6">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" th:id="cin" name="cin"
+										th:field="*{companySummonsDto.cin}" placeholder="CIN"
+										maxlength="21" /> <span id="cinErr" style="color: red;"
+										th:errors="*{companySummonsDto.cin}">Cin Error</span>
+								</div>
+							</div>
+
+							<div class="form-group row">
+
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Address <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-6">
+									<textarea class="inputTxt form-control" cols="2" rows="3"
+										th:id="caddress" name="address"
+										th:field="*{companySummonsDto.address}"
+										placeholder="Enter Address" maxlength="200"></textarea>
+									<span id="addressErr" style="color: red;"
+										th:errors="*{companySummonsDto.address}"></span>
+								</div>
+
+							</div>
+							<div class="form-group row">
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Email Address<span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-6">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" th:id="emailCompany" name="email"
+										th:field="*{companySummonsDto.email}"
+										placeholder="Enter Email Address" maxlength="100" /> <span
+										id="emailErr" style="color: red;"
+										th:errors="*{companySummonsDto.email}">Email Error</span>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<div class="col-sm-4"></div>
+								<div class="col-sm-5">
+									<button type="button" th:name="savecompdtl" th:id="savecompdtl"
+										class="btn btn-success">
+										<i class="fa fa-plus"></i> save company details
+									</button>
+
+
+									<button type="button" th:id="selectPerson" class="btn btn-info">
+										<i class="fa fa-plus"></i> Select Person
+									</button>
+								</div>
+								<div class="col-sm-3"></div>
+							</div>
+
+							<div th:if="${personmessage}"
+								class="alert alert-danger alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert">&times;</button>
+								<div class="alert-icon">
+									<i class="fa fa-check"></i>
+								</div>
+								<div class="alert-message">
+									<span th:text="${personmessage}"></span>
+								</div>
+							</div>
+
+							<div id="personBlock" style="display: none;">
+
+								<h4 class="form-header text-uppercase">
+									<i class="fa fa-envelope-o"></i> Person Details
+								</h4>
+
+
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">Is Pan Number
+										?<span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<div class="icheck-inline">
+											<input type="radio" id="dummyY" name="isDummy" value="Y" />
+											<label for="inline-radio-primary">Dummy</label>
+										</div>
+										<div class="icheck-inline">
+											<input type="radio" id="dummyN" name="isDummy" value="N" />
+											<label for="inline-radio-info">Original</label>
+										</div>
+										<input type="hidden" th:field="*{personDetails.isDummyValue}"
+											th:id="aisadummy">
+											 <span id="isdummyErr"
+											class="text-danger" th:errors="*{personDetails.isDummyValue}"></span>
+									</div>
+								</div>
+
+
+
+								<div class="form-group row">
+									<label for="input-16" class="col-sm-2 col-form-label">Pan
+										Number<span class="text-danger">*</span>
+									</label>
+
+									<div class="col-sm-4">
+										<input type="text" class="form-control" name="panNumber"
+											th:field="*{personDetails.panNumber}" id="panNumber"
+											onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 47 && event.charCode < 58)"
+											placeholder="Enter Pan Number " maxlength="10"> <span
+											class="text-danger" th:errors="*{personDetails.panNumber}"></span>
+									</div>
+
+									<label for="input-10" class="col-sm-2 col-form-label">
+										Full Name <span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" autocomplete="off"
+											id="fullName" name="fullName"
+											onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32) || (event.charCode==46)"
+											th:field="*{personDetails.fullName}"
+											placeholder="Enter First Name" maxlength="70"> <span
+											class="text-danger" th:errors="*{personDetails.fullName}"></span>
+									</div>
+								</div>
+
+
+								<div class="form-group row">
+									<label for="input-10" class="col-sm-2 col-form-label">
+										Gender <span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control"
+											th:field="*{personDetails.Gender}">
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
+											<option value="Other">Other</option>
+										</select> <span class="text-danger" th:errors="*{personDetails.Gender}"></span>
+									</div>
+
+									<label for="input-10" class="col-sm-2 col-form-label">Father's
+										Name <span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" autocomplete="off"
+											id="fatherName" name="fatherName"
+											onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32) || (event.charCode==46)"
+											th:field="*{personDetails.RelationName}"
+											placeholder="Enter Father's Name" maxlength="50"> <span
+											class="text-danger" th:errors="*{personDetails.RelationName}"></span>
+									</div>
+
+								</div>
+
+								<div class="form-group row">
+									<label for="input-16" class="col-sm-2 col-form-label">Date
+										of Birth<span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="dob" name="dob"
+											placeholder="DD/MM/YYYY" th:field="*{personDetails.dob}"
+											maxlength="10"> <span class="text-danger"
+											th:errors="*{personDetails.dob}"></span>
+									</div>
+
+									<label for="input-15" class="col-sm-2 col-form-label">Designation
+										<span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+
+										<select class="form-control"
+											th:field="*{personDetails.compDto.designation}"
+											th:id="designation">
+											<option value="0" selected="selected">Choose
+												Designation</option>
+											<option th:each="design: ${designationList}"
+												th:value="${design.id}" th:utext="${design.designation}" />
+										</select> <span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.compDto.designation')}"
+											th:errors="*{personDetails.compDto.designation}"></span>
+									</div>
+
+
+								</div>
+
+
+
+								<div class="form-group row">
+
+									<label for="input-16" class="col-sm-2 col-form-label">
+										Address <span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+
+										<textarea rows="4" cols="5" class="form-control"
+											name="address" id="address"
+											th:field="*{personDetails.address}"
+											placeholder="Enter address" maxlength="200"></textarea>
+										<p>
+											<span id="wordCount">0</span> Characters
+										</p>
+
+										<span class="text-danger"></span> <span id="addressErr"
+											class="text-danger" th:errors="*{personDetails.address}"></span>
+									</div>
+
+									<label for="input-14" class="col-sm-2 col-form-label">Official
+										Email ID <span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="email"
+											th:field="*{personDetails.email}" name="email" maxlength="50"
+											placeholder="Enter Official Email ID"> <span
+											class="text-danger" id="invalidEmail"> </span> <span
+											class="text-danger" th:errors="*{personDetails.email}"></span>
+									</div>
+
+									<!-- th:onblur="'javascript:checkEmail(this);'" -->
+								</div>
+
+								<div class="form-group row">
+									<label for="input-10" class="col-sm-2 col-form-label">
+										Mobile No <span class="text-danger"></span>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" autocomplete="off"
+											id="primaryMobile" name="primaryMobile"
+											onkeypress="return isNumber(event)"
+											th:field="*{personDetails.primaryMobile}"
+											placeholder="Enter Mobile Number" maxlength="10"> <span
+											class="text-danger"
+											th:errors="*{personDetails.primaryMobile}"></span>
+									</div>
+
+									<label for="input-16" class="col-sm-2 col-form-label">Phone
+										<span class="text-danger"></span>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" autocomplete="off"
+											id="alternateNo" name="alternateNo"
+											th:field="*{personDetails.alternateNo}"
+											placeholder="Enter alternateno" maxlength="15"> <span
+											class="text-danger" th:errors="*{personDetails.alternateNo}"></span>
+									</div>
+
+
+								</div>
+								<div class="form-group row" id="AdinBlock"
+									style="display: none;">
+									<label for="input-10" class="col-sm-2 col-form-label">
+										DIN </label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" autocomplete="off"
+											id="din" name="din" th:field="*{personDetails.compDto.din}"
+											placeholder="Enter DIN Number" maxlength="10"> <span
+											class="text-danger" th:errors="*{personDetails.compDto.din}"></span>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="input-10" class="col-sm-2 col-form-label">FRN
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" autocomplete="off"
+											id="gstin" name="gstin"
+											th:field="*{personDetails.compDto.frn}"
+											placeholder="Enter FRN Number" maxlength="7"> <span
+											class="text-danger" th:errors="*{personDetails.compDto.frn}"></span>
+									</div>
+									<label for="input-16" class="col-sm-2 col-form-label">IEC
+										Number</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control"
+											th:field="*{personDetails.compDto.Iec}" name="Iec" id="Iec"
+											placeholder="Enter Iec Number"> <span
+											id="passwordErr" class="text-danger"></span> <span
+											class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.compDto.Iec')}"
+											th:errors="personDetails.compDto.Iec"></span>
+									</div>
+								</div>
+
+								<div class="form-group row">
+
+									<label for="input-16" class="col-sm-2 col-form-label">
+										Date of appointment <span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control"
+											th:field="*{personDetails.compDto.dateAppointment}"
+											id="dateAppoit" name="dateAppoit" placeholder="DD/MM/YYYY"
+											maxlength="10"> <span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.compDto.dateAppointment')}"
+											th:errors="*{personDetails.compDto.dateAppointment}"></span>
+									</div>
+
+
+									<label for="input-16" class="col-sm-2 col-form-label">
+										Date of Cessation </label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control"
+											th:field="*{personDetails.compDto.dateCessation}"
+											id="dateCessa" name="dob" placeholder="DD/MM/YYYY"
+											maxlength="10"> <span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.compDto.dateCessation')}"
+											th:errors="*{personDetails.compDto.dateCessation}"></span>
+									</div>
+
+								</div>
+
+
+								<div class="form-group row">
+									<label for="input-15" class="col-sm-2 col-form-label">Investigation
+										Status<span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control"
+											th:field="*{personDetails.compDto.pca.status}">
+											<option th:each="ulist: ${statusLst}" th:value="${ulist.id}"
+												th:utext="${ulist.statusName}" />
+										</select> <span class="text-danger"
+											th:if="${#fields.hasErrors('personDetails.compDto.pca.status')}"
+											th:errors="*{personDetails.compDto.pca.status}"></span>
+									</div>
+									<label for="input-15" class="col-sm-2 col-form-label">Remark<span
+										class="text-danger"></span>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" autocomplete="off"
+											id="Remark" name="Remark"
+											th:field="*{personDetails.compDto.personRemark}"
+											placeholder="Enter Remark" maxlength="70"> <span
+											class="text-danger"
+											th:errors="*{personDetails.compDto.personRemark}"></span>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">If VoterID is
+										available?<span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<div class="icheck-inline">
+											<input type="radio" id="AvoterY" name="aifvoter" value="Y" />
+											<label for="inline-radio-primary">Yes</label>
+										</div>
+										<div class="icheck-inline">
+											<input type="radio" id="AvoterN" name="aifvoter" value="N" />
+											<label for="inline-radio-info">No</label>
+										</div>
+										<input type="hidden" th:field="*{personDetails.isAvoter} "
+											th:id="aisavoter"> <span id="isvoterErr"
+											class="text-danger" th:errors="*{personDetails.isAvoter}"></span>
+									</div>
+								</div>
+								<div class="form-group row" id="AvoterBlock">
+									<label for="input-10" class="col-sm-2 col-form-label">Voter
+										Id Number <span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" autocomplete="off"
+											id="voterId" name="voterId"
+											onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode > 47 && event.charCode < 58) "
+											th:field="*{personDetails.voterId}"
+											placeholder="Enter Voter Id Number" maxlength="10"> <span
+											class="text-danger" th:errors="*{personDetails.voterId}"></span>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">If passport is
+										available?<span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-4">
+										<div class="icheck-inline">
+											<input type="radio" id="ApassY" name="aifpass" value="Y" />
+											<label for="inline-radio-primary">Yes</label>
+										</div>
+										<div class="icheck-inline">
+											<input type="radio" id="ApassN" name="aifpass" value="N" />
+											<label for="inline-radio-info">No</label>
+										</div>
+										<input type="hidden" th:field="*{personDetails.isApass}"
+											th:id="aispass"> <span id="ispassErr"
+											class="text-danger" th:errors="*{personDetails.isApass}"></span>
+									</div>
+								</div>
+
+								<div id="ApassBlock">
+									<div class="form-group row">
+										<label for="input-16" class="col-sm-2 col-form-label">
+											Passport Issued Country <span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-4">
+
+											<select class="form-control"
+												th:field="*{personDetails.country}" th:id="Country">
+												<option value="0" selected="selected">Choose
+													Country</option>
+												<option th:each="c,stats : ${Country}" th:value="${c.id}"
+													th:utext="${c.country_name}" />
+											</select> <span class="text-danger"
+												th:if="${#fields.hasErrors('personDetails.country')}"
+												th:errors="*{personDetails.country}"></span>
+										</div>
+									</div>
+
+
+									<div class="form-group row">
+										<label for="input-16" class="col-sm-2 col-form-label">Passport
+											No. <span class="text-danger">*</span>
+										</label>
+
+
+
+										<div class="col-sm-4">
+											<input type="text" class="form-control"
+												th:field="*{personDetails.passportNumber}"
+												name="passportNumber" id="passportNumber"
+												placeholder="Enter Passport Number" maxlength="8"
+												th:onblur="'javascript:checkpassport(this);'"> <span
+												class="text-danger"
+												th:if="${#fields.hasErrors('personDetails.passportNumber')}"
+												th:errors="*{personDetails.passportNumber}"> </span> <span
+												id="passportNoErr" class="text-danger"></span>
+										</div>
+
+										<label for="input-10" class="col-sm-2 col-form-label">
+											Passport Date </label>
+										<div class="col-sm-4">
+
+											<input type="text" class="form-control"
+												th:field="*{personDetails.passportDate}" id="passportDate"
+												name="PassportDate" placeholder="DD/MM/YYYY"> <span
+												class="text-danger"
+												th:if="${#fields.hasErrors('personDetails.passportDate')}"
+												th:errors="*{personDetails.passportDate}"></span>
+										</div>
+									</div>
+								</div>
+								<input type="hidden"
+									th:field="*{personDetails.compDto.summon_type_id}"
+									th:id="snms_summon_type_id">
+								<div class="form-group row">
+									<div class="col-sm-4"></div>
+									<div class="col-sm-5">
+										<button type="button" class="btn btn-success"
+											th:id="savedetail">save</button>
+
+
+									</div>
+									<div class="col-sm-3"></div>
+								</div>
+
+							</div>
+
+							<div class="col-md-12">
+								<table class="table table-bordered table-responsive-lg"
+									id="companydetailTable">
+									<thead class="bg-success text-white">
+
+										<tr class="bg-success">
+											<th colspan="6">Details</th>
+										</tr>
+
+										<tr class="bg-info">
+											<th>S.No.</th>
+											<th style="display: none;">summon Type</th>
+											<th>Person Name</th>
+											<th>Person Details</th>
+											<th>Company Details</th>
+											<!-- 		<th>Action</th> -->
+
+											<!-- <th>Edit/Delete <br> Company Details</th> -->
+										</tr>
+
+									</thead>
+
+									<tbody>
+										<tr th:each="pclist,stats : ${pesoncompList}">
+											<td th:text="${stats.count}"></td>
+
+											<td><span class="text-wrap" th:text="${pclist.fullName}"></span></td>
+											<td>
+											<strong> PAN Number Type:</strong>    
+											<th:block th:if="${pclist.isDummy == true}">
+											<span> Dummy</span>
+											</th:block>	
+											<th:block th:if="${pclist.isDummy == false}">
+											<span> Original</span>
+											</th:block>	<br>											
+											<strong>PAN Number:</strong> <span class="text-wrap"
+												th:text="${pclist.panNumber}"></span> <br> <strong>Passport
+													Number:</strong> <th:block th:if="${pclist.passportNumber!=''}">
+													<span class="text-wrap" th:text="${pclist.passportNumber}"></span>
+												</th:block> <br> <strong>Email:</strong> </th:block> <span class="text-wrap"
+												th:text="${pclist.email}"></span> <br> <strong>Gender:</strong>
+												<span class="text-wrap" th:text="${pclist.Gender}"></span> <br>
+												<strong>Mobile Number:</strong> <span class="text-wrap"
+												th:text="${pclist.primaryMobile}"></span>
+											<td class="text-wrap"><span
+												th:each="compType,rowStat : ${pclist.companyperson}"
+												th:if="${compType.caseDetails.id==caseDetails.id}">
+
+													<table style="display: none;" id="compsumid">
+														<tr>
+															<td></td>
+														</tr>
+														<tbody>
+															<tr>
+																<td style="display: none;"
+																	th:text="${compType.summon_type_id}"></td>
+															</tr>
+														</tbody>
+													</table>
+													<table>
+														<tr>
+															<td>Details</td>
+															<td>Status</td>
+															<td>Action</td>
+														</tr>
+														<tbody>
+															<tr>
+																<td><strong class="text-danger">Company
+																		Name . :</strong><span
+																	th:text="${compType.companySummon.companyName}"></span>
+																	<br> <!-- <strong class="text-danger">DIN. :</strong><span
+																	th:text="${compType.din}"></span> <br> --> <strong
+																	class="text-danger">FRN :</strong> <th:block
+																		th:if="${compType.frn !=''}">
+																		<span th:text="${compType.frn}"></span>
+																	</th:block> <th:block th:if="${compType.frn ==''}">
+																		<span>N/A</span>
+																	</th:block> <br> <strong class="text-danger">IEC :</strong><span
+																	th:text="${compType.Iec}"></span> <br> <strong
+																	class="text-danger">Date of Appointment:</strong><span
+																	th:text="${	#dates.format(compType.dateAppointment,'dd/MM/YYYY ')}"></span>
+																	<br> <strong class="text-danger">Date of
+																		Cessation:</strong><span
+																	th:text="${	#dates.format(compType.dateCessation,'dd/MM/YYYY ')}"></span>
+																	<br> <strong class="text-danger">investigation
+																		Status:</strong><span th:text="${compType.status.statusName}"></span>
+																	<br> <strong class="text-danger">Remark:</strong>
+																	<span th:text="${compType.personRemark}"></span> <br>
+																	
+																	 <!--  <span th:text="${#dates.format(compType.personDetails.createdDate,'dd/MM/YYYY')}"></span> <br> --> 
+																	 
+																	<!--  <span th:text="${#dates.format('2022-06-01','dd/MM/YYYY')}"></span>
+																	 
+																	<span th:text="${#dates.format(compType.personDetails.createdDate,'dd/MM/YYYY ')}"></span> -->
+																</td>
+																<td><th:block
+																		th:if="${compType.isApprovedstage2==true}">
+																		<button type="button"
+																			class="btn btn-success btn-round m-1">Approved</button>
+																	</th:block> <th:block
+																		th:if="${compType.isApprovedstage2==false and compType.rejected==false and compType.isDeleted==false}">
+																		<button type="button"
+																			class="btn btn-danger btn-round m-1">Pending
+																		</button>
+																	</th:block> <th:block th:if="${compType.rejected==true}">
+																		<button type="button"
+																			class="btn btn-danger btn-round m-1">Send
+																			Back for Review</button>
+																		<br>
+																		<strong class="text-danger">Remark </strong>
+																		<span class="text-wrap" th:text="${compType.remark}"></span>
+																	</th:block> <th:block th:if="${compType.isDeleted==true}">
+																		<button type="button"
+																			class="btn btn-danger btn-round m-1">Rejected</button>
+																		<br>
+																		<strong class="text-danger">Remark </strong>
+																		<span class="text-wrap" th:text="${compType.remark}"></span>
+																	</th:block></td>
+																<td>
+																
+																<button class="btn btn-info dropdown-toggle"
+																		type="button" data-toggle="dropdown">
+																		Action <span class="caret"></span>
+																	</button>
+																
+																<div class="dropdown-menu">
+																<th:block th:if="${compType.isDeleted != true}">
+																 <th:block th:if="${compType.isDeleted==false}">
+														    	 <button type = "button" class="dropdown-item" th:onclick = "'editpersoncomp(\'' + ${compType.id} +'\');'">
+														    	Edit </button> 
+													      </th:block>
+
+													     <!-- <th:block th:if ="${#dates.format(compType.personDetails.createdDate,'dd/MM/YYYY').before(#dates.format('1/03/2022'))}">
+													      -->
+													     <th:block th:if ="${(compType.personDetails.createdDate).before(summonDetails.validDate) and compType.personDetails.isDummy==false}">
+													     													   				     
+													     <!--  <th:block th:if="${compType.personDetails.isDummy==false}"> -->
+													       <button type="submit" th:name="editPan" th:value ="${compType.id}" class="dropdown-item">
+													       Edit PAN Details</button>
+													</th:block>
+												</th:block>
+													
+										
+																
+																	</div>
+																
+															
+																	
+																	</td>
+													</table>
+											</span></td>
+
+										</tr>
+
+
+
+									</tbody>
+
+								</table>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+			<div class="modal fade" id="largesizemodal">
+				<div class="modal-dialog modal-xl modal-dialog-centered"
+					style="width: 100%;">
+					<div class="modal-content">
+						<div class="modal-header bg-primary">
+							<h5 class="modal-title text-white">ADD Person Details</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+
+							<table id="compexample"
+								class="table table-bordered table-responsive-lg">
+								<thead>
+									<tr>
+										<th>Sr. No.</th>
+										<th style="display: none"></th>
+										<th>Person Name</th>
+
+										<th>email</th>
+										<th>passport</th>
+										<th>pan</th>
+										<th>Address</th>
+										<th>type</th>
+										<th>Add Person</th>
+									</tr>
+								</thead>
+								<tbody id="companyTable">
+
+								</tbody>
+
+
+							</table>
+
+
+							<div id="msg"></div>
+						</div>
+						<div class="modal-footer">
+							<!-- <button type="button" class="btn btn-dark" data-dismiss="modal">
+							<i class="fa fa-times"></i> Close
+						</button> -->
+							<button type="button" class="btn btn-primary"
+								id="addnewCompanycase" onclick="addnewpersoncase()">
+								<i class="fa fa-plus"></i> Add New Person
+							</button>
+						</div>
+					</div>
+				</div>
+
+
+
+
+			</div>
+
+
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Add New
+								Designation</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="form-group">
+									<label for="recipient-name" class="col-form-label">Designation
+										Name :</label> <input type="text" class="form-control"
+										id="DesignatinName"
+										th:field="*{personDetails.designationName}"
+										onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32) || (event.charCode==46)"
+										maxlength="40"> <span id="DesignatinNameErr"
+										class="text-danger"></span>
+								</div>
+
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary"
+								onClick="savedDesignation()">Save</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<link rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script src="js/jquery-confirm.js"></script>
+		<script type="text/javascript" src="js/customValidation.js"></script>
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script th:inline="javascript">
+		
+		
+$(document).ready(function(){
+	
+	
+	 var table = $('#compexample').DataTable( {
+//	        lengthChange: false,
+	        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+	      } );
+	/*  var table = $('#companydetailTable').DataTable( {
+//	        lengthChange: false,
+	        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+	      } );
+	  */
+	if( $('#compType').val()==3){
+		$('#cinlabel').text('LLPIN *');
+		document.getElementById("cinlabel").style.color = "#ff0000";
+		
+	}
+		
+			$('#AvoterBlock').hide();
+			$('#ApassBlock').hide();
+			if($('#aispass').val()=='Y'){
+				 $("input[name=aifpass][value=" + $('#aispass').val() + "]").prop('checked', true);
+					$('#ApassBlock').show();
+              }else{
+				var value = "N"
+				 $("input[name=aifpass][value=" +value+ "]").prop('checked', true);
+			}
+		//	alert($('#aisavoter').val());
+			if($('#aisavoter').val()=='Y'){
+				 $("input[name=aifvoter][value=" + $('#aisavoter').val() + "]").prop('checked', true);
+					$('#AvoterBlock').show();
+				
+			}else{
+				var value = "N"
+				 $("input[name=aifvoter][value=" +value+ "]").prop('checked', true);
+			}
+			
+			// Saurabh 
+			//alert($('#aisadummy').val());
+			 if($('#aisadummy').val()=='Y'){
+					$("input[name=isDummy][value=" + $('#aisadummy').val() + "]").prop('checked', true);
+				}
+				else if($('#aisadummy').val()=='N')
+					{
+					var value =  "N"
+					$("input[name=isDummy][value=" +value+ "]").prop('checked', true);
+					}
+			
+			
+			
+			
+			
+			
+			
+			
+			if($('#editperson').val()=="true"){
+				$('#personBlock').show();
+			}
+			
+			$('#uploadDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			
+			
+			$('#dob').datepicker({
+				format : 'dd/mm/yyyy',
+				 maxDate :new Date()
+			
+			});
+
+			$('#applicationDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			
+			$('#dateAppoit').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+				endDate: new Date(),
+			});
+			
+			$('#passportDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+				endDate: new Date(),
+			});
+			
+			$('#dateCessa').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+				 minDate: 0
+
+			});
+			$('#statusDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			$('#lastPassportDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+			});
+			
+		if($('#panNumber').val()!=''){
+		//alert($('#panNumber').val())
+
+				$.ajax({
+				      type : "post",
+				      url : "getpanDetails?panNumber="+$('#panNumber').val(),
+//		 		      data : {editDeleteId:id},
+				      contentType : "application/json; charset=utf-8",
+				      
+				      success : function(data) {
+				    	  
+			//	    	  alert(data);
+				    	  if(data!=''){
+				    	  var d = new Date(data.dob);
+					    	
+				    	  var newDate = d.toLocaleDateString("en-GB",data.dob);
+					    	
+					    	
+					    	//   alert(newDate)
+						
+				    	//  $("#fullName").attr("readonly", true); 
+			    	   //   $("#fullName").val(data.fullName); 
+				    	 
+			    	      
+			    	  //    $("#fatherName").attr("readonly", true); 
+			    	  //    $("#fatherName").val(data.relationName);
+			              
+			    	      $("#dob").attr("readonly", true); 
+			    	      $("#dob").val(newDate);
+				    		 
+			    	      $("#address").attr("readonly", true); 
+			    	      $("#address").val(data.address);
+			    	      
+			    	 /*      $("#address").attr("readonly", true); 
+			    	      $("#address").val(data.address); */
+			    	      
+			    	      $("#email").attr("readonly", true); 
+			    	      $("#email").val(data.email);
+			    	      
+			    	      $("#primaryMobile").attr("readonly", true); 
+			    	      $("#primaryMobile").val(data.primaryMobile);
+			    	      
+			    	      if(data.alternateNo !=null){
+			    	      $("#alternateNo").attr("readonly", true); 
+			    	      $("#alternateNo").val(data.alternateNo);
+			    	      }
+			    	      if(data.voterId!=null){
+			    	    	  $("#voterId").attr("readonly", true); 
+				    	      $("#voterId").val(data.voterId);
+				    	      $("input[name=aifvoter][value= Y]").prop('checked', true);
+								$('#AvoterBlock').show();
+			    	      }
+			    	      if(data.voterId==""){
+			    	    	  $("#voterId").attr("readonly", false); 
+				    	      $("#voterId").val('');
+				    	      $("input[name=aifvoter][value= N]").prop('checked', true);
+								$('#AvoterBlock').hide();
+			    	      }
+			    	      if(data.passportNumber!=null){
+			    	    	  $("#passportNumber").attr("readonly", true); 
+				    	      $("#passportNumber").val(data.passportNumber);
+				    	      $("input[name=aifpass][value=Y]").prop('checked', true);
+								$('#ApassBlock').show();
+			    	      }
+			    	     
+			    	      if(data.passportNumber==""){
+			    	    	  $("#passportNumber").attr("readonly", false); 
+				    	      $("#passportNumber").val('');
+				    	      $("input[name=aifpass][value=N]").prop('checked', true);
+								$('#ApassBlock').hide();
+			    	      }
+				    	  }
+				    	  else{
+				        	  var d = new Date(data.dob);
+						    	
+						    	var newDate = d.toLocaleDateString(data.dob);
+						    	  //alert(data.address)
+						
+						    	
+								    	/*   $("#fullName").attr("readonly", false); 
+								
+								    	  $("#fullName").val(); */
+					    	 
+				    	    //  $("#fatherName").attr("readonly", false); 
+				    	    //  $("#fatherName").val();
+				              
+				    	      $("#dob").attr("readonly", false); 
+				    	      $("#dob").val();
+				    	      
+				    	     $("#address").attr("readonly", false); 
+				    	      $("#address").val(); 
+				    	  
+				    	 /*      $("#address").attr("readonly", true); 
+				    	      $("#address").val(data.address); */
+				    	      
+				    	     /*  $("#email").attr("readonly",false); 
+				    	      $("#email").val(); */
+				    	      
+				    	      $("#primaryMobile").attr("readonly", false); 
+				    	      $("#primaryMobile").val();
+				    	      
+				    	      
+				    	    	  $("#alternateNo").attr("readonly", false); 
+					    	      $("#alternateNo").val();
+					    	      
+					    	      
+					    	    
+				    	      
+				    	  }
+				    	 },
+				      error : function(xhr, status, error) {
+					       //alert('NO DATA FOUND');
+					  /*      $("#largesizemodal").modal("hide");*/
+							 $('#compnayBlock').show(); 
+							 
+					      }
+				    }); 
+
+			}
+});
+		 function addnewpersoncase() {
+			 
+			 $("#largesizemodal").modal("hide");
+			 
+		//	  $("#isDummy").attr("checked", false);
+		//	$('#isDummy').val('') ;
+			
+			//$("input[name=aifvoter]").prop('checked', false);
+			
+			// Reset Radio Button Value
+			$("#dummyY").prop("checked", false);
+			$("#dummyN").prop("checked", false);
+			 
+			
+			 
+			 $("#fullName").attr("readonly", false); 
+	    	  $('#fullName').val('')
+	    	  $("#email").attr("readonly", false); 
+	    	  $('#email').val('')
+			  $("#passportNumber").attr("readonly", false); 
+	    	  $('#passportNumber').val('')
+	    	   $("#panNumber").attr("readonly", false); 
+		    	$('#panNumber').val('') 
+	    	     $("#panNumber").attr("readonly", false); 
+	    	      $('#panNumber').val('')
+	    	      $("#fatherName").attr("readonly", false); 
+	    	      $('#fatherName').val('')
+	    	      $("#primaryMobile").attr("readonly", false); 
+	    	      $("#primaryMobile").val('');
+	    	      $("#address").attr("readonly", false); 
+	    	      $("#address").val('');
+	    	      $("#alternateNo").attr("readonly", false); 
+	    	      $("#alternateNo").val('');
+	    	      $("#dob").attr("readonly", false); 
+	    	      $("#dob").val('');
+	    	      
+				$('#personBlock').show();
+		}
+	 $('#selectPerson').click(function(){
+		 if($('#chooseComp').val()!=0){
+			
+			 var company=$('#chooseComp').val();
+			    company  = company.replaceAll('&','@and@');
+			    var caseId=$('#caseId').val();
+		
+			 var token = $("input[name=_csrf]").val();
+			 var header = 'X-CSRF-TOKEN';
+			
+			 $(document).ajaxSend(function(e, xhr, options)
+			{
+			    xhr.setRequestHeader(header, token);
+			}), 
+			
+			$('#personBlock').hide();
+			$.ajax({
+				 crossDomain: true,
+			        type: "post",
+			        url: "getpersonListBycompany?company="+company+"&caseId="+caseId,
+			        contentType : "application/json; charset=utf-8",
+			        dataType:"json",
+			        /* data:{caseId:caseId
+			        }, */
+			        cache: false,
+			        timeout: 600000,
+			        success: function(data){
+			        	/* alert(data) */
+			        	 $("#largesizemodal").modal("show");
+			        	
+			        	 var html = '';
+							var len = data.length;
+							$('#companyTable').empty();
+							for (var i = 0; i < len; i++) {
+//								debugger
+								var a = i+1;
+								var isAdded=false;
+								var trString='';
+								
+								$('#compsumid tr').each(function(j,v){ if($(this).children('td:eq(0)').text()==data[i][5]){
+									isAdded=true };  }); 
+								if(isAdded)
+									trString = '<td><input type="button"  value = "Already Added" class = "btn btn-info" disabled="true"/></td></tr>';
+								else
+									trString ='<td><input type="button"  value = "ADD XOXO" class = "btn btn-success"  onclick = "addpersondetail(\'' + data[i][0] +'\',\''+data[i][1]+'\',\''+data[i][2]+'\',\''+data[i][3]+'\',\''+data[i][5]+'\')"/></td></tr>';	
+										
+									if(data[i][2]==null){
+										data[i][2]='';
+									}
+									if(data[i][3]==null){
+										data[i][3]='';
+									}
+								html += '<tr><td>'+a+'</td>'+
+										
+								
+										'<td class="text-wrap">'+data[i][0]+'</td>'+ 
+										'<td class="text-wrap">'+data[i][1]+'</td>'+
+										
+										'<td class="text-wrap">'+data[i][2]+'</td>'+
+										
+										
+										'<td class="text-wrap">'+data[i][3]+'</td>'+
+										'<td class="text-wrap">'+data[i][7]+'</td>'+
+										'<td class="text-wrap">'+data[i][4]+'</td>'+
+										
+										trString;
+										
+							}
+				        	$('#companyTable').append(html);
+			  
+			        	},
+			        	
+			 error : function(xhr, status, error) {
+		       alert('NO DATA FOUND');
+		  /*      $("#largesizemodal").modal("hide");*/
+				 $('#compnayBlock').show(); 
+				 
+		      }
+			 });
+		 }else{
+			 alert('Please select company');
+		 }
+	 });
+	 
+	 function addpersondetail(name,email,passportNumber,panNumber,summon_typeid) {
+		 
+	
+		 $("#largesizemodal").modal("hide");
+	
+		  $("#fullName").attr("readonly", true); 
+    	  $('#fullName').val(name) 
+    	  
+    	   if(email!=""){
+    	  $("#email").attr("readonly", true); 
+    	  $('#email').val(email)
+    	  }
+    	  else{
+    		  $("#email").attr("readonly", false); 
+        	  $('#email').val(email) 
+    	  } 
+    	  
+    	   if(passportNumber!="" ||passportNumber!=null ){
+    		  
+    		
+			$('#ApassBlock').show();
+    	  $("#passportNumber").attr("readonly", true); 
+    	  $('#passportNumber').val(passportNumber)
+	 }   
+    	  
+    	  if(passportNumber=="null")	  {
+    		  $("#passportNumber").attr("readonly", false); 
+    	   	  $('#passportNumber').val();
+    	   	$('#ApassBlock').hide();
+    	  }
+    	  else if (passportNumber==""){
+    		  $("#passportNumber").attr("readonly", false); 
+    	   	  $('#passportNumber').val();
+    	   	$('#ApassBlock').hide();
+    	  }
+    	  else{
+		 $("#passportNumber").attr("readonly", false); 
+   	  $('#passportNumber').val(passportNumber)
+   	$('#ApassBlock').show();
+   	  $("input[name=aifpass][value=Y]").prop('checked', true);
+	 }
+    	  
+    	 if ( panNumber!=""){
+    	  $("#panNumber").attr("readonly", true); 
+    	  $('#panNumber').val(panNumber)
+    	    }
+    	 if( panNumber!=null ){
+    		  $("#panNumber").attr("readonly", false); 
+	    	  $('#panNumber').val('') 
+    	  }
+    	      else{
+    	    	 $("#panNumber").attr("readonly", false); 
+    	    	  $('#panNumber').val('')
+    	    }
+    	  
+    	  
+    	  $("#dob").attr("readonly", false); 
+    	  $('#dob').val('')
+    	  $("#address").attr("readonly", false); 
+    	  $('#address').val('')
+    	  
+    	    $("#primaryMobile").attr("readonly", false); 
+    	  $('#primaryMobile').val('')
+    	   $("#fatherName").attr("readonly", false); 
+    	  $('#fatherName').val('')
+    	   $("#alternateNo").attr("readonly", false); 
+    	  $('#alternateNo').val('')
+    	  
+    	  $('#snms_summon_type_id').val(summon_typeid)
+		$('#personBlock').show();
+	} 
+	 
+	  $('#chooseComp').change(function(){
+		  $('#cinlabel').text('CIN *');
+		var compName = $(this).val();
+		 compName  = compName.replaceAll('&','@and@')
+		var token = [[${_csrf.token}]];
+		 var header = [[${_csrf.headerName}]];
+		 $(document).ajaxSend(function(e, xhr, options)
+		   {
+			 xhr.setRequestHeader(header,token );
+		   }), 
+		  $.ajax({
+		      type : "POST",
+		      url : "getCompanyDetail?companyName=" + compName,
+		      contentType : "application/json; charset=utf-8",		  
+		      success : function(data) {
+		    	
+		    	  if(data[0]!=null){
+		    	 $("#cin").attr("readonly", true); 
+		    	 $("#compType option[value='3']").remove();
+		    	  }else{
+		    		  
+		    		  $.ajax({
+		    		      type : "POST",
+		    		      url : "getCompanyType",
+		    		      contentType : "application/json; charset=utf-8",		  
+		    		      success : function(response) {
+		    		    	  var len = response.length;
+
+		    	                $("#compType").empty();
+		    	                for( var i = 0; i<len; i++){
+		    	                    var id = response[i]['id'];
+		    	                    var name = response[i]['name'];
+		    	                    
+		    	                    $("#compType").append("<option value='"+id+"'>"+name+"</option>");
+
+		    	                }
+		    		      }
+		    		      });
+		    		 /*  $("#cin").attr("readonly", false); 
+		    		  $('#compType')
+		    	         .append($("<option></option>")
+		    	         .attr("value",3)
+		    	         .text("LLP"));	  */	  
+		    	  }
+		    	  
+		    	  $("#cin").attr("readonly", false); 
+		        $("#cin").val(data[0]);
+		        if(data[1]!=null){
+		        $("#caddress").attr("readonly", true);
+		        }
+		        else{
+		        $("#caddress").attr("readonly", false);
+		        }
+		        $("#caddress").val(data[1]);
+		        
+		        if(data[2]!=null){
+		        $("#emailCompany").attr("readonly", true); 
+		        }else{
+		        	 $("#emailCompany").attr("readonly", false); 
+		        }
+		        $('#emailCompany').val(data[2]);
+		        $("#compType").val(data[3]) 
+		      },
+		      error : function(jqXHR, textStatus, errorThrown) {
+		        alert(textStatus);
+		      }
+	 }); 
+});
+		 $("input[name='aifvoter']").change(function() { 
+			 
+				//alert("helooo")
+			 $('#aisavoter').val($('input:radio[name=aifvoter]:checked').val());
+		
+				
+				//alert($(this).attr('id')+ " voter id value")
+		if($(this).attr('id')=='AvoterY' ){
+	      $('#AvoterBlock').show();
+		}
+		
+		else if($(this).attr('id')=='AvoterN'){
+			$('#voterId').val('');
+			$('#AvoterBlock').hide();
+		}
+		
+		 
+		 });
+		 $("input[name='aifpass']").change(function() { 
+			 //alert("helooo")
+			 $('#aispass').val($('input:radio[name=aifpass]:checked').val());
+
+		if($(this).attr('id')=='ApassY')
+			$('#ApassBlock').show();
+
+
+		else if($(this).attr('id')=='ApassN')
+			$('#ApassBlock').hide();
+
+		$('#passportNumber').val('');
+		$('#passportDate').val('');
+		
+		});
+	 $('#savecomp').click(function(e){
+		 if($('#chooseComp').val()==0){
+			 alert('Please choose Company');
+			 e.preventDefault();
+		 }
+	 });
+	 
+	 $('#savedetail').click(function(){
+
+		 var myTextEmail = $('#email').val();
+	//	 alert($('#email').val());
+			$.ajax({
+			      type : "post",
+			      url : "getValidEmail?Email="+myTextEmail,
+//	 		      data : {editDeleteId:id},
+			      contentType : "application/json; charset=utf-8",
+			      success : function(data) {
+			    	//alert(data);
+			    	
+			    	if(data==false){
+			    		alert("Invalid Email Address ")
+				
+			    	}else{
+			    		$.confirm({
+				  		    title: '',
+				  		    content: 'Please verify before you proceed further.',
+				  		    type: 'green',
+				  		    typeAnimated: true,
+				  		    buttons: {
+				  		        tryAgain: {
+				  		            text: 'Continue',
+				  		            btnClass: 'btn-Success',
+				  		            action: function(){
+				  		            	$('#createpersonForm').attr('action', 'savepersondetails');
+				  		  		 	
+				  						$('#createpersonForm').submit();
+				  				 
+			                                  
+				  		    					 	  		            }
+				  		        },
+				  		        Cancel: function () {
+				  		        }
+				  		    }
+				  		});
+					
+			    	}
+			      }
+			});
+						 
+		  		
+	 });
+	 
+	 
+	 
+	 
+	
+	 $('#savecompdtl').click(function(){
+		 if($('#chooseComp').val()!=0){
+		 		$('#createpersonForm').attr('action', 'addCompany');
+				$('#createpersonForm').submit();
+		 }else{
+			 alert('Please select company');
+		 }
+	 });
+ 
+      // When click on edit Button
+	 function editpersoncomp(compid) {
+
+			$.confirm({
+	  		    title: '',
+	  		    content: 'Are You sure you want to Edit ',
+	  		    type: 'red',
+	  		    typeAnimated: true,
+	  		    buttons: {
+	  		        tryAgain: {
+	  		            text: 'Yes',
+	  		            btnClass: 'btn-Success',
+	  		            action: function(){
+	  		            	
+
+	  		    			$('#createpersonForm').attr('action', 'personcomEdit');
+	  		    			$('#prcId').val(compid);
+	  		    			$('#createpersonForm').submit();
+	  		            }
+	  		        },
+	  		        close: function () {
+	  		        }
+	  		    }
+	  		});
+
+		}
+	 
+      //Today (10/June)
+	/*  function editpersonpan(compid) {
+
+			$.confirm({
+	  		    title: '',
+	  		    content: 'Are You sure you want to Edit ',
+	  		    type: 'red',
+	  		    typeAnimated: true,
+	  		    buttons: {
+	  		        tryAgain: {
+	  		            text: 'Yes',
+	  		            btnClass: 'btn-Success',
+	  		            action: function(){
+	  		            	
+
+	  		    			$('#createpersonForm').attr('action', 'addPersonNew');
+	  		    			$('#prcId').val(compid);
+	  		    			$('#createpersonForm').submit();
+	  		            }
+	  		        },
+	  		        close: function () {
+	  		        }
+	  		    }
+	  		});
+
+		}
+       */
+      
+      
+	 
+	 $('#panNumber').blur(function(){
+			
+		 var token = $("input[name=_csrf]").val();
+		 var header = 'X-CSRF-TOKEN';
+		
+		 $(document).ajaxSend(function(e, xhr, options)
+		{
+		    xhr.setRequestHeader(header, token);
+		}), 
+       // var compName = $("#chooseComp").val();				
+		//var caseId = $("#caseId").val();
+		
+	
+		$.ajax({
+		      type : "post",
+		      url : "getpanDetails?panNumber="+$(this).val(),
+// 		      data : {editDeleteId:id},
+		      contentType : "application/json; charset=utf-8",
+		      success : function(data) {
+		    	  
+		    	  if(data!=''){
+		    	//alert(data.voterId);
+		    	
+		    	  var d = new Date(data.dob);
+			    	
+			    	var newDate = d.toLocaleDateString("en-GB",data.dob);
+			    	  //alert(data.address)
+			   
+			    
+			    	  
+	    	    //  alert(data.isDummy);
+	    	    //  alert("hello");
+	    	    // console.log(data)
+	    	   //  alert(data.panNumber);
+	    	      
+	    	     if(data.panNumber=="")
+	    	    	 {
+	    	    	 $("input[name=isDummy][value= N]").prop('checked', true);
+	    	    	 }
+	    	     
+	    	      if(data.isDummy == true){
+	    	    	  $("#isDummyValue").attr("readonly", true); 
+		    	      $("#isDummyValue").val(data.isDummyValue);
+		    	      $("input[name=isDummy][value= Y]").prop('checked', true);
+		    	     // $("input[name=isDummy][value= N]").attr("disabled",true);  //Disable Functionality
+	    	      }
+	    	      
+	    	     if(data.isDummy == false){
+	    	    	  $("#isDummyValue").attr("readonly", true); 
+		    	      $("#isDummyValue").val(data.isDummyValue);
+		    	      $("input[name=isDummy][value= N]").prop('checked', true);
+		    	     // $("input[name=isDummy][value= Y]").attr("disabled",true);  //Disable 
+	    	      }
+	    		    	      
+			    	  
+		    	  $("#fullName").attr("readonly", true); 
+	    	      $("#fullName").val(data.fullName);
+		    	 
+	    	      $("#fatherName").attr("readonly", true); 
+	    	      $("#fatherName").val(data.relationName);
+	              
+	    	      $("#dob").attr("readonly", true); 
+	    	      $("#dob").val(newDate);
+	    	      
+	    	     $("#address").attr("readonly", true); 
+	    	      $("#address").val(data.address); 
+	    	  
+	    	 /*      $("#address").attr("readonly", true); 
+	    	      $("#address").val(data.address); */
+	    	      
+	    	      $("#email").attr("readonly", true); 
+	    	      $("#email").val(data.email);
+	    	      
+	    	      $("#primaryMobile").attr("readonly", true); 
+	    	      $("#primaryMobile").val(data.primaryMobile);
+	    	      
+	    	      if(data.alternateNo !=null){
+	    	      $("#alternateNo").attr("readonly", true); 
+	    	      $("#alternateNo").val(data.alternateNo);
+	    	      }else{
+	    	    	  $("#alternateNo").attr("readonly", false); 
+		    	      $("#alternateNo").val(data.alternateNo);
+	    	      }
+	    	      if(data.voterId!=null){
+	    	    	  $("#voterId").attr("readonly", true); 
+		    	      $("#voterId").val(data.voterId);
+		    	      $("input[name=aifvoter][value= Y]").prop('checked', true);
+						$('#AvoterBlock').show();
+	    	      }
+	    	      if(data.voterId==""){
+	    	    	  $("#voterId").attr("readonly", false); 
+		    	      $("#voterId").val('');
+		    	      $("input[name=aifvoter][value= N]").prop('checked', true);
+						$('#AvoterBlock').hide();
+	    	      }
+	    	      if(data.passportNumber!=null){
+	    	    	  $("#passportNumber").attr("readonly", true); 
+		    	      $("#passportNumber").val(data.passportNumber);
+		    	      $("input[name=aifpass][value=Y]").prop('checked', true);
+						$('#ApassBlock').show();
+	    	      }
+	    	     
+	    	      if(data.passportNumber==""){
+	    	    	  $("#passportNumber").attr("readonly", false); 
+		    	      $("#passportNumber").val('');
+		    	      $("input[name=aifpass][value=N]").prop('checked', true);
+						$('#ApassBlock').hide();
+	    	      }
+		    	  }else{
+		        
+				    	  $("#fullName").attr("readonly", false); 
+			                if( $('#snms_summon_type_id').val()!=null){
+			               
+				    	  $("#fullName").val();
+			                }
+			                
+			                else if($('#snms_summon_type_id').val()==null &&  $("#fullName").val()==null){
+			                	
+			                	$("#fullName").val('');
+			                }
+			                else{
+			                	
+			                	  $("#fullName").val('');
+			                }
+		    	      $("#fatherName").attr("readonly", false); 
+		    	      if( $('#snms_summon_type_id').val()!=null){
+		    	    	  $("#fatherName").val();
+		    	      }
+		    	      
+		    	      else if($('#snms_summon_type_id').val()==null &&  $("#fatherName").val()==null){
+		                	 $("#fatherName").val('');
+		                }
+		    	      else{
+		    	      $("#fatherName").val('');
+		    	      }
+		    	      $("#dob").attr("readonly", false); 
+		    	      if( $('#snms_summon_type_id').val()!=null){
+		    	    	  $("#dob").val();
+		    	      }
+		    	      else if($('#snms_summon_type_id').val()==null &&  $("#dob").val()==null){
+		                	 $("#dob").val('');
+		                }
+		    	      else{
+		    	      $("#dob").val('');
+		    	      }
+		    	     $("#address").attr("readonly", false); 
+		    	     
+		    	      $("#address").val(''); 
+		    	  
+		    	 /*      $("#address").attr("readonly", true); 
+		    	      $("#address").val(data.address); */
+		    	      
+		    	      $("#email").attr("readonly",false); 
+		    	      if( $('#snms_summon_type_id').val()!=null){
+		    	      $("#email").val();
+		    	      }
+		    	      else if($('#snms_summon_type_id').val()==null &&  $("#email").val()==null){
+		                	 $("#email").val('');
+		                }
+		    	      else{
+		    	    	  $("#email").val();
+		    	      }
+		    	      $("#primaryMobile").attr("readonly", false); 
+		    	      $("#primaryMobile").val('');
+		    	      
+		    	      
+		    	    	  $("#alternateNo").attr("readonly", false); 
+			    	      $("#alternateNo").val('');
+			    	      
+			    	      $("#voterId").attr("readonly", false); 
+			    	      $("#voterId").val('');
+			    	      $("input[name=aifvoter][value= N]").prop('checked', true);
+							$('#AvoterBlock').hide();
+							
+							  $("#passportNumber").attr("readonly", false); 
+							  if( $('#snms_summon_type_id').val()!=null){
+								  $("#passportNumber").val();
+								  if($("#passportNumber").val()!=null){
+								  $("input[name=aifpass][value=Y]").prop('checked', true);
+									$('#ApassBlock').show();
+								  }else{
+									  $("#passportNumber").val('');
+						    	      $("input[name=aifpass][value=N]").prop('checked', true);
+										$('#ApassBlock').hide();
+								  }
+							  }
+							  if( $('#snms_summon_type_id').val()==null){
+								  if($("#passportNumber").val()==null){
+									  $("#passportNumber").val('');
+						    	      $("input[name=aifpass][value=N]").prop('checked', true);
+										$('#ApassBlock').hide();
+									  }    
+								  }
+								 
+							  
+							  else{
+				    	      $("#passportNumber").val('');
+				    	      $("input[name=aifpass][value=N]").prop('checked', true);
+								$('#ApassBlock').hide();
+							  }
+		    	      
+		    	  }
+		    	 },
+		      error : function(xhr, status, error) {
+			       alert('NO DATA FOUND');
+			  /*      $("#largesizemodal").modal("hide");*/
+					 $('#compnayBlock').show(); 
+					 
+			      }
+		    }); 
+		 
+	 });
+	 
+	 $('#compType').on('change',function(){
+		
+			if(this.value == '3')
+				{
+				
+				$('#cinlabel').text('LLPIN *');
+				document.getElementById("cinlabel").style.color = "#ff0000";
+				
+				}else{
+					 $('#cinlabel').text('CIN *');
+				}
+			 
+		 });
+	 
+	 var myText = document.getElementById("address");
+/* 	 alert(myText); */
+	 var wordCount = document.getElementById("wordCount");
+
+	 myText.addEventListener("keyup",function(){
+	 	var characters = myText.value.split('');
+	   wordCount.innerText = characters.length;
+	 });
+	 
+	 
+	 
+	 
+	 $('#designation').on('change', function() {
+			
+	      if ( this.value == '11')
+	  
+	      {
+	    	  //alert("designation   "+ this.value)
+	    	  
+	    	   $("#exampleModal").modal("show");
+	     //   $("#exampleModal").show();
+	      
+	      }
+	      else
+	      {
+	        $("#AdinBlock").hide();
+	      }
+	    });
+	 
+	 
+	 function savedDesignation() {
+		 
+		 
+		var DesignationName = $("#DesignatinName").val();
+		if(DesignationName == null || DesignationName == ""){
+			document.getElementById("DesignatinNameErr").textContent="Enter the Designation Name";
+			//$("#DesignatinNameErr").val('Enter the Designation Name ')
+		}
+		else{
+		//alert(DesignationName);
+		$.ajax({
+				//crossDomain: true,
+				type : "GET",
+				url : "addOtherDesignation?DesignationName="+DesignationName,
+				//contentType : "application/json; charset=utf-8",
+				cache : false,
+				timeout : 600000,
+				success : function(data) {
+					debugger 
+					 $("#exampleModal").modal("hide");
+					
+					$("#DesignatinName").val('');
+						alert("The Designation is saved. Now  Choose from dropdown ");
+					 $("#designation").empty();
+					 var len = data.length;
+
+ 	                for( var i = 0; i<len; i++){
+ 	                    var id = data[i]['id'];
+ 	                    var name = data[i]['designation'];
+ 	                    
+ 	                    $("#designation").append("<option value='"+id+"'>"+name+"</option>");
+
+ 	                }
+					
+				},
+
+				error : function(xhr, status, error) {
+					alert('This designation is already exits');
+				}
+			});
+		}	
+	}
+	 	
+		$("input[name='isDummy']").change(function() { 
+			
+$('#aisadummy').val($('input:radio[name=isDummy]:checked').val());
+
+});
+	 </script>
+		<script type="text/javascript" src="js/customValidation.js"></script>
+
+	</div>
+</body>
+</html>
+
+

@@ -1,0 +1,518 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Preview Case Details</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Update
+						Case Details</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<form th:action="@{/showCaseDetails}" method="post"
+			class="needs-validation" th:object="${caseDetails}"
+			th:id="showCaseDetails" enctype="multipart/form-data">
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-briefcase"></i>Case Details
+							</h4>
+
+							<div class="form-group row">
+
+								<input type="hidden" th:field="*{id}" th:id="caseDetailsId"
+									name="caseID" /> <input type="hidden" th:field="*{radioValue}" th:id="radioValue">
+
+                                 <input type = "hidden" th:value="${officeList}" th:id="isSigned">     
+								<label class="col-sm-2 col-form-label"> Case No : </label>
+								<th:block th:unless = "${officeList==1  and caseDetails.radioValue=='MCA'}">
+								<div class="col-sm-4" id="caseID">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" th:id="caseId" name="caseId"
+										th:field="*{caseId}" maxlength="50" /> <span
+										class="text-danger" th:errors="*{caseId}"></span>
+								</div>
+                               </th:block>
+                               
+                                <th:block th:if ="${officeList==1  and caseDetails.radioValue=='MCA'}">
+                               
+									<div class="col-sm-4">
+									<label
+									class="col-sm-10 col-form-label text-primary"> <span
+									th:text="${caseDetails.caseId}"></span>
+								</label>
+								</div>
+                                </th:block>
+                               
+                               
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Case Title : </label>
+                                 <th:block th:unless = "${officeList==1  and caseDetails.radioValue=='MCA'}">
+								<div class="col-sm-4">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" th:id="caseTitle" name="caseTitle"
+										th:field="*{caseTitle}" placeholder="Case Title"
+										maxlength="50" /> <span class="text-danger"
+										th:errors="*{caseTitle}"></span>
+								</div>
+                                </th:block>  
+
+                               <th:block th:if ="${officeList==1  and caseDetails.radioValue=='MCA'}">
+                               
+									<div class="col-sm-4">
+									<label
+									class="col-sm-10 col-form-label text-primary"> <span
+									th:text="${caseDetails.caseTitle}"></span>
+								</label>
+								</div>
+                                </th:block>
+
+							</div>
+							<div class="form-group row"></div>
+
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label">Financial Year :</label>
+								<label class="col-sm-4 col-form-label text-primary"><span
+									th:text="${caseDetails.financeYear}"></span>
+								</label>
+								<label class="col-sm-2 col-form-label">Investigation
+									Order Received From : </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.radioValue}"></span>
+								</label>
+
+							</div>
+
+
+							<div th:if="${caseDetails.mcaOrderNo != '' }"
+								class="form-group row" id="mcaDiv">
+
+								<label class="col-sm-2 col-form-label">MCA Order No : </label> <label
+									class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.mcaOrderNo}"></span>
+								</label> <label class="col-sm-2 col-form-label">MCA Order Date :
+								</label> <label class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${#dates.format(caseDetails.mcaOrderDate, 'dd/MM/yyyy')}"></span>
+								</label>
+
+							</div>
+
+							<div
+								th:if="${caseDetails.courtOrderNo != null and caseDetails.courtOrderNo!=''}"
+								class="form-group row" id="courtDiv">
+
+								<label class="col-sm-2 col-form-label">Court Order No :
+								</label> <label class="col-sm-4 col-form-label text-primary"> <span
+									th:text="${caseDetails.courtOrderNo}"></span>
+								</label> <label class="col-sm-2 col-form-label">Court Order Date
+									: </label> <label class="col-sm-4 col-form-label text-primary">
+									<span
+									th:text="${#dates.format(caseDetails.courtOrderDate, 'dd/MM/yyyy')}"></span>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.mcaOrderFile != null}"
+								class="form-group row" id="mcaFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Communication received from MCA : </label> <label
+									class="col-sm-6 col-form-label text-primary"> <a
+									th:target="_blank"
+									th:href="@{|/downloadFiles?fileName=${caseDetails.mcaOrderFile}|}"><span
+										th:text="${caseDetails.mcaOrderFile}"></span></a>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.courtOrderFile != null}"
+								class="form-group row" id="courtFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Order received from Court : </label> <label
+									class="col-sm-6 col-form-label text-primary"> <span
+									th:text="${caseDetails.courtOrderFile}"></span>
+								</label>
+
+							</div>
+
+
+							<div th:if="${caseDetails.legacyOrderFile != null}"
+								class="form-group row" id="orderFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of running office Order uploaded : </label> <label
+									class="col-sm-6 col-form-label text-primary"> <a
+									th:target="_blank"
+									th:href="@{|/downloadFiles?fileName=${caseDetails.legacyOrderFile}|}"><span
+										th:text="${caseDetails.legacyOrderFile}"></span></a>
+								</label>
+
+							</div>
+
+                                <div th:if="${caseDetails.radioValue =='Prosecution'} "
+								class="form-group row" id="orderFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Date of Submission: </label> 
+								<div class="col-sm-4">
+									<label class="col-sm-10 col-form-label text-primary"> <span
+										th:text="${	#dates.format(caseDetails.mcaSubmissionDate,'dd/MM/YYYY ')}"></span>
+									</label>
+								</div>
+							</div>
+                                
+
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-industry"></i> Company Under Investigation
+							</h4>
+
+							<div class="form-group row">
+
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Sr. No.</th>
+											<th>Company Name</th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<tr th:if="${comList.empty}">
+											<td colspan="2">No Data Available</td>
+										</tr>
+										<tr th:each="insp : ${comList}">
+											<td th:text="${insp.id}"></td>
+											<td th:text="${insp.name}"></td>
+										</tr>
+									</tbody>
+								</table>
+
+							</div>
+							<th:block th:if="${caseDetails.radioValue!= 'Prosecution'}">
+								<h4 class="form-header text-uppercase">
+									<i class="fa fa-users"></i>Investigation Team
+
+								</h4>
+
+
+								<div class="col-sm-4">
+									<button type="button" class="btn btn-success"
+										data-toggle="modal" data-target="#largesizemodal"
+										onclick="getInspectorList($('#caseDetailsId').val());">
+
+
+										<i class="fa fa-plus"></i>Deactivated Inspector's List
+									</button>
+
+								</div>
+
+								<br>
+
+								<div class="form-group row">
+
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Sr. No.</th>
+												<th style="width: 700px">Name</th>
+												<th>Case Designation</th>
+												<!-- <th>Investigation Officer</th> -->
+											</tr>
+										</thead>
+										<tbody>
+
+											<tr th:if="${inspList.empty}">
+												<td colspan="3">No Data Available</td>
+											</tr>
+											<tr th:each="insp : ${inspList}">
+												<td th:text="${insp.srNo}"></td>
+												<td th:text="${insp.inspName}"></td>
+
+												<th:block
+													th:if="${insp.isIO() == true and insp.isAdo() == true }">
+													<td>IO and Addl.</td>
+												</th:block>
+												<th:block
+													th:if="${insp.isIO() == true and insp.isAdo() == false }">
+													<td>IO</td>
+												</th:block>
+												<th:block
+													th:if="${insp.isAdo() == true and insp.isIO() == false}">
+													<td>Addl.</td>
+												</th:block>
+
+												<th:block
+													th:if="${insp.isIO() == false and insp.isAdo() == false}">
+													<td>Inspector</td>
+												</th:block>
+
+												<!--<td th:text="${insp.isIO() == true} ?  ' IO' : 'Inspector'"><td>
+											<!-- <th:block th:if="${#strings.equlas(ioName,insp.inspName)}">
+												<td th:text="${insp.inspName}"><span>-IO</span></td>
+											</th:block>
+											<th:block th:if="${#!strings.equlas(ioName,insp.inspName)}">
+												<td th:text="${insp.inspName}"></td>
+											</th:block> -->
+												<!-- <td th:text="${insp.inspName}"></td> -->
+												<!-- <td th:text="${insp.inspName}"> - Investigating Officer</td> -->
+
+												<!-- <td th:text="${insp.inspName}"></td> -->
+												<!-- <td th:text="${insp.isIO}"></td> -->
+											</tr>
+
+										</tbody>
+
+
+									</table>
+
+
+								</div>
+
+							</th:block>
+
+                                 <th:block th:if ="${officeList==1  and caseDetails.radioValue=='MCA'}">
+                                 	<label for="input-13" class="col-form-label text-danger" style="font-size: large; color: red;">
+								This Office Order has been  E-signed so you can't update the Case ID/Title   </label>
+                                 </th:block>
+							<div class="form-footer">
+
+								<a href="showAllADOCase" class="btn btn-danger">Back</a>
+
+								<!-- <input type="button" class="btn btn-success" onclick="saveBtn()" th:value="Update">  -->
+								<button type="button" class="btn btn-primary"
+									id="updatecasedetail" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
+									<i class="fa fa-plus"></i> Update
+								</button>
+							</div>
+
+
+
+						</div>
+					</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Reason For Updating Case Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Remark : </label>
+            <input type="text" th:field="*{caseRemark}" placeholder="Enter Update Reason " onkeypress="return Validate(event);"
+            maxlength="50"   class="form-control" id="deleteRemark">
+            <span class="text-danger"   id="remarkval">Maximum length 50  </span>
+            <span class="text-danger" style="display: none"  id="deleteError">Please Enter Reason </span>
+          </div>
+         
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button"  th:name = "reject"  onclick="saveBtn();" class="btn btn-primary" >Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+					<div class="modal fade" id="largesizemodal">
+						<div class="modal-dialog modal-lg modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header bg-primary">
+									<h5 class="modal-title text-white">Inspector's List</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Sr. No.</th>
+												<th style="display: none"></th>
+												<th>Name</th>
+												<th>Designation</th>
+												<th>From Date</th>
+												<th>To Date</th>
+
+											</tr>
+										</thead>
+										<tbody id="inspectorTable">
+
+
+										</tbody>
+
+
+									</table>
+
+
+									<div id="msg"></div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-dark" data-dismiss="modal">
+										<i class="fa fa-times"></i> Close
+									</button>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<link rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+		<script src="js/jquery-confirm.js"></script>
+		<script type="text/javascript">
+		
+		$(document).ready(function(){
+			var isSigned =$("#isSigned").val();
+			var radioValue = $('#radioValue').val();
+			if(isSigned ==1 && radioValue==="MCA"){
+				
+				 $("#updatecasedetail").attr("disabled", true);
+				
+			}else{
+				 $("#updatecasedetail").attr("disabled", false);
+			}
+		});
+function getInspectorList(caseID){
+	var token =  $("input[name=_csrf]").val();
+	var header = 'X-CSRF-TOKEN';
+	 $(document).ajaxSend(function(e, xhr, options)
+	{
+	    xhr.setRequestHeader(header, token);
+	}), 
+	$.ajax({
+		 crossDomain: true,
+	        type: "post",
+	        url: "getDeletedInspectorList?caseID="+caseID,
+	        contentType : "application/json; charset=utf-8",
+	        /* data:{caseId:caseId
+	        }, */
+	        cache: false,
+	        timeout: 600000,
+	        success: function(data){
+	        	
+	        
+	        	var html = '';
+				var len = data.length;
+				$('#inspectorTable').empty();
+				for (var i = 0; i < len; i++) {
+					
+					var trString='';
+					$('#showInsrTable tr').each(function(j,v){ if($(this).children('td:eq(1)').text()==data[i].userId){
+						isAdded=true };  }); 
+					i
+							
+					html += '<tr><td>'+data[i].srNo+'</td>'+
+							'<td style="display: none">'+data[i].userID+'</td>'+
+							'<td>'+data[i].inspName+'</td>'+
+							'<td>'+data[i].designation+'</td>'+
+							'<td>'+data[i].fromDate+'</td>'+
+							'<td>'+data[i].toDate+'</td>'+
+							trString;
+				}
+	        	$('#inspectorTable').append(html);
+	        	},
+	        	
+	 error : function(xhr, status, error) {
+       alert('error in getting count');
+     }
+	 });
+	
+	
+	
+	
+}
+
+
+function saveBtn() {
+	
+	var deleteRemark = $('#deleteRemark').val();
+	if(deleteRemark ===  ""){
+		$('#deleteError').show();
+	}else{
+//	$('#exampleModal').hide();
+	
+	$('#exampleModal').modal('hide');
+	$.confirm({
+		    title: '',
+		    content: 'Are you sure, you want to Update the caseID/Title ?',
+		    type: 'green',
+		    typeAnimated: true,
+		    buttons: {
+		        tryAgain: {
+		            text: 'yes',
+		            btnClass: 'btn-Success',
+		            action: function(){
+		            	$('#showCaseDetails').attr('action', 'updateCaseId');
+		  		 	
+						$('#showCaseDetails').submit();
+				 
+                          
+		    					 	  		            }
+		        },
+		        No: function () {
+		        	$('#exampleModal').hide();
+  		        }
+		    }
+		});
+	}
+	
+	
+	
+}
+
+function Validate(e) {
+    var keyCode = e.keyCode || e.which;
+    var lblError = document.getElementById("remarkval");
+    lblError.innerHTML = "";
+
+    //Regex for Valid Characters i.e. Alphabets and Numbers.
+    var regex = /^[A-Za-z0-9\s]+$/;
+
+    //Validate TextBox value against the Regex.
+    var isValid = regex.test(String.fromCharCode(keyCode));
+    if (!isValid) {
+        lblError.innerHTML = "Only Alphabets and Numbers allowed.";
+    }
+
+    return isValid;
+}
+</script>
+
+	</div>
+
+</body>
+</html>

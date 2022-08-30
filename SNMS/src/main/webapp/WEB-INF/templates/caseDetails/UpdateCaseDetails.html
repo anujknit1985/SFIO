@@ -1,0 +1,1239 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Case Details</title>
+</head>
+<style type="text/css">
+.formFieldError{
+color:red;
+}
+
+.loading{
+color:red;
+}
+</style>
+<body>
+
+	<div layout:fragment="content">
+	
+	
+	<script type="text/javascript"  th:inline="javascript">
+$(document).ready(function() {
+
+if($("#radioSelected").val()=='Court')
+	
+{
+	
+$("#inline-radio-info"). prop("checked", true);
+	
+	
+$('#mcaDiv').hide();
+$('#mcaFileDiv').hide();
+$('#courtDiv').show();
+$('#courtFileDiv')
+		.show();
+
+$('#mcaOrderNo')
+		.removeAttr(
+				'required');
+$('#mcaOrderFile')
+		.removeAttr(
+				'required');
+
+$("#courtOrderNo")
+		.prop(
+				'required',
+				true);
+$("#courtOrderFile")
+		.prop(
+				'required',
+				true);
+
+
+	
+}else if($("#radioSelected").val()== 'MCA'){
+	
+$("#inline-radio-primary"). prop("checked", true);
+	
+	$('#courtDiv').hide();
+	$('#courtFileDiv')
+			.hide();
+	$('#mcaDiv').show();
+	$('#mcaFileDiv').show();
+
+	$('#courtOrderNo')
+			.removeAttr(
+					'required');
+	$('#courtOrderFile')
+			.removeAttr(
+					'required');
+	$("#mcaOrderNo").prop(
+			'required',
+			true);
+	$("#mcaOrderFile")
+			.prop(
+					'required',
+					true);
+
+}
+
+
+else if ($("#radioSelected").val()== 'Both') {
+	
+
+$("#inline-radio-success"). prop("checked", true);
+	
+	
+	$('#mcaDiv').show();
+	$('#mcaFileDiv').show();
+	$('#courtDiv').show();
+	$('#courtFileDiv')
+			.show();
+
+	$("#courtOrderNo")
+			.prop(
+					'required',
+					true);
+	$("#courtOrderFile")
+			.prop(
+					'required',
+					true);
+
+	$("#mcaOrderNo").prop(
+			'required',
+			true);
+	$("#mcaOrderFile")
+			.prop(
+					'required',
+					true);
+
+}
+
+}); 
+</script>
+	
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Create
+						New Case</li>
+				</ol>
+			</div>
+		</div>
+
+		
+		<form th:action="@{/updateCaseDetails}" method="post" th:id="fileUploadForm"
+			class="needs-validation" th:object="${caseDetails}" 
+			enctype="multipart/form-data">
+
+            <input type="hidden" th:field = "*{id}" >
+         <!--     <input type="hidden" th:field="*{caseId}" /> -->
+            <input  type = "hidden" th:field ="*{mcaOrderFile}">
+            <input type="hidden" th:field="*{radioValue}"
+										th:id="radioSelected">
+         	<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-briefcase"></i> Add Case Details
+							</h4>
+
+
+							<div class="form-group row">
+
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Case ID <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" th:id="caseId" name="caseId"
+										th:field="*{caseId}" maxlength="50"/ readonly="readonly">
+								</div>
+								<label for="input-10" class="col-sm-2 col-form-label">Financial
+									Year</label>
+								<div class="col-sm-4">
+									<select class="form-control" th:name="financeYear">
+									 <option th:each="ulist: ${fyList}" 
+											th:value="${ulist.fromY}+'-'+${ulist.toY}" th:utext="${ulist.fromY}+'-'+${ulist.toY}" />
+									</select>
+								</div>
+
+
+							</div>
+							<div class="form-group row">
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Case Title <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-10">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" th:id="caseTitle" name="caseTitle"
+										th:field="*{caseTitle}" placeholder="Case Title" maxlength="50"/>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label">Investigation
+									Order Received From </label>
+								<div class="col-sm-8">
+									<div class="icheck-material-primary icheck-inline">
+										<input type="radio" id="inline-radio-primary"
+											name="radioValue1" checked value="MCA" /> <label
+											for="inline-radio-primary">Ministry of Corporate
+											Affairs(MCA)</label>
+									</div>
+									<div class="icheck-material-info icheck-inline">
+										<input type="radio" id="inline-radio-info" name="radioValue1"
+											value="Court" /> <label for="inline-radio-info">Supreme/High
+											Court</label>
+									</div>
+									<div class="icheck-material-success icheck-inline">
+										<input type="radio" id="inline-radio-success"
+											name="radioValue1" value="Both" /> <label
+											for="inline-radio-success">Both</label>
+									</div>
+									<!-- <input type="hidden" th:field="*{radioValue}"
+										th:id="radioValue"> -->
+								</div>
+							</div>
+
+
+							<div class="form-group row" id="mcaDiv">
+								<label for="input-11" class="col-sm-2 col-form-label">MCA
+									Order No <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" th:id="mcaOrderNo" name="mcaOrderNo"
+										th:field="*{mcaOrderNo}" placeholder="MCA Order No"
+										 maxlength="50"/>
+								</div>
+
+								<label for="input-12" class="col-sm-2 col-form-label">MCA
+									Order Date <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" th:id="mcaDate" name="mcaDate"
+										th:field="*{mcaDate}" placeholder="DD/MM/YYYY"  maxlength="10"/>
+								</div>
+
+							</div>
+
+							<div class="form-group row" id="courtDiv" style="display: none;">
+
+								<label for="input-11" class="col-sm-2 col-form-label">Court
+									Order No <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" th:id="courtOrderNo" name="courtOrderNo"
+										th:field="*{courtOrderNo}" placeholder="Court Order No" maxlength="50"/>
+								</div>
+
+								<label for="input-12" class="col-sm-2 col-form-label">Court
+									Order Date<span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-4">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" th:id="courtDate" name="courtDate"
+										th:field="*{courtDate}" placeholder="DD/MM/YYYY" maxlength="10"/>
+								</div>
+
+							</div>
+
+
+                              	<div th:if="${caseDetails.mcaOrderFile != null}"
+								class="form-group row" id="mcaFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Communication received from MCA : </label> <label
+									class="col-sm-6 col-form-label text-primary"> <a th:target="_blank" th:href="@{|/downloadFiles?fileName=${caseDetails.mcaOrderFile}|}" ><span
+									th:text="${caseDetails.mcaOrderFile}"></span></a>
+								</label>
+
+							</div>
+                              
+							<div class="form-group row file-upload" id="mcaFileDiv">
+							
+							
+                                <label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Communication received from MCA <span
+									class="text-danger">*</span>
+								</label>
+								<div class="col-sm-6">
+									<input type="file" class="form-control" autocomplete="off"
+										th:id="mcaOrderFile" name="mcaFile"
+										th:field="*{mcaFile}" placeholder="MCA Order No"
+										 />
+								</div>
+
+							</div>
+
+
+                               
+                                
+							 <div class="form-group row" id="courtFileDiv" style="display: none">
+                                   <div th:if="${caseDetails.courtOrderFile != null}">
+                                 <a th:target="_blank" th:href="@{|/downloadFiles?fileName=${caseDetails.courtOrderFile}|}" >
+                                 <span th:text="${caseDetails.courtOrderFile}"></span>
+                                 </a>
+                                </div>
+                                <br>
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Order received from Court <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-6">
+									<input type="file" class=" form-control" autocomplete="off"
+										th:id="courtOrderFile" name="courtFile"
+										th:field="*{courtFile}" placeholder="MCA Order No" />
+								</div>
+
+							</div>
+
+<th:block th:if="${caseDetails.id!=null}">
+	                               <div class="form-group row">
+
+								<label for="input-11" class="col-sm-6 col-form-label">
+									Case  Unit <span class="text-danger">*</span>
+								</label>
+								<div class="col-sm-6">
+									<span th:text="${caseDetails.unit.unitName}"></span>
+								</div>
+
+							</div>
+</th:block>
+
+
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-industry"></i> Add Company Under Investigation <span
+									class="text-danger">*</span>
+							</h4>
+
+							<div class="form-group row">
+
+								<label for="input-13" class="col-sm-2 col-form-label">
+									Company Name </label>
+
+								<div class="col-sm-7">
+									<input type="text" class="inputTxt form-control"
+										autocomplete="off" id="companyName" name="companyNam"
+										placeholder="Company Name" maxlength="100" onkeypress="return Validate_alphanumeric(event);"/>
+								</div>
+
+								<div class="col-sm-3">
+									<button type="button" th:name="addCompany" th:id="addCompany"
+										class="btn btn-success">
+										<i class="fa fa-plus"></i>Add
+									</button>
+
+								</div>
+
+
+							</div>
+
+
+							<div class="form-group row" id="companyDiv"
+								>
+
+
+
+								<table id="myTable" class="table table-primary table-responsive">
+									<thead>
+										<tr>
+											<th>Sr NO</th>
+											<th>Company Name</th>
+											<th>Options</th>
+											<!-- <th>E-mail</th>
+									<th>Mobile</th> -->
+										</tr>
+									</thead>
+
+									<tbody id="companyTable">
+                                      <tr th:if="${comList.empty}">
+									<td colspan="5">No Data Available</td>
+								</tr>
+								<tr th:each="comp : ${comList}">
+								     <td th:text = "${comp.id}"></td>
+                                       <td th:text = "${comp.name}"></td>
+                      <td> <button class="btn btn-danger btn-round m-1 deleteBtn" th:onclick= "'javascript:showDeleteComdiv(\'' + ${comp.compId} +'\');'">Delete</button> </td>
+										
+</tr>
+									</tbody>
+
+								</table>
+
+							</div>
+							
+							<input type="hidden" name="companyName"  id="companies">
+	
+							<table class="table table-primary table-responsive"
+									id="DeletecomapnyTable"  style="display: none;">
+									<thead>
+										<tr>
+											
+											<th style="display: none;"></th>
+										
+										</tr>
+									</thead>
+									<tbody id="showDeletecompTable">
+									</tbody>
+								</table>
+							   <input type = "hidden"  name = "deleteCompId" id = "deleteCompId"
+                                        th:value  = "deleteCompId" />
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-users"></i>Choose Investigation Team<span
+									class="text-danger">*</span>
+							</h4>
+
+							<div class="form-group row">
+								<label for="input-12" class="col-sm-4 col-form-label">Select
+									Investigation Unit</label>
+								<div class="col-sm-2">
+									<select class="form-control" th:id="unitId" name="unitId">
+										<option th:each="ulist: ${unitList}" 
+											th:value="${ulist.unitId}" th:utext="${ulist.unitName}" />
+									</select>
+								</div>
+
+
+								<div class="col-sm-4">
+									<button type="button" class="btn btn-success"
+										data-toggle="modal" data-target="#largesizemodal" onclick="getInspectorList($('#unitId').val());">
+										<i class="fa fa-plus"></i>Add Inspectors
+									</button>
+
+								</div>
+								
+								<input type="hidden" name="inspectors"  id="inspectors">  
+									<input type="hidden" name="deleteIO"  id="deleteIO">  
+							
+								<!-- 	<label for="input-13" class="col-sm-2 col-form-label">
+											Inspector Name</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="caseTitle"
+												name="caseTitle" th:field="*{caseTitle}"
+												placeholder="Case Title" required />
+										</div> -->
+							</div>
+							
+							<div class="form-group row" id="inspectorDiv"
+								>
+								<table class="table table-primary table-responsive"
+									id="myInspectorTable">
+									<thead>
+										<tr>
+											<th>Sr. No.</th>
+											<th style="display: none;">userId</th>
+											<th>Name</th>
+											<th>Designation</th>
+											<th>Cases Assigned</th>
+											<th>Choose I/O</th>
+											<th>Choose Addl. Director</th>
+											<th>Options</th>
+										</tr>
+									</thead>
+									<tbody id="showInsrTable">
+									<tr th:if="${inspList.empty}">
+									<td colspan="5">No Data Available</td>
+								</tr>
+								<tr th:each="insp : ${inspList}">
+								     <td th:text = "${insp.srNo}"></td>
+								     <td th:text = "${insp.userID}" style="display:none"></td>
+									<td th:text="${insp.inspName}"></td>
+									<td th:text="${insp.Designation}"></td>
+									<td th:text="${insp.caseAssign}"></td>
+									<!-- <td th:text="${insp.IO}"></td>
+									<td th:text="${insp.Ado}"></td> -->
+									 <td th:if="${insp.IO}">
+									   <input type="radio" name="chooseIo" checked="checked" th:value="${insp.userID}"/>
+                                       </td>
+                                       <td th:if="${!insp.IO}">
+									   <input type="radio" name="chooseIo"  th:value="${insp.userID}"/>
+                                       </td> 
+                                      <td th:if="${insp.Ado}">
+                                       <input type ="radio" name="chooseAdo"   checked="checked"  th:value="${insp.userID}"/>
+                                       
+                                       </td>
+                                       <td th:if="${!insp.Ado}">
+                                       <input type ="radio" name="chooseAdo"   th:value="${insp.userID}"/>
+                                       
+                                       </td> 
+                                       <td><button class="btn btn-danger btn-round m-1 deleteBtn "th:onclick= "'javascript:showDeleteIodiv(\'' + ${insp.userID} +'\');'">Delete</button> 
+                                      <br>
+                                    
+                                       </td>
+                                       
+                                    
+                                       
+									<!-- <td th:text="${insp.isIO}"></td>
+									<td th:text="${insp.isAdo}"></td> -->
+								</tr>
+									
+									</tbody>
+								</table>
+							</div>
+							
+							
+							
+							<table class="table table-primary table-responsive"
+									id="DeleteInspectorTable"  style="display: none;">
+									<thead>
+										<tr>
+											
+											<th style="display: none;">userId</th>
+										
+										</tr>
+									</thead>
+									<tbody id="showDeleteTable">
+									</tbody>
+								</table>
+							   <input type = "hidden"  name = "deleteIo" id = "deleteIo"
+                                        th:value  = "deleteIo" />
+							<input type="hidden" name="CaseDetails" id="holdCase"/>
+							<!-- <input type="hidden" name="chooseIo" th:id="chooseIo">
+							<input type="hidden" name="chooseAdo" th:id="chooseAdo"> -->
+
+							<div class="form-footer">
+								<button type="reset" class="btn btn-danger">
+									<i class="fa fa-times"></i> RESET
+								</button>
+								<button type="button" th:name="save" th:id="saveBtn"
+									class="btn btn-success">
+									<i class="fa fa-check-square-o"></i> Update Data
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="modal fade" id="fileuplodmodal">
+			<div class="modal-dialog modal-lg modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header bg-primary">
+						<h5 class="modal-title text-white">Choose Investigation Team</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					 <div class="modal-body">
+
+						<label for="input-11" class="col-sm-6 col-form-label">Inspector Order <span
+									class="text-danger">*</span>
+								</label>
+								<div class="col-sm-6">
+									<input type="file" class="form-control" autocomplete="off"
+										th:id="IoOrderFile" name="orderFile"
+										th:field="*{ioOrder}" placeholder="MCA Order No"
+										 />
+								</div>
+						
+
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-dark" data-dismiss="modal">
+							<i class="fa fa-times"></i> Close
+						</button>
+						<button type="button" class="btn btn-primary" id="addIoFile">
+							<i class="fa fa-plus"></i> Add
+						</button>
+					</div>
+				</div>
+			</div>
+		</div> -->
+		</form>
+		<div class="modal fade" id="largesizemodal">
+			<div class="modal-dialog modal-lg modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header bg-primary">
+						<h5 class="modal-title text-white">Choose Investigation Team</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Sr. No.</th>
+									<th style="display: none"></th>
+									<th>Name</th>
+									<th>Designation</th>
+									<th>Cases Assigned</th>
+									<th>Select Inspector</th>
+								</tr>
+							</thead>
+							<tbody id="inspectorTable">
+
+								<!-- <tr th:if="${inspList.empty}">
+									<td colspan="5">No Data Available</td>
+								</tr>
+								<tr th:each="insp : ${inspList}">
+									<td th:text="${insp.srno}"></td>
+									<td style="display: none" th:text="${insp.userId}"></td>
+									<td th:text="${insp.name}"></td>
+									<td th:text="${insp.designation}"></td>
+									<td th:text="${insp.caseAssigned}"></td>
+									<td><input type="checkbox" id="inline-info" /></td>
+								</tr> -->
+
+							</tbody>
+
+
+						</table>
+
+
+ <div id="msg"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-dark" data-dismiss="modal">
+							<i class="fa fa-times"></i> Close
+						</button>
+						<button type="button" class="btn btn-primary" id="addInspector">
+							<i class="fa fa-plus"></i> Add
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		
+<!-- <form id="upload-file-form" enctype="multipart/form-data" method="post">
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+  <input id="upload-file-input" type="file" name="uploadfile" accept="*" />
+  <input type="button" id="uploadFile" value="Upload" />
+</form> -->
+		<script th:inline="javascript">
+			$(document)
+					.ready(
+							function() {
+								
+								$('form').submit(function(){
+									$('body').append('<div class="loading">Loading&#8230;</div>');
+								});
+								
+								/* $("input[name='chooseIo']").change(function() {
+									//alert($('input:radio[name=chooseIo]:checked').val());
+									 $('#chooseIo').val($('input:radio[name=chooseIo]:checked').val());
+
+								});
+								$("input[name='chooseAdo']").change(function() {
+									//alert($('input:radio[name=chooseIo]:checked').val());
+									 $('#chooseAdo').val($('input:radio[name=chooseAdo]:checked').val());
+
+								}); */
+
+								$("#caseId")
+										.keydown(
+												function(e) {
+													var oldvalue = $(this)
+															.val();
+													var field = this;
+													setTimeout(
+															function() {
+																if (field.value
+																		.indexOf('SFIO/INV/2020/') !== 0) {
+																	$(field)
+																			.val(
+																					oldvalue);
+																}
+															}, 1);
+												});
+
+								/* $('#courtDiv').hide();
+								$('#courtFileDiv').hide();
+ */
+							$("input[name='radioValue1']")
+										.change(
+												function() {
+													$('#radioVal')
+															.val(
+																	$(
+																			'input:radio[name=orderRadio]:checked')
+																			.val());
+													if ($(
+															'input:radio[name=radioValue1]:checked')
+															.val() == 'MCA') {
+														$('#radioSelected').val('MCA');
+														$('#courtDiv').hide();
+														$('#courtFileDiv')
+																.hide();
+														$('#mcaDiv').show();
+														$('#mcaFileDiv').show();
+
+														$('#courtOrderNo')
+																.removeAttr(
+																		'required');
+														$('#courtOrderFile')
+																.removeAttr(
+																		'required');
+														$("#mcaOrderNo").prop(
+																'required',
+																true);
+														$("#mcaOrderFile")
+																.prop(
+																		'required',
+																		true);
+
+													} else if ($(
+															'input:radio[name=radioValue1]:checked')
+															.val() == 'Court') {
+														$('#radioSelected').val('Court');
+														$('#mcaDiv').hide();
+														$('#mcaFileDiv').hide();
+														$('#courtDiv').show();
+														$('#courtFileDiv')
+																.show();
+
+														$('#mcaOrderNo')
+																.removeAttr(
+																		'required');
+														$('#mcaOrderFile')
+																.removeAttr(
+																		'required');
+
+														$("#courtOrderNo")
+																.prop(
+																		'required',
+																		true);
+														$("#courtOrderFile")
+																.prop(
+																		'required',
+																		true);
+
+													} else if ($(
+															'input:radio[name=radioValue1]:checked')
+															.val() == 'Both') {
+														$('#radioSelected').val('Both');
+														$('#mcaDiv').show();
+														$('#mcaFileDiv').show();
+														$('#courtDiv').show();
+														$('#courtFileDiv')
+																.show();
+
+														$("#courtOrderNo")
+																.prop(
+																		'required',
+																		true);
+														$("#courtOrderFile")
+																.prop(
+																		'required',
+																		true);
+
+														$("#mcaOrderNo").prop(
+																'required',
+																true);
+														$("#mcaOrderFile")
+																.prop(
+																		'required',
+																		true);
+
+													}
+													
+												}); 
+
+								$("#companyTable")
+										.on(
+												'click',
+												'.editBtn',
+												function() {
+													var currentRow = $(this)
+															.closest("tr");
+													var name = currentRow.find(
+															"td:eq(1)").text();
+
+													$('#companyName').val(name);
+
+													currentRow.remove();
+
+													$('#companyTable')
+															.find('tr')
+															.find('td:first')
+															.each(
+																	function(
+																			index) {
+																		$(this)
+																				.text(
+																						index + 1);
+																	});
+												});
+
+								$("#companyTable")
+										.on(
+												'click',
+												'.deleteBtn',
+												function() {
+													var currentRow = $(this)
+															.closest("tr");
+													currentRow.remove();
+													$('#companyTable')
+															.find('tr')
+															.find('td:first')
+															.each(
+																	function(
+																			index) {
+																		$(this)
+																				.text(
+																						index + 1);
+																	});
+												});
+
+								$("#showInsrTable")
+										.on(
+												'click',
+												'.deleteBtn',
+												function() {
+													debugger 
+													var currentRow = $(this)
+															.closest("tr");
+													currentRow.remove();
+													$('#showInsrTable')
+															.find('tr')
+															.find('td:first')
+															.each(
+																	function(
+																			index) {
+																		$(this)
+																				.text(
+																						index + 1);
+																	});
+													
+													var inspId = currentRow.children('td:eq(1)').text();
+													 $('#inspectorTable tr').each(function(i,v){ if($(this).children('td:eq(1)').text()==inspId){
+														$(this).children('td:eq(5)').children('input').attr('disabled',false) };  }); 		
+													
+												});
+								
+								
+								var table = $('#showInsrTable');
+							});
+
+			$("#addInspector")
+					.click(
+							function() {
+								$('#inspectorDiv').show();
+								
+								
+								$("#largesizemodal").modal("hide");
+								var table = $('#showInsrTable');
+								$(
+										"#inspectorTable input[type=checkbox]:checked")
+										.each(
+												function() {
+
+													var rowCount = $('#showInsrTable tr').length;
+
+													var row = $(this).closest(
+															"tr")[0];
+
+													var markup = [
+															'<tr>',
+															'<td class="index">',
+															rowCount + 1,
+															'</td>',
+															'<td style="display:none;">',
+															row.cells[1].innerHTML,
+															'</td>',
+															'<td class="text-wrap">',
+															row.cells[2].innerHTML,
+															'</td>'	,
+															'<td class="text-wrap">',
+															row.cells[3].innerHTML,
+															'</td>',
+															'<td >',
+															row.cells[4].innerHTML,
+															'</td>',
+															'<td><input type="radio" name="chooseIo" value="'+row.cells[1].innerHTML+'" /></td>',
+															'<td><input type="radio" name="chooseAdo" value="'+row.cells[1].innerHTML+'" /></td>',
+															'<td><button class="btn btn-danger btn-round m-1 deleteBtn ">Delete</button> </td>',
+															'</tr>' ];
+													table.append(markup
+															.join(''));
+
+													$(this).closest("td").find(
+															"input:checkbox")
+															.attr("disabled",
+																	true).attr(
+																	"checked",
+																	false);
+
+												});
+								info_noti();
+								//return false;
+							});
+
+			$("#addCompany")
+					.click(
+							function() {
+								if ($('#companyName').val() == '') {
+									swal("Required!", "Please Enter Company Name First", "error");
+// 									alert('Please Enter Company Name First');
+									return;
+								}
+
+								$('#companyDiv').show();
+
+								var table = $('#companyTable');
+								var rowCount = $('#companyTable tr').length;
+								var company =$('#companyName').val();
+								var markup ="";
+								if(company.length>50){
+									var companyPart1=company.substring(0,50);
+									var companyPart2=company.substring(companyPart1.length,company.length);
+								 markup = [
+										'<tr th:object="*{companyList}" >',
+										'<td class="index" th:field="*{companyList.setId()}">',
+										rowCount + 1,
+										'</td>',
+										'<td class="text-wrap" th:field="*{companyList.setCompanyName()}">'
+												+ companyPart1+'<br>'+companyPart2
+												+ '</td>',
+										'<td> <button class="btn btn-warning btn-round m-1 editBtn">Edit</button> <button class="btn btn-danger btn-round m-1 deleteBtn">Delete</button> </td>',
+										'</tr>' ];
+								}
+								else
+								{
+									 markup = [
+												'<tr th:object="*{companyList}" >',
+												'<td class="index" th:field="*{companyList.setId()}">',
+												rowCount + 1,
+												'</td>',
+												'<td class="text-wrap" th:field="*{companyList.setCompanyName()}">'
+														+ company
+														+ '</td>',
+												'<td> <button class="btn btn-warning btn-round m-1 editBtn">Edit</button> <button class="btn btn-danger btn-round m-1 deleteBtn">Delete</button> </td>',
+												'</tr>' ];
+								}
+								table.append(markup.join(''));
+								$('#companyName').val('');
+
+								//info_noti();
+
+							});
+
+			$('#mcaDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+				endDate: new Date(),
+			});
+
+			$('#courtDate').datepicker({
+				autoclose : true,
+				todayHighlight : true,
+				format : 'dd/mm/yyyy',
+				endDate: new Date(),
+			});
+
+			$('#unitId').change(function() {
+				var value = $(this).val();
+
+				//alert(value);
+			});
+			
+
+
+			var token;
+			$("#saveBtn").click(
+					function() {
+/* var filename = $("#mcaOrderFile").val();
+filename = filename.replace("C:\\fakepath\\","");
+alert(filename);
+
+var form = $('#fileUploadForm')[0];
+
+var data = new FormData(form);
+ */
+						token = $("input[name=_csrf]").val();
+						var header = 'X-CSRF-TOKEN';
+						/*  var caseDetails = {};
+						caseDetails["caseTitle"] = $("#caseTitle").val();
+						caseDetails["caseId"] = $("#caseId").val();
+						caseDetails["radioValue"] = $(
+								'input:radio[name=orderRadio]:checked').val();
+						caseDetails["mcaOrderNo"] = $("#mcaOrderNo").val();
+						caseDetails["mcaDate"] = $("#mcaDate").val();
+						caseDetails["courtOrderNo"] = $("#courtOrderNo").val();
+						caseDetails["courtDate"] = $("#courtDate").val();
+						caseDetails["mcaFile"] =  new FormData($("#fileUploadForm")[0]);
+						caseDetails["courtOrderFile"] = $("#courtOrderFile")
+								.val();
+						caseDetails["unitId"] = $("#unitId").val(); 
+
+						caseDetails["companies"] = $('#myTable').tableToJSON(); */
+						
+// 						$('#companies').val($('#myTable').tableToJSON());
+						var compNames = "";
+						$('#myTable tbody tr td:nth-child(2)').each(function(i,v){ compNames = compNames +$(this).text()+",";  });
+						compNames = compNames.substring(0,compNames.lastIndexOf(','));
+						console.log(compNames);
+                        $('#companies').val(compNames);
+                        var myInspectorTable = "";
+                        $('#myInspectorTable tbody tr td:nth-child(2)').each(function(i,v){ myInspectorTable = myInspectorTable +$(this).text()+",";  });
+                        
+                        myInspectorTable = myInspectorTable.substring(0,myInspectorTable.lastIndexOf(','));
+                        console.log(myInspectorTable);
+                        $('#inspectors').val(myInspectorTable);
+                        
+                        var deletetab = "";
+                        
+                         $('#DeleteInspectorTable tbody tr td:nth-child(1)').each(function(i,v){ deletetab = deletetab +$(this).text()+",";  });
+                        
+                        deletetab = deletetab.substring(0,deletetab.lastIndexOf(','));
+                       // alert(deletetab);
+                        console.log(deletetab);
+                       
+                        $('#deleteIO').val(deletetab);
+                        
+                        
+                        
+                        var comdeletetab = "";
+                        
+                        $('#DeletecomapnyTable tbody tr td:nth-child(1)').each(function(i,v){ comdeletetab = comdeletetab +$(this).text()+",";  });
+                       
+                        comdeletetab = comdeletetab.substring(0,comdeletetab.lastIndexOf(','));
+                        // alert(deletetab);
+                       console.log("compId"+comdeletetab);
+                      
+                       $('#deleteCompId').val(comdeletetab);
+                       
+                      
+                        
+                        
+                        
+                        
+					/* 	caseDetails["inspectorList"] = $ ('#myInspectorTable')
+								.tableToJSON();  */
+						
+// 						$('#holdCase').val(caseDetails);
+						
+						  $.ajax({
+							type : "POST",
+							contentType : false,
+							enctype: 'multipart/form-data',
+							url : 'addCaseDetails',
+							data : new FormData($("#fileUploadForm")[0]),
+// 							dataType : 'json',
+							cache : false,
+							async : true,
+							processData : false,
+							timeout : 600000,
+							beforeSend : function(xhr) {
+								xhr.setRequestHeader(header, token);
+								$('body').append('<div class="loading">Loading&#8230;</div>');
+							},
+							success : function(data) {
+							if(data.status=="SUCCESS"){
+								//console.log("SUCCESS : ", data);
+								var form = document.createElement("form");
+
+								form.method = "POST";
+								form.action = 'CaseUpdateSuccess';
+
+								var element1 = document.createElement("input");
+								element1.type = "hidden";
+								element1.value = data.caseDetails.caseId;
+								element1.name = "caseId";
+
+								var element2 = document.createElement("input");
+								element2.type = "hidden";
+								element2.value = token;
+								element2.name = "_csrf";
+
+								var element3 = document.createElement("input");
+								element3.type = "hidden";
+								element3.value = data.caseDetails.id;
+								element3.name = "id";
+								
+								var element4 = document.createElement("input");
+								element4.type = "hidden";
+								element4.value = data.caseDetails.mcaOrderNo;
+								element4.name = "mcaOrderNo";
+								
+								var element5 = document.createElement("input");
+								element5.type = "hidden";
+								element5.value = data.caseDetails.mcaDate;
+								element5.name = "mcaOrderDate";
+
+								form.appendChild(element1);
+								form.appendChild(element2);
+								form.appendChild(element3);
+								
+								form.appendChild(element4);
+								
+								form.appendChild(element5);
+
+								document.body.appendChild(form);
+
+								form.submit();
+
+							}else if(data.status="ERROR"){
+								$('.errmsg').remove();
+								 for(var key in data.errorsMap){
+									 $("#"+key+"Id").remove();
+			                            var err="<span class=\"errmsg\" style=\"color:red\" id=\""+key+"Id\">"+data.errorsMap[key]+"</span>";
+			                            jQuery("[name^='"+key+"']").after(err);
+			                        }
+								 $('div').removeClass('loading');
+							}
+							},
+							error : function(e) {
+								console.log("ERROR : ", e);
+								$('div').removeClass('loading');
+							}
+						});  
+
+					});
+			
+			
+			
+
+			function getInspectorList(unitId){
+				 var token = [[${_csrf.token}]];
+				 var header = [[${_csrf.headerName}]];
+				 $(document).ajaxSend(function(e, xhr, options)
+				{
+				    xhr.setRequestHeader(header, token);
+				}), 
+				$.ajax({
+					 crossDomain: true,
+				        type: "post",
+				        url: "getInspectorListByUnitId?unitId="+unitId,
+				        contentType : "application/json; charset=utf-8",
+				        /* data:{caseId:caseId
+				        }, */
+				        cache: false,
+				        timeout: 600000,
+				        success: function(data){
+				        	var html = '';
+				        	alert(data);
+							var len = data.length;
+							$('#inspectorTable').empty();
+							for (var i = 0; i < len; i++) {
+								//debugger
+								var isAdded=false;
+								var trString='';
+								$('#showInsrTable tr').each(function(j,v){ if($(this).children('td:eq(1)').text()==data[i].userId){
+									isAdded=true };  }); 
+								if(isAdded)
+									trString = '<td><input type="checkbox" id="inline-info" disabled="true"/></td></tr>';
+								else
+									trString ='<td><input type="checkbox" id="inline-info"/></td></tr>';	
+										
+								html += '<tr><td>'+data[i].srno+'</td>'+
+										'<td style="display: none">'+data[i].userId+'</td>'+
+										'<td>'+data[i].name+'</td>'+
+										'<td>'+data[i].designation+'</td>'+
+										'<td>'+data[i].caseAssigned+'</td>'+
+										trString;
+										
+							}
+				        	$('#inspectorTable').append(html);
+				        	},
+				        	
+				 error : function(xhr, status, error) {
+			        alert('error in getting count');
+			      }
+				 });
+				
+				
+			}
+			
+			function DeleteFunction(userid){
+				
+				
+				
+				
+				//alert("delete functioncall"+userid)
+				
+				//alert($("#delfileName").val().substring($("#delfileName").val().lastIndexOf("\\")+1,$("#delfileName").val().length));
+				//document.getElementById("deleteIo").value =userid ;
+				
+			var fileName = $("#delfileName_"+userid).val().substring($("#delfileName_"+userid).val().lastIndexOf("\\")+1,$("#delfileName_"+userid).val().length);
+				alert(fileName);
+				
+			    var markup = '<tr>'+
+			    	'<td>'+userid+'</td>'+
+			                  '<td>'+fileName+'</td>'+
+			                  '</tr>'   ;
+			     
+		            $("#showDeleteTable").append(markup);
+		            
+		            
+		            var currentRow = $(userid)
+					.closest("tr");
+			currentRow.remove();
+			$('#showInsrTable')
+					.find('tr')
+					.find('td:first')
+					.each(
+							function(
+									index) {
+								$(this)
+										.text(
+												index + 1);
+							});
+			
+			var inspId = userid;
+			 $('#inspectorTable tr').each(function(i,v){ if($(this).children('td:eq(1)').text()==inspId){
+				$(this).children('td:eq(5)').children('input').attr('disabled',false) };  }); 		
+			
+	
+
+
+var table = $('#showInsrTable');
+					
+		            
+			//	$("#deleteIo").value = 
+			}
+			
+			
+			function showDeleteIodiv(userId){
+				//alert("deletfunction")
+				
+				  var markup = '<tr>'+
+			    	'<td>'+userId+'</td>'+'<tr>'
+			    	
+			    	  $("#showDeleteTable").append(markup);
+			           
+				//$("#deletfile_"+userId).show();
+			}
+			
+			
+			
+			
+			function showDeleteComdiv(compId){
+			
+				
+				  var markup = '<tr>'+
+			    	'<td>'+compId+'</td>'+'<tr>'
+			    	
+			    	  $("#showDeletecompTable").append(markup);
+			           
+				//$("#deletfile_"+userId).show();
+			}
+			
+		</script>
+<script type="text/javascript" src="js/customValidation.js"></script>
+
+	</div>
+
+
+
+</body>
+</html>

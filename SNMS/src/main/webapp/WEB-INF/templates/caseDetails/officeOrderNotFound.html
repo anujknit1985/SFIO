@@ -1,0 +1,141 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Office Order Not Found</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="text-center">
+
+					<div th:if="${message}"
+						class="alert alert-danger alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						<div class="alert-icon">
+							<i class="fa fa-close"></i>
+						</div>
+						<div class="alert-message">
+							<span th:text="${message}"></span>
+						</div>
+					</div>
+
+
+					<form th:action="@{/genOfficeOrdAS}" method="post" id="generateOrder"
+						class="needs-validation" th:object="${caseDetails}">
+
+						<div class="form-group row">
+							<div class="col-sm-12">
+								<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="id" th:field="*{id}" name="id" required />
+								<input type="hidden" name="sectionClause" id="sectionClause"/>
+							</div>
+							<div class="col-sm-4">
+								<label for="input-13" class="col-sm-12 col-form-label">
+									Select section<span class="text-danger">*</span>
+								</label>
+								<div>
+									<select th:name="section" class="form-control" id="section">
+									<option value="0">Select Section</option>
+									<option value="210(1)">210(1)</option>
+									<option value="212(1)">212(1)</option>
+									<option value="216(1)">216(1)</option>
+									</select>
+									<span class="text-danger errMsg"
+										id="sectionErr"></span>
+								</div>
+							</div>
+							
+							<div class="col-sm-4">
+								<label for="input-13" class="col-sm-12 col-form-label">
+									Select Clause of chosen section<span class="text-danger">*</span>
+								</label>
+								<div>
+								<span id="clause1" class="clauses">	<input type="checkbox" name="clause" value="(a)"/> (a)</span>
+								<span id="clause2" class="clauses">	<input type="checkbox" name="clause" value="(b)"/> (b)</span>
+								<span id="clause3" class="clauses">	<input type="checkbox" name="clause" value="(c)"/> (c)</span>
+								<span id="clause4" class="clauses">	<input type="checkbox" name="clause" value="(d)"/> (d)</span>
+								</div>
+								<span class="text-danger errMsg"
+										id="clauseErr"></span>
+							</div>
+						</div>
+						
+						<div class="form-group row"><div class="col-sm-4"></div>
+							<div class="col-sm-4">
+								<a href="home" class="btn btn-warning">Home </a>
+								<button type="button" class="btn btn-info" id="submit" onclick="setclause();">
+									 Generate Order
+								</button>
+								<button type="submit" id="sub" class="invisible"></button>
+							</div>
+						</div>
+
+
+					</form>
+
+
+
+
+
+				</div>
+			</div>
+		</div>
+
+	<script th:inline="javascript">
+	
+	$(document).ready(function(){
+		$('.clauses').hide();
+		
+		$('#section').change(function(){
+			
+			if($(this).val()=='210(1)'){
+				$('.clauses').show();
+				$('#clause4').hide();
+				$('input:checkbox').prop("checked", false);
+			}
+			else if($(this).val()=='212(1)'){
+				$('.clauses').show();
+			}
+			else if($(this).val()=='216(1)'){
+				$('.clauses').hide();
+				$('input:checkbox').prop("checked", false);
+			}		
+		});
+		
+		
+	});
+	
+	
+	function setclause(){
+		
+		if($('#section').val()=='0'){
+			$('#sectionErr').text('Please choose section');
+			return false;
+		}
+		var clause="";
+		$('input:checkbox[name=clause]:checked').each(function(i,v){  clause = clause + v.value+',' });
+		clause = clause.substring(0,clause.lastIndexOf(','))
+		$('#sectionClause').val(clause);
+		
+		if(($('#section').val()=='210(1)' || $('#section').val()=='212(1)') && clause==''){
+			$('#clauseErr').text('Please choose atleast one clause');
+			return false;
+		}
+		
+		
+		$('#sub').click();
+	}
+</script>
+
+	</div>
+
+</body>
+</html>

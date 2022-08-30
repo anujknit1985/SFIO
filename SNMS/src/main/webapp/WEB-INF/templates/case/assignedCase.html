@@ -1,0 +1,121 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link
+	href="plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css"
+	rel="stylesheet" type="text/css">
+<title>Assign Cases</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Total Assigned Cases</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> Assigned Cases
+						</h4>
+
+						<form th:action="@{/createNotice}" method="post"
+							class="needs-validation" th:object="${caseDetails}">
+                             
+							<div class="form-group row" th:if="${errorCaseID}">
+							<span th:text="${errorCaseID}" class="text-danger "></span>
+							</div>
+							<div class="form-group row">
+								<table class="table table-respnsive" id="assignTable">
+									<thead class="bg-info text-white">
+										<tr>
+											<th>S.No.</th>
+											<th>Case Id</th>
+											<th>Case Title</th>
+											<th>View Order</th>
+											<th>Case Type</th>
+											<th>Action</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="p,stats: ${caselist}">
+											 <td th:text="${stats.index+1}"></td> 
+											<td th:text="${p.caseStrId}"></td>
+											<td th:text="${p.caseTitle}"></td>
+											<td><a th:target="_blank" th:href="@{|/downloadFiles?fileName=${p.mcaOrderFile}|}" ><span
+									th:text="${p.mcaOrderFile}"></span></a>
+									<a th:target="_blank" th:href="@{|/downloadFiles?fileName=${p.courtOrderFile}|}" ><span
+									th:text="${p.courtOrderFile}"></span></a></td> 
+									<th:block th:if="${p.caseType == 'MCA'}">
+											<td class="text-wrap">System Generated</td>
+										</th:block>
+										<th:block th:if="${p.caseType == 'Legacy' }">
+											<td class="text-wrap">Legacy</td>
+										</th:block>
+										
+										<th:block th:if="${p.caseType == 'Prosecution' }">
+											<td class="text-wrap">Prosecution</td>
+										</th:block>
+											<td>
+											<button class="btn btn-info dropdown-toggle"
+																		type="button" data-toggle="dropdown">
+																		Action <span class="caret"></span>
+																	</button>
+
+																	<div class="dropdown-menu">
+														    	<button type="submit" th:name="addIndividual" th:id="caseId" class="dropdown-item"
+													th:value="${p.caseId}">Add/Edit Individual</button>
+															<button type="submit" th:name="caseDetails" th:id="caseId" class="dropdown-item"
+													th:value="${p.caseId}">View Case Details</button>
+													     
+																<button type="submit" th:name="AddCompany" th:id="caseId" class="dropdown-item"
+													th:value="${p.caseId}">Add Company </button>
+																
+																	</div>
+											
+											
+											</td> 
+										</tr>
+
+
+									</tbody>
+
+								</table>
+							</div>
+						</form>                            
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+
+$(document).ready(function(){
+	
+	 var table = $('#assignTable').DataTable();
+
+	  
+	   
+});
+
+</script>
+	</div>
+
+</body>
+</html>

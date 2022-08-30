@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+<link href="css/bootstrap-datetimepicker-build.css" rel="stylesheet" />
+<title>Audit Trail</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-8">
+				<h5 class="page-title">Audit Trail</h5>
+			</div>
+			<div class="col-sm-4">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="Home1">Home</a></li>
+					<li class="breadcrumb-item"><a href="#">Audit Trail</a></li>
+
+				</ol>
+			</div>
+		</div>
+
+		<!-- <div class="card"> -->
+		<!-- <div class="card-header bg-info text-white text-uppercase"></div>
+			 -->
+		<!-- <div class="card-body"> -->
+		<form action="auditTrailReport" th:action="@{/auditTrailReport}"
+			th:object="${auditDto}" method="post">
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+						
+							<div class="form-group row">
+						<label class="control-label" id="fromDate">From Date</label>
+							<div class="col-sm-2">
+								<input class="form-control" type="text" th:field="*{date}" placehoder="Start Date"
+									id="startdate"  required="required" /> 
+									
+							</div>
+
+
+							<label class="control-label" id="toDate">To Date </label>
+							<div class="col-sm-2">
+								<input class="form-control" th:field="*{toDate}" type="text" placehoder="End Date"
+									id="enddate"  required="required"  />
+							</div>
+</div>
+							<div class="clearfix form-actions">
+								<div class="col-md-offset-3 col-md-9">
+
+									<Button class="btn btn-success" type="submit" id="audit-submit">
+										<i class="ace-icon fa fa-check bigger-110"></i> Submit
+									</Button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-warning" type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i> Reset
+									</button>
+
+
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-danger" type="button"
+										onclick="window.history.back();">
+										<i class="ace-icon fa fa-arrow-left bigger-110 "></i> Back
+									</button>
+								</div>
+							</div>
+
+							<th:block th:if="${not #lists.isEmpty(auditList)}">
+								<div class="bg-aqua"
+									style="font-size: 20px; font-weight: 300; margin-top: 2%">
+									<p>
+										Audit Trail Report - <span th:text=" ${auditDto.date}"></span>
+									</p>
+								</div>
+
+								<table id="roleTable" class="table table-bordered table-striped"
+									style="margin-top: 10px">
+									<thead>
+										<tr>
+											<th>S.No.</th>
+											<th>ACTOR_NAME</th>
+											<th>IP Address</th>
+											<th> Function Performed</th>
+											<th>Function DESC</th>
+											<th>TIME(IST)</th>
+											
+										</tr>
+									</thead>
+									<th:block th:if="${not #lists.isEmpty(auditList)}">
+										<tbody id="reviewer_tbl">
+
+											<tr th:each="listValue , auditlist : ${auditList}">
+												<td class="txtRght"><span th:text=" ${auditlist.count}"></span></td>
+												<td class="txtLft"><span
+													th:text=" ${listValue.actorName}"></span></td>
+												<td class="txtRght"><span
+													th:text=" ${listValue.actorIP}"></span></td>
+												<td class="txtLft"><span th:text=" ${listValue.url}"></span></td>
+												<td class="txtLft"><span
+													th:text=" ${listValue.operationDesc}"></span></td>
+												<td class="txtRght"><span th:text="${#dates.format(listValue.actionDate, 'dd/MM/yyyy hh:mm:ss')}"
+													></span></td>
+												
+											</tr>
+
+										</tbody>
+									</th:block>
+								</table>
+							</th:block>
+						</div>
+					</div>
+				</div>
+		</div>
+		</form>
+
+	
+
+
+	<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+	<script
+		src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+
+	<script type="text/javascript">
+	
+	 var table = $('#roleTable').DataTable( {
+//	        lengthChange: false,
+"ordering": true,
+	        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+	      } );
+		$(document).ready(function() {
+			$("#startdate")
+			.datepicker(
+					{
+
+						format : 'dd-mm-yyyy',
+						endDate : new Date(),
+					// autoclose: true,
+					})
+			.on(
+					'changeDate',
+					function(
+							selected) {
+						var minDate = new Date(
+								selected.date
+										.valueOf());
+						$(
+								'#enddate')
+								.datepicker(
+										'setStartDate',
+										minDate);
+					});
+
+	$("#enddate")
+			.datepicker(
+					{
+						format : 'dd-mm-yyyy',
+						endDate : new Date(),
+
+					})
+			.on(
+					'changeDate',
+					function(
+							selected) {
+						var minDate = new Date(
+								selected.date
+										.valueOf());
+						$(
+								'#startdate')
+								.datepicker(
+										'setEndDate',
+										minDate);
+					});
+			var table = $('#roleTable').DataTable({
+				//	 	        lengthChange: false,
+				buttons : [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			});
+		});
+		
+		
+	</script>
+	<script type="text/javascript" src="js/customValidation.js"></script>
+	</div>
+</body>
+</html>

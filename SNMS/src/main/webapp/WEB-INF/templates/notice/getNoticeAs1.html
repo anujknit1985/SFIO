@@ -1,0 +1,419 @@
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Notice</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+
+
+
+		<form th:action="@{/generateNotice}" method="post"
+			class="needs-validation" th:object="${caseDto}">
+			<input type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="caseId" th:field="*{caseId}" name="caseId" required /> <input
+				type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="caseStrId" th:field="*{caseStrId}" name="caseStrId" required />
+			<input type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="summonNo" th:field="*{summonNo}" name="summonNo" required /> <input
+				type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="dateOfAppear" th:field="*{dateOfAppear}" name="dateOfAppear"
+				required /> <input type="hidden" class="inputTxt form-control"
+				autocomplete="off" id="summontypeid" th:field="*{summontypeid}"
+				name="summontypeid" required /> <input type="hidden"
+				class="inputTxt form-control" autocomplete="off" id="noticeDin"
+				th:field="*{noticeDin}" name="noticeDin" required />
+
+
+			<div class="row text-black">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+
+							<th:block th:if="${caseDto.para1h!=null}">
+
+
+
+
+								<div class="form-group row" align="justify">
+									<div class="col-lg-12" align="center">
+										<img src="images/emblem-dark.png" height="80"> <br>
+										<label>भारत सरकार </label><br> <label>कारपोरेट
+											कार्य मंत्रालय</label><br> <label>गंभीर कपट अन्वेषण
+											कार्यालय,</label><br>
+
+										<th:block th:if="${OfficeAddress_hi!=null}">
+											<label> <span th:text="${OfficeAddress_hi}"></span>
+											</label>
+										</th:block>
+									</div>
+								</div>
+<br>
+
+								<div class="form-group row">
+									<div class="col-lg-3">
+										<label style="font-size: 20px;">डी आई एन: </label> <span
+											th:text="${noticeDin}"></span>
+										<!-- label
+										th:text="${summonDin}"></label> -->
+									</div>
+									<div class="col-lg-6"></div>
+
+									<div class="col-lg-3" align="right">
+										<label style="font-size: 20px;">दिनांक: </label> <label
+											th:text="${#dates.format(date, 'dd/MM/yyyy')}"></label>
+									</div>
+								</div>
+
+								<div class="form-group row" align="justify">
+									<div class="col-lg-12" align="center">
+
+
+										<label class="text-center"
+											style="text-decoration: underline; font-size: 20px; font-weight: bold;">नोटिस</label>
+
+									</div>
+								</div>
+
+
+								<div class="form-group row" align="justify">
+									<div>
+
+										<label>सेवा में,<br>नाम : <span th:text="${name}"></span>
+
+											<th:block th:if="${designation != null}">
+												<span class="text-wrap">,</span>
+											</th:block> <th:block th:if="${designation != null}">
+												<span class="text-wrap" th:text="${designation}"></span>
+											</th:block> <th:block th:if="${Type!=7}">
+												<span class="text-wrap"><br></span>
+											</th:block> <th:block th:if="${Type!=7}">
+												<span class="text-wrap" th:text="${companyName}"></span>
+											</th:block> <br>पता : <span th:text="${address}"></span> <!--  	<br>email : <span th:text="${email}"></span> -->
+										</label>
+									</div>
+								</div>
+								<br>
+
+								<div class="form-group row" align="justify">
+									<div>
+										<br> <label style="font-size: 18px;"> <span
+											th:text="${caseDto.para1h}"></span></label>
+
+										<!-- <textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para1h}" th:id="para1h"></textarea> -->
+									</div>
+
+								</div>
+								<br>
+								<div class="form-group row" align="justify">
+									<div>
+										<!-- 				<label style="font-size: 18px;"> <span
+											th:text="${caseDto.para2h}"></span></label> -->
+
+										<br>
+										<table>
+											<thead>
+											</thead>
+											<tbody>
+
+												<tr th:each="para2h,stats : ${para2h}">
+													<td th:text="${para2h}"></td>
+
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+
+								</div>
+								<br>
+								<div class="form-group row" align="justify">
+									<div>
+										<!-- <label style="font-size: 18px;"> <span
+											th:text="${caseDto.para3h}"></span></label> -->
+										<br>
+										<table>
+											<thead>
+											</thead>
+											<tbody>
+
+												<tr th:each="para3h,stats : ${para3h}">
+													<td th:text="${para3h}"></td>
+
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<br>
+								<div class="form-group row" align="justify">
+									<div>
+										<!-- <label style="font-size: 18px;"> <span
+											th:text="${caseDto.para4h}"></span></label> -->
+
+										<br>
+										<table>
+											<thead>
+											</thead>
+											<tbody>
+
+												<tr th:each="para4h,stats : ${para4h}">
+													<td th:text="${para4h}"></td>
+
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+								</div>
+								<br>
+								<div class="form-group row" align="justify">
+									<div>
+										<!-- 	<label style="font-size: 18px;"> <span
+											th:text="${caseDto.para5h}"></span></label>
+ -->
+
+										<br>
+										<table>
+											<thead>
+											</thead>
+											<tbody>
+
+												<tr th:each="para5h,stats : ${para5h}">
+													<td th:text="${para5h}"></td>
+
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<br>
+								<br>
+								<div class="form-group row" align="justify">
+									<div class="col-lg-12" align="right">
+										<label th:text="*{io}"> </label><br> (<label
+											th:text="*{designation_hi}"></label>)
+									</div>
+								</div>
+
+
+
+								<br>
+
+								<hr width="100%" color="black">
+
+							</th:block>
+							<br>
+
+
+							<div class="form-group row" align="justify">
+								<div align="center">
+									<img src="images/emblem-dark.png" height="80"> <br>
+									<label class="text-center"
+										style="font-size: 20px; font-weight: bold;"> <span>Government
+											of India </span>
+									</label><br> <label class="text-center"
+										style="font-size: 20px; font-weight: bold;">Ministry
+										of Corporate Affairs</label><br> <label class="text-center"
+										style="font-size: 20px; font-weight: bold;">Serious
+										Fraud Investigation Officer</label><br> <label> <span
+										class="text-center"
+										style="font-size: 20px; font-weight: bold; justify-content: center;"
+										th:text="${officeadrress}"></span>
+									</label>
+
+
+								</div>
+							</div>
+
+							<br>
+							<div class="form-group row" align="justify">
+								<div class="col-lg-3">
+									<label style="font-size: 20px;">DIN: </label> <span
+											th:text="${noticeDin}"></span>
+								</div>
+								<div class="col-lg-3" align="right">
+									<label style="font-size: 20px;"> Date </label> <label
+										th:text="${#dates.format(date, 'dd/MM/yyyy')}"></label>
+								</div>
+							</div>
+
+							<div class="form-group row" align="justify">
+								<div align="center">
+
+									<label class="text-center"
+										style="text-decoration: underline; font-size: 20px; font-weight: bold;">Notice</label>
+
+								</div>
+							</div>
+
+							<br>
+
+							<div class="form-group row" align="justify">
+								<div>
+
+									<label>To,<br>Name : <span th:text="${name}"></span>
+
+										<th:block th:if="${designation != null}">
+											<span class="text-wrap">,</span>
+										</th:block> <th:block th:if="${designation != null}">
+											<span class="text-wrap" th:text="${designation}"></span>
+										</th:block> <th:block th:if="${Type!=7}">
+											<span class="text-wrap"><br></span>
+										</th:block> <th:block th:if="${Type!=7}">
+											<span class="text-wrap" th:text="${companyName}"></span>
+										</th:block> <br>Address : <span th:text="${address}"></span> <!--  	<br>email : <span th:text="${email}"></span> -->
+									</label>
+								</div>
+							</div>
+							<br>
+
+							<div class="form-group row" align="justify">
+								<div>
+
+									<label style="font-size: 18px; font-weight: normal;"> <span
+										th:text="${caseDto.para1}"></span></label>
+
+
+								</div>
+
+							</div>
+
+							<br>
+							<div class="form-group row" align="justify">
+								<div>
+
+									<span type="text" id="para21">
+								</div>
+
+							</div>
+
+							<br>
+							<div class="form-group row" align="justify">
+								<div>
+									<!-- 	<label style="font-size: 18px; font-weight: normal;"> <span
+										th:text="${caseDto.para2}" id="para2"></span></label> -->
+
+
+									<br>
+									<table>
+										<thead>
+										</thead>
+										<tbody>
+
+											<tr th:each="para2,stats : ${para2}">
+												<td th:text="${para2}"></td>
+
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+							</div>
+							<br>
+							<div class="form-group row" align="justify">
+								<br>
+								<table>
+									<thead>
+									</thead>
+									<tbody>
+
+										<tr th:each="para3,stats : ${para3}">
+											<td th:text="${para3}"></td>
+
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<br>
+							<div class="form-group row" align="justify">
+								<div>
+									<!-- 					<label style="font-size: 18px; font-weight: normal;"> <span
+										th:text="${caseDto.para4}"></span></label>
+ -->
+
+
+									<br>
+									<table>
+										<thead>
+										</thead>
+										<tbody>
+
+											<tr th:each="para4,stats : ${para4}">
+												<td th:text="${para4}"></td>
+
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<br>
+
+							<div class="form-group row" align="justify">
+								<div>
+
+									<!-- 	<label style="font-size: 18px; font-weight: normal;"> <span
+										th:text="${caseDto.para5}"></span></label> -->
+									<br>
+									<table>
+										<thead>
+										</thead>
+										<tbody>
+
+											<tr th:each="para5,stats : ${para5}">
+												<td th:text="${para5}"></td>
+
+											</tr>
+										</tbody>
+									</table>
+
+								</div>
+							</div>
+
+							<br> <br> <br>
+							<div class="form-group row" align="justify">
+								<div align="right">
+									<label th:text="*{io}"> </label><br> (<label
+										th:text="*{Designation}"></label>)
+								</div>
+							</div>
+
+							<!-- <div class="form-group row">
+								<div class="col-lg-12">
+									<label>To,<br>Sh.<span th:text="${name}"></span>,
+										<span th:text="${designation}"></span>,
+										<br><span th:text="${companyName}"></span>,
+										<br>Address <span th:text="${address}"></span>
+									</label>
+								</div>
+							</div>
+							 -->
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</form>
+
+
+
+
+		<script>
+			var element = document.getElementById("para2").val();
+			alert(element);
+			document.getElementById("para21").innerHTML = element;
+		</script>
+
+	</div>
+
+
+
+</body>
+</html>

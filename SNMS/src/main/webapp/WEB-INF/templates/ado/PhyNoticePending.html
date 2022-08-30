@@ -1,0 +1,199 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Signed Summon</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<script type="text/javascript">
+		function getSummons(id)
+	  	{
+	  		$('#id').val(id);
+	        $('#getSummons').attr("action", "viewSSummon");
+	        $('#getSummons').submit();  
+	        interval = setInterval(removeDiv,500);
+	  	}
+		function removeDiv(){
+			$('div').removeClass('loading');
+	    	 clearInterval(interval); 
+		}
+		</script>
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Physically sent Notice</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> Physically sent Notice
+						</h4>
+						
+						<form th:action="@{/PhysicallyNoticeview}" method="post"
+							class="needs-validation" th:object="${caseDetails}">
+						<div class="form-group row">
+								<table class="table table-responsive" id="summonDetailsTable">
+									<thead class="bg-info text-white">
+										<tr>
+											<th>S.No.</th>
+											<th>DIN </th>
+											<!-- <th>Summon Id</th> -->
+											<th>Case Title <br> Summon Id</th>
+											<th>Details</th>
+											<th>Date of Appearance</th>
+											<th>Action</th>
+											
+										</tr>
+									</thead>
+									 <tbody>
+									 <tr th:each="p,stats: ${signOrders}">
+											 <td th:text="${stats.count}"></td> 
+											 <td class ="text-wrap" th:text="${p.noticeDin}"></td>
+											<!--  <td class ="text-wrap" th:text="${p.summonNo}"></td> -->
+											 <td class ="text-wrap"> <span  th:text="${p.caseDetails.caseTitle}"></span> <br> 
+											 <span  th:text="${p.summonNo}"></span>
+											 </td>
+													<th:block th:if="${p.summonType.individualType.IndividualId == 7}">
+												<td class="text-wrap">
+													 <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          										  <strong>If CIN is available ? : </strong><span th:text="${p.summonType.isCin}"></span>
+          											<th:block th:if="${p.summonType.isCin == 'Y'}" >
+          												<strong>CIN : </strong><span th:text="${p.summonType.Registration_no}"></span>
+          											</th:block>
+          										  <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										  <strong>Address : </strong><span th:text="${p.summonType.Address}"></span>
+          										  <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										   <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										   <strong>Relation With Company: </strong><span th:text="${p.summonType.relationwithcompany}"></span>
+          										 
+          									
+												</td>
+											</th:block>
+											<th:block th:if="${p.summonType.individualType.IndividualId == 5 or p.summonType.individualType.IndividualId == 6}" >
+												<td class="text-wrap">
+													 <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          									
+          										    <strong>If CIN is available ? : </strong><span th:text="${p.summonType.isCin}"></span>
+          											<th:block th:if="${p.summonType.isCin == 'Y'}" >
+          												<strong>CIN : </strong><span th:text="${p.summonType.Registration_no}"></span>
+          											</th:block>
+          											
+          											  <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										 	  <strong>Address : </strong><span th:text="${p.summonType.Address}"></span>
+          										      <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										      <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										      <strong>NameCompany: </strong><span th:text="${p.summonType.NameCompany}"></span>
+          										 
+												</td>
+											</th:block>
+											<th:block th:if="${p.summonType.individualType.IndividualId == 3 or p.summonType.individualType.IndividualId == 4}">
+												<td class="text-wrap">
+												 <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          									
+          										    <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										 	<strong>Designation : </strong><span th:text="${p.summonType.designation}"></span>
+          										 	<strong>sex : </strong><span th:text="${p.summonType.sex}"></span>
+          										 	<strong>DOB : </strong><span th:text="${#dates.format(p.summonType.dob, 'dd/MM/yyyy')}"></span>
+          										 	
+          										 	<strong>Nationality : </strong><span th:text="${p.summonType.nationality}"></span>
+          										 	<strong>National Id : </strong><span th:text="${p.summonType.nationalId}"></span>
+          										 	
+          										 	<strong>Passport No. : </strong><span th:text="${p.summonType.passport}"></span>
+          										 	<strong>Issue date : </strong><span th:text="${#dates.format(p.summonType.issueDate, 'dd/MM/yyyy')}"></span>
+          										 	<strong>Place of issues : </strong><span th:text="${p.summonType.placeof_issued}"></span>
+          										     <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										     <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										 
+          										 
+											</th:block>
+											<th:block th:if="${p.summonType.individualType.IndividualId == 1 or p.summonType.individualType.IndividualId == 2 }" >
+												<td class="text-wrap">
+												  <strong>Individual Type :</strong> <span th:text="${p.summonType.individualType.IndividualName}" class="text-warning text-bold"></span>
+          										
+												  <strong>DIN : </strong><span th:text="${p.summonType.Registration_no}"></span>
+          										  <strong>Name : </strong><span th:text="${p.summonType.Name}"></span>
+          										  <strong>Date of joining  : </strong><span th:text="${p.summonType.offJoinDate}"></span>
+          										  <strong>Address : </strong><span th:text="${p.summonType.Address}"></span>
+          										  <strong>Mobile No : </strong><span th:text="${p.summonType.MobileNo}"></span>
+          										   <strong>Email Id: </strong><span th:text="${p.summonType.email}"></span>
+          										 
+          										 </td>
+											</th:block>
+									     	 <td th:text="${p.dateOfAppear}"></td>
+											
+											<td><button type="submit" th:name="NoticeOrders" class="btn btn-primary"
+													th:value="${p.id}">View physically sent Notice</button></td> 
+											
+											
+										</tr> 
+									</tbody>
+
+								</table>
+							</div>
+
+							<!-- <div class="form-group row">
+								<table class="table table-respnsive" id="summonDetailsTable">
+									<thead class="bg-info text-white">
+										<tr>
+											<th>S.No.</th>
+											<th>Case Id</th>
+											<th>Case Title</th>
+											<th>Summon No.</th>
+											 <th>Company Name</th>
+											<th>Individual Name</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									 <tbody>
+									  <tr th:each="p,stats: ${signOrders}">
+											 <td th:text="${stats.count}"></td> 
+											<td th:text="${p.caseStringId}"></td>
+											<td th:text="${p.CaseTitle}"></td>
+											<td th:text="${p.companyName}"></td>
+											<td th:text="${p.indivi_name}"></td>
+											
+											<td th:text="${p.summonNo}"></td>
+											<td th:text="${#dates.format(p.signDate.toString(), 'dd-MM-yyyy HH:mm')}"></td>
+											 <td><a href="#" th:onclick="'javascript:getSummons(\'' + ${p.orderid} +'\');'" class="btn btn-danger">View Signed Summons</a></td> 
+										</tr> 
+									</tbody>
+
+								</table>
+							</div> -->
+					
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		 <form method="post" id="getSummons" target="_blank">
+		<input id="id" name="id" type="hidden" />
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		</form> 
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+			
+			 var table = $('#summonDetailsTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+		});
+		
+		</script>	
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link
+	href="plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css"
+	rel="stylesheet" type="text/css">
+<title>Drafted Case</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Drafted Summons and Notices</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> Drafted Summons and Notices
+						</h4>
+
+						<form th:action="@{/openDraftSummon}" method="post" id="draftForm"
+							class="needs-validation" th:object="${caseDetails}">
+
+							<div class="form-group row">
+							</div>
+							<div class="form-group row">
+							<input type="hidden" name="caseId" id="caseId"/>		
+							<input type="hidden" name="type" id="type"/>		
+							<input type="hidden" name="summontypeid" id="summontypeid" />		
+							
+								<table class="table table-respnsive" id="assignTable">
+									<thead class="bg-info text-white">
+										<tr>
+											<th>S.No.</th>
+											<th style="display:none">id</th>
+											<th>Case Id</th>
+											<th>Case Title</th>
+ 											<th>Type</th> 
+											<th>Action</th>
+											
+										</tr>
+									</thead>
+									
+									<tbody>
+									
+																
+										<tr th:each="p,stats: ${caselist}">
+											 <td th:text="${stats.index+1}"></td> 
+											 <td style="display:none" th:text="${p.summonTypeId}"></td>
+											<td th:text="${p.caseStrId}"></td>
+											<td th:text="${p.caseTitle}"></td>
+											<td th:text="${p.mcaOrderFile}"></td>
+											<td><button type="button" th:name="caseId" class="btn btn-success"
+													th:value="${p.caseId}" onclick="setData(this);">Open Draft</button></td> 
+										</tr>
+
+
+									</tbody>
+
+								</table>
+							</div>
+						</form>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+
+		function setData(elem){
+			$('#caseId').val(elem.value);
+			$('#type').val($(elem).parent('td').prev('td').text());
+			$('#summontypeid').val($(elem).parent('td').parent('tr').find('td:eq(1)').text());
+			if($('#type').val()=='Summon'){
+				$('#draftForm').attr('action','openDraftSummon');
+				$('#draftForm').submit();
+			}else if($('#type').val()=='Notice'){
+				$('#draftForm').attr('action','openDraftNotice');
+				$('#draftForm').submit();
+			}
+		}
+		
+$(document).ready(function(){
+	 var table = $('#assignTable').DataTable();
+	   
+});
+
+</script>
+	</div>
+
+</body>
+</html>

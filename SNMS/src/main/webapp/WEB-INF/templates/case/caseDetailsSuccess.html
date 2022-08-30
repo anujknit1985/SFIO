@@ -1,0 +1,85 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Case Details</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="text-center">
+
+					<div th:if="${message}"
+						class="alert alert-success alert-dismissible" role="alert">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						<div class="alert-icon">
+							<i class="fa fa-check"></i>
+						</div>
+						<div class="alert-message">
+							<span th:text="${message}"></span>
+						</div>
+					</div>
+
+
+					<form th:action="@{/genOfficeOrdAS}" method="post"
+						class="needs-validation" th:object="${caseDetails}">
+
+						<div class="form-group row">
+
+							<div class="col-sm-4">
+								<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="id" th:field="*{id}" name="id" required />
+									
+									<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="caseId" th:field="*{caseId}" name="caseId" required />
+									
+									<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="mcaOrderNo" th:field="*{mcaOrderNo}" name="mcaOrderNo" required />
+									
+									<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="mcaDate" th:field="*{mcaDate}" name="mcaDate" required />
+
+							</div>
+
+							<div class="col-sm-4">
+
+					<span sec:authorize="hasRole('ROLE_ADMIN')"><a href="home" class="btn btn-dark">Home</a></span>
+			
+					<span sec:authorize="hasRole('ROLE_DIRECTOR')"><a href="dirHome" class="btn btn-dark">Home</a></span>
+			
+					<span sec:authorize="hasRole('ROLE_ADMIN_SECTION')"><a href="adsHome" class="btn btn-dark">Home</a></span>
+			
+					<span sec:authorize="hasRole('ROLE_ADMIN_OFFICER')"><a href="adoHome" class="btn btn-dark">Home</a></span>
+			
+					<span sec:authorize="hasRole('ROLE_USER')"><a href="userHome" class="btn btn-dark">Home</a></span>
+								<button type="submit" class="btn btn-success">
+									<i class="fa fa-plus"></i> Generate Order
+								</button>
+							</div>
+
+						</div>
+
+
+					</form>
+
+
+
+
+
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+</body>
+</html>

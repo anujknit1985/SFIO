@@ -1,0 +1,100 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Office Orders Pending For Approval</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Office
+						Order Pending</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> Pending Office Orders for
+							Approval
+						</h4>
+
+
+						<form th:action="@{/showCaseDetailsDir}" method="post"
+							class="needs-validation" th:object="${caseDetails}">
+
+							<div class="form-group row">
+
+								<!-- 	<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="id" th:field="*{id}" name="id" required />
+
+								<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="caseId" th:field="*{caseId}"
+									name="caseId" required /> -->
+							</div>
+							<div class="form-group row">
+								<table class="table table-striped">
+									<thead>
+										<tr style="background-color: blueviolet; color: white;">
+											<th>S.No.</th>
+											<th>Case Id</th>
+											<th>Case Title</th>
+											<th>Case Type</th>
+											<th></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="p ,stats : ${pending}">
+
+											<td th:text="${stats.count}"></td>
+											<td th:text="${p.caseStrId}"></td>
+											<td th:text="${p.caseTitle}"></td>
+											<td th:text="${p.radiovalue}"></td>
+											<td><button type="submit" th:name="caseDetails"
+													th:id="caseId" class="btn btn-info" th:value="${p.caseId}">Case
+													Details</button></td>
+											<td><button type="submit" th:name="approve"
+													class="btn btn-primary" th:value="${p.officeOrderId}">View
+													& Approve</button></td>
+
+										</tr>
+
+
+									</tbody>
+
+								</table>
+							</div>
+						</form>
+
+
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>

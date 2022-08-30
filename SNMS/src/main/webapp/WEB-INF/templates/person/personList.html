@@ -1,0 +1,133 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>GEP Person Status Pending For Approval</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Approved Person
+						</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i> <span
+								th:text="${PersonList}"></span>
+						</h4>
+
+
+						<form th:action="@{/caseAndByProsecutorOrdDetail}" method="post"
+							class="needs-validation" th:object="${caseDetails}" th:id="showperson">
+							<input type="hidden" name="personId" id="personId" /> 
+							<input type="hidden" name="compId" id="compId" />
+                         <input type="hidden" id="rpcId" name ="rpcId">
+							<div class="form-group row">
+
+								<!-- 	<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="id" th:field="*{id}" name="id" required />
+
+								<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="caseId" th:field="*{caseId}"
+									name="caseId" required /> -->
+							</div>
+							<div class="form-group row">
+								<table class="table table-striped" id="userTable">
+									<thead>
+										<tr style="background-color: blueviolet; color: white;">
+
+											<th>Case Id</th>
+											<th>Case Title</th>
+											<th>Full Name</th>
+											<th>Pan Number</th>
+											<th>Company Name</th>
+											<th>Status</th>
+										 <th>prev  status Details</th>
+											<!--<th></th>-->
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="p: ${pending}">
+
+											<td th:text="${p.caseDetails.caseId}"></td>
+											<td th:text="${p.caseDetails.caseTitle}"></td>
+											<!--  <td th:text="${p.personDetails.fullName}"></td>-->
+											<td><a class="text-info text-wrap " href="#" title="Edit"
+																	th:onclick="'ShowDetails(\'' + ${p.id} +'\');'"> <span th:text="${p.personDetails.fullName}"></span></a></td>
+											<td th:text="${p.personDetails.panNumber}"></td>
+											<td th:text="${p.companySummon.companyName}"></td>
+											<td th:text="${p.status.statusName}"></td>
+											<td>
+											<a href="#"
+												th:onclick="'showCompStatusDetails(\'' + ${p.id} +'\');'">
+													<span> Prev.Status Details</span>
+											</a>
+											</td>
+											<!--<td><button type="submit" th:name="caseDetails"
+													th:id="caseId" class="btn btn-info"
+													th:value="${p.caseDetails.id}">Case
+													Details</button></td>-->
+										</tr>
+
+
+									</tbody>
+
+								</table>
+							</div>
+						</form>
+
+
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script
+			src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+				var table = $('#userTable').DataTable({
+					//		 	        lengthChange: false,
+					buttons : [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+				});
+			});
+			function ShowDetails(id) {
+				$('#showperson').attr('action', 'showpersonInfo');
+	  			$('#rpcId').val(id);
+	  			$('#showperson').submit();
+			}
+			function showCompStatusDetails(compId) {
+				$('#showperson').attr('action', 'CompanyStatusDetails');
+				$('#compId').val(compId);
+				$('#showperson').submit();
+			}
+		</script>
+	</div>
+
+</body>
+</html>

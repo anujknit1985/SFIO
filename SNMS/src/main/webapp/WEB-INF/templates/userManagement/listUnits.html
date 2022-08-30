@@ -1,0 +1,90 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>All Units</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-5">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page"> Total Unit </li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-user"></i> Total Unit
+						</h4>
+							<div class="form-group row">
+								<table class="table table-responsive" id="unitTable">
+									<thead class="bg-info text-white">
+										<tr>
+											<th>S.No.</th>
+											<th>Name</th>
+											<th>Location</th>
+											<th>address</th>
+											<th>address Hindi</th>
+											<th>Official Email</th>
+											<th>Contact No.</th>
+											<th>Fax No.</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+									 <tr th:each="p,stats: ${unitList}">
+											<td th:text="${stats.count}"></td> 
+											<td class="text-wrap" th:text="${p.unitName}"></td>
+											<td class="text-wrap" th:text="${p.location}"></td>
+											<td class="text-wrap" th:text="${p.address}"></td>
+											<td class="text-wrap" th:text="${p.address_hi}"></td>
+											<td class="text-wrap" th:text="${p.eMail}"></td>
+											<td class="text-wrap" th:text="${p.telephoneNo}"></td>
+											<td class="text-wrap" th:text="${p.faxNo}"></td>
+											<td>
+											<form th:action="@{/editUnit}" method="post"
+												autocomplete="off">
+												<button class="btn btn-success text-wrap" type="submit"
+													th:name="editunit" th:value="${p.unitId}">Edit</button>
+											</form>
+										</td>
+											
+										</tr> 
+									</tbody>
+
+								</table>
+							</div>
+					
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		
+		
+		<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+			
+			 var table = $('#unitTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+		});
+		
+		</script>		
+	</div>
+
+</body>
+</html>

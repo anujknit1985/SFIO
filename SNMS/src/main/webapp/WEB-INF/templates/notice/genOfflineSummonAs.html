@@ -1,0 +1,327 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Summon</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Summon</li>
+				</ol>
+			</div>
+		</div>
+
+
+		<form th:action="@{/generateOfflineSummon}" method="post"
+			class="needs-validation" th:object="${caseDto}"
+			enctype="multipart/form-data">
+			<input type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="caseId" th:field="*{caseId}" name="caseId" required /> <input
+				type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="caseStrId" th:field="*{caseStrId}" name="caseStrId" required />
+			<input type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="summonNo" th:field="*{summonNo}" name="summonNo" required /> <input
+				type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="dateOfAppear" th:field="*{dateOfAppear}" name="dateOfAppear"
+				required /> <input type="hidden" class="inputTxt form-control"
+				autocomplete="off" id="summontypeid" th:field="*{summontypeid}"
+				name="summontypeid" required /> <input type="hidden"
+				class="inputTxt form-control" autocomplete="off" id="summonDin"
+				th:field="*{summonDin}" name="summonDin" required /> <input
+				type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="dateOfIssue" th:field="*{dateOfIssue}" name="dateOfIssue"
+				required /> <input type="hidden" class="inputTxt form-control"
+				autocomplete="off" id="summonId" th:field="*{summonId}"
+				name="summonId" required /> <input type="hidden"
+				th:value="${individualtype}" id="individualtype"
+				name="individualtype">
+
+
+			<div class="row text-black">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-briefcase"></i> Summon Details
+							</h4>
+
+
+
+
+
+
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<label>भारत सरकार </label><br> <label>कारपोरेट
+										कार्य मंत्रालय, </label><br> <label>गंभीर कपट अन्वेषण
+										कार्यालय</label><br> <label> <span
+										th:text="${OfficeAddress_hi}"></span></label>
+
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<label class="text-center"
+										style="text-decoration: underline; font-size: 20px; font-weight: bold;">भौतिक सम्मन</label>
+
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para1h}" th:id="para1h" readonly="readonly"></textarea>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para2h}" th:id="para2h" readonly="readonly"></textarea>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para3_1h}" th:id="para3h" readonly="readonly"></textarea>
+								</div>
+							</div>
+
+							<div class="form-group row" style="display: none;">
+								<div class="col-lg-12" align="center">
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para3h}" th:id="para3h" readonly="readonly"
+										hidden="true"></textarea>
+								</div>
+							</div>
+
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="right">
+									<label th:text="*{directorName}"> </label><br> (<label
+										th:text="${Iodesignation_hi}"></label>)
+								</div>
+							</div>
+
+
+
+
+							<hr width="100%" color="black">
+
+
+							<div class="pagebreak"></div>
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<label>Government of India </label><br> <label>Ministry
+										of Corporate Affairs</label><br> <label>Serious Fraud
+										Investigation Officer</label><br> <label> <span
+										th:text="${OfficeAddress}"></span></label>
+
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<div class="col-lg-3">
+									<label>DIN: </label>
+									<!-- <label th:text="*{summonDin}"></label> -->
+								</div>
+								<div class="col-lg-6"></div>
+
+								<div class="col-lg-3" align="right">
+									<!-- 									<label th:text="*{date}"></label> -->
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<label class="text-center"
+										style="text-decoration: underline; font-size: 20px; font-weight: bold;">Physical
+										SUMMON</label>
+
+								</div>
+							</div>
+
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para1}" th:id="para1" readonly="readonly"></textarea>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para2}" th:id="para2" readonly="readonly"></textarea>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="center">
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para3_1}" th:id="para3" readonly="readonly"></textarea>
+								</div>
+							</div>
+
+							<div class="form-group row" style="display: none;">
+								<div class="col-lg-12" align="center">
+									<textarea rows="4" class="form-control" style="border: none;"
+										th:field="*{para3}" th:id="para3" readonly="readonly"
+										hidden="true"></textarea>
+								</div>
+							</div>
+
+
+
+
+
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label">Upload Physical
+									Summon <span class="text-danger">*</span>
+								</label> <input type="file" autocomplete="off"
+									th:field="*{summonOfflineFile}" th:name="summonOfflineFile"
+									th:id="summonOfflineFile" required="required">
+
+							</div>
+
+
+							<div class="form-group row">
+								<div class="col-lg-12" align="right">
+									<label th:text="*{directorName}"> </label><br> (<label
+										th:text="*{Designation}"></label>)
+								</div>
+							</div>
+							<!-- <div class="form-group row">
+								<div class="col-lg-12">
+									<label>To,<br>Sh.<span th:text="${name}"></span>,
+										<span th:text="${designation}"></span>
+										<th:block th:if ="${Type!=7}">
+									<br><span th:text="${companyName}"></span>
+									</th:block>,
+										<br>Address <span th:text="${address}"></span>
+									</label>
+								</div>
+							</div> -->
+
+
+							<div class="form-footer">
+								<a href="getCompleteCase" class="btn btn-danger"> <i
+									class="fa fa-times"></i> Back
+								</a> <span th:if="${privilege}"> <!-- 								<button type="button" th:name="save" th:id="saveBtn" -->
+									<!-- 									class="btn btn-success" data-toggle="modal" data-target="#largesizemodal"> -->
+									<!-- 									<i class="fa fa-check-square-o"></i> Forward -->
+									<!-- 								</button> -->
+
+									<button type="submit" th:name="forward" class="btn btn-success">
+										<i class="fa fa-check-square-o"></i> Generate DIN
+									</button>
+								</span> <a href="#" th:onclick="'javascript:pdfView();'"
+									class="btn btn-info">Preview</a>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="largesizemodal">
+				<div class="modal-dialog modal-lg modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header bg-primary">
+							<h5 class="modal-title text-white">Choose Forward type</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="col-sm-4">
+								<b>Is Sensitive - </b>
+								<div class="icheck-inline">
+									<input type="radio" id="inline-radio-primary"
+										name="isSensitive" value="Y" /> <label
+										for="inline-radio-primary">Yes</label>
+								</div>
+								<div class="icheck-inline">
+									<input type="radio" id="inline-radio-info" name="isSensitive"
+										value="N" /> <label for="inline-radio-info">No</label>
+								</div>
+								<!-- <input type="hidden" th:field="*{summonTypeDto.isdirector}"
+										th:id="isdirector"> -->
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-dark" data-dismiss="modal">
+								<i class="fa fa-times"></i> Close
+							</button>
+							<button type="submit" th:name="forward" class="btn btn-primary"
+								id="forwardButton">
+								<i class="fa fa-check-square-o"></i> Forward
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<script>
+			function pdfView() {
+
+				$('#individualtype1').val($('#individualtype').val())
+				$('#summonNo1').val($('#summonNo').val())
+				$('#getPdf').attr("action", "genOfflineSummonPdf1");
+				$('#getPdf').submit();
+				$('div').removeClass('loading');
+			}
+		</script>
+		<form method="post" id="getPdf" target="_blank">
+			<input id="caseId" name="caseId" type="hidden"
+				th:value="${pdfPreview.id }" /> <input id="chooseComapny"
+				name="chooseComapny" type="hidden" th:value="${pdfPreview.company }" />
+			<input id="summontypeid" name="summontypeid" type="hidden"
+				th:value="${pdfPreview.sumtypeId }" /> <input id="dateOfAppear"
+				name="dateOfAppear" type="hidden"
+				th:value="${pdfPreview.appearDate }" /> <input id="dateOfAppear"
+				name="dateOfAppear" type="hidden"
+				th:value="${pdfPreview.IssueDate }" /> <input id="summonNo"
+				name="summonNo" type="hidden" th:value="${pdfPreview.summonNo }" />
+			<input id="summonDin" name="summonDin" type="hidden"
+				th:value="${pdfPreview.summonDin }" /> <input id="IssueDate"
+				name="IssueDate" type="hidden" th:value="${pdfPreview.issueDate }" />
+			<input type="hidden" class="inputTxt form-control" autocomplete="off"
+				id="summonNo1" name="summonNo1" required /> <input type="hidden"
+				th:id="para1h_h" th:name="para1h_h"> <input type="hidden"
+				id="individualtype1" name="individualtype1"> <input
+				type="hidden" th:name="${_csrf.parameterName}"
+				th:value="${_csrf.token}" />
+
+		</form>
+
+	</div>
+
+
+
+</body>
+</html>

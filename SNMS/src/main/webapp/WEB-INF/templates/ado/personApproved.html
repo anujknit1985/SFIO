@@ -1,0 +1,126 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title> GEP Person Status  Pending For Approval</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+		<div class="row pt-2 pb-2">
+			<!-- <div class="col-sm-9">
+				<h5 class="page-title"></h5>
+			</div> -->
+			<div class="col-sm-3">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page"> Approved Person </li>
+				</ol>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="form-header text-uppercase">
+							<i class="fa fa-address-book-o"></i>  GAMS  Approved Person List
+							
+						</h4>
+
+
+						<form th:action="@{/showpersonDetails}" method="post" th:id="showperson"
+							class="needs-validation" th:object="${caseDetails}">
+                             <input type="hidden" id="rpcId" name ="rpcId">
+                             <input type="hidden" name="compId" id="compId" />
+                         
+							<div class="form-group row">
+
+							<!-- 	<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="id" th:field="*{id}" name="id" required />
+
+								<input type="hidden" class="inputTxt form-control"
+									autocomplete="off" id="caseId" th:field="*{caseId}"
+									name="caseId" required /> -->
+							</div>
+							<div class="form-group row">
+								<table  class="table table-respnsive" id="PersonDetailsTable">
+									<thead>
+										<tr style="background-color: blueviolet; color: white;">
+											
+											<th>Case Id</th>
+											<th>Case Title</th>
+											<th>Full Name </th>
+											<th>Pan Number </th>
+											<th> Company Name  </th>
+											<th> prev  status Details </th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="p: ${pending}">
+											
+											<td th:text="${p.rpc.caseDetails.caseId}"></td>
+											<td th:text="${p.rpc.caseDetails.caseTitle}"></td>
+											<td><a class="text-info" href="#" title="Edit"
+																	th:onclick="'ShowDetails(\'' + ${p.rpc.id} +'\');'"> <span th:text="${p.rpc.personDetails.fullName}"></span></a></td>
+											
+											<td th:text="${p.rpc.personDetails.panNumber}"></td>
+											<td th:text="${p.rpc.companySummon.companyName}"></td>
+											<td>	<a href="#"
+												th:onclick="'showCompStatusDetails(\'' + ${p.rpc.id} +'\');'">
+													<span> Prev.Status Details</span>
+											</a></td>
+
+										</tr>
+
+
+									</tbody>
+
+								</table>
+							</div>
+						</form>
+
+
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+<script src="plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+		<script src="plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+			
+			 var table = $('#PersonDetailsTable').DataTable( {
+//		 	        lengthChange: false,
+			        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+			      } );
+		});
+		function ShowDetails(id) {
+			$('#showperson').attr('action', 'showpersonInfo');
+  			$('#rpcId').val(id);
+  			$('#showperson').submit();
+		}
+		
+		function showCompStatusDetails(compId) {
+			$('#showperson').attr('action', 'CompanyStatusDetails');
+			$('#compId').val(compId);
+			$('#showperson').submit();
+		}
+		</script>	
+
+	</div>
+
+</body>
+</html>

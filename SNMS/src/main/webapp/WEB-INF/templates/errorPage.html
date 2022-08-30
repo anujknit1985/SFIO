@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <title>Error Page</title>
+  <link rel="icon" href="images/India_flag.png" type="image/x-icon"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- animate CSS-->
+  <link href="css/animate.css" rel="stylesheet" type="text/css"/>
+  <!-- Icons CSS-->
+  <link href="css/icons.css" rel="stylesheet" type="text/css"/>
+  <!-- Custom Style-->
+  <link href="css/app-style.css" rel="stylesheet"/>
+</head>
+
+<body>
+ <div id="wrapper">
+ <div class="height-100v d-flex align-items-center justify-content-center">
+	<div class="card card-error mb-1">
+		<div class="card-body">
+		 <div class="card-content p-2">
+		 	<div class="text-center">
+		 	</div>
+		  		<!-- <div class="card-title text-uppercase text-center py-3 text-info">Generic Error</div> -->
+		   		<div class="form-group col-md-12">
+						<p style="font-size: 15px; font-weight: 500;" class="text-danger">
+							Sorry, <span th:text="${ErrorString}"></span>
+						</p>
+						
+						<!-- <!--1.method access session value 
+						 <a th:href="${session.ErrorUrl}"
+							style="font-size: 15px; color: #0085ff; font-weight: 600;"> <b
+							style="text-align: center;">Home</b>
+						</a> -->
+						<!--2.method access session value -->
+						<!-- <a th:href="${#session.getAttribute('ErrorUrl')}"
+							style="font-size: 15px; color: #0085ff; font-weight: 600;"> <b
+							style="text-align: center;">Home</b>
+						</a> -->
+						<!--2.method access model attribute value -->
+						<a th:href="${ErrorUrl}" style="font-weight: 600;" class="text-bold text-info">Home</a>
+					</div>
+		   </div>
+		   
+		   </div>
+		  </div>
+	     </div>
+	     <!-- <span th:text="${#session.removeAttribute('ErrorUrl')}" style="display:none;"></span> -->
+	     
+	 </div>
+    
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+	
+  <!-- sidebar-menu js -->
+  <script src="js/sidebar-menu.js"></script>
+  
+  <!-- Custom scripts -->
+  <script src="js/app-script.js"></script>
+  
+</body>
+
+</html>

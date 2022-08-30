@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Home Page</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+
+	<div class="row mt-3">
+       
+       <div class="col-12 col-lg-6 col-xl-4">
+         <div class="card gradient-info">
+           <div class="card-body">
+              <h5 class="text-white mb-0" ><span th:text="${totalCase}"></span><span class="float-right"><i class="zmdi zmdi-layers"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Total Cases<span class="float-right"><a href="showAllCaseDir" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div> 
+       </div>
+       
+       <div class="col-12 col-lg-6 col-xl-4">
+         <div class="card gradient-ohhappiness">
+            <div class="card-body">
+              <h5 class="text-white mb-0"><span id="totalNotice" th:text="${totalOrder}"></span> <span class="float-right"><i class="fa fa-clock-o"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Total Signed Orders<span class="float-right"><a href="allSignedOrders" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div>
+       </div>
+       
+       <div class="col-12 col-lg-6 col-xl-4">
+         <div class="card gradient-ibiza">
+            <div class="card-body">
+              <h5 class="text-white mb-0"><span id="totalSummons" th:text="${totalNotice}"></span> <span class="float-right"><i class="zmdi zmdi-card-travel"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Total Signed Notices<span class="float-right"><a href="getSignedNotices1" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div>
+       </div>
+       
+       <div class="col-12 col-lg-6 col-xl-4">
+         <div class="card gradient-royal">
+            <div class="card-body">
+              <h5 class="text-white mb-0"><span id="totalSummons" th:text="${totalSummon}"></span> <span class="float-right"><i class="zmdi zmdi-card-travel"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Total Signed Summons<span class="float-right"><a href="getSignedSummons1" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div>
+       </div>
+      
+       
+      <div class="col-12 col-lg-6 col-xl-4">
+         <div class="card gradient-influenza">
+            <div class="card-body">
+              <h5 class="text-white mb-0"><span id="totalNotice" th:text="${appOrder}"></span> <span class="float-right"><i class="fa fa-clock-o"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Approved Orders<span class="float-right"><a href="approvedOrders" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div>
+       </div>
+       <div class="col-12 col-lg-6 col-xl-4">
+         <div class="card gradient-meridian">
+            <div class="card-body">
+              <h5 class="text-white mb-0"><span id="totalSummons" th:text="${appNotice}"></span> <span class="float-right"><i class="zmdi zmdi-card-travel"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Approved Notices<span class="float-right"><a href="approvedNotice" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div>
+       </div>
+       
+       <div class="col-12 col-lg-6 col-xl-4">
+         <div class="card gradient-knight">
+            <div class="card-body">
+              <h5 class="text-white mb-0"><span id="totalNotice" th:text="${appSummon}"></span> <span class="float-right"><i class="fa fa-clock-o"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Approved Summons<span class="float-right"><a href="approvedSummon" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div>
+       </div>
+      
+         <div class="col-12 col-lg-6 col-xl-4">
+         <div class="card gradient-deepblue">
+           <div class="card-body">
+              <h5 class="text-white mb-0" ><span th:text="${Physummon}"></span><span class="float-right"><i class="zmdi zmdi-layers"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Total Physically Sent Summons pending for approval /sent Back for Review <span class="float-right"><a href="showAllPhysummon" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div> 
+       </div>
+     
+        <div class="col-12 col-lg-6 col-xl-4">
+         <div class=" card gradient-orange ">
+           <div class="card-body">
+              <h5 class="text-white mb-0" ><span th:text="${PhyNotice}"></span><span class="float-right"><i class="zmdi zmdi-layers"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Total Physically Sent Notice pending for approval /sent Back for Review <span class="float-right"><a href="showAllPhyNotice" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div> 
+       </div>
+     
+     
+       <div class="col-12 col-lg-6 col-xl-4">
+         <div class="card gradient-info">
+           <div class="card-body">
+              <h5 class="text-white mb-0" ><span th:text="${PendingPhysummon}"></span><span class="float-right"><i class="zmdi zmdi-layers"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Total Physically Send Summon Yet to Upload<span class="float-right"><a href="showAllPenPhysummon" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div> 
+       </div>
+    
+    
+        <div class="col-12 col-lg-6 col-xl-4">
+         <div class="card gradient-shifter">
+           <div class="card-body">
+              <h5 class="text-white mb-0" ><span th:text="${PendingPhyNotice}"></span><span class="float-right"><i class="zmdi zmdi-layers"></i></span></h5>
+                <div class="progress my-3" style="height:3px;">
+                   <div class="progress-bar" style="width:55%"></div>
+                </div>
+              <p class="mb-0 text-white small-font">Total Physically Send Notice Yet to Upload<span class="float-right"><a href="showAllPenPhyNotice" class="text-white">More Info</a> <i class="zmdi zmdi-long-arrow-right"></i></span></p>
+            </div>
+         </div> 
+       </div>
+     </div>
+		
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,1695 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Edit Individual Details</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<script th:inline="javascript">
+function getData() {
+    var firmNo = $("#regisNo").val();
+    $.ajax({
+      type : "GET",
+      url : "getIcaiByFirmNo?firmNo=" + firmNo,
+      success : function(data) {
+        console.log(data);
+        $("#auditorName").val(data.name_of_firm);
+        $("#emailAuditor").val(data.email);
+        $("#teleAuditor").val(data.telephone_no);
+        $("#addressAuditor").val(data.address_line_1+data.address_line_2+data.address_line_3+data.address_line_4+","+data.city_name+" - "+data.pin_code);
+      },
+      error : function(jqXHR, textStatus, errorThrown) {
+        alert('Auditor Reg. number is not avaliable');
+      }
+
+    });
+  }
+$(document).ready(function() {
+	
+	
+
+	$('#dateOfJoining,#issueDate,#dob').datepicker({
+		autoclose : true,
+		todayHighlight : true,
+		format : 'dd/mm/yyyy',
+		endDate: new Date(),
+	});
+/* 	 $('#individual').hide();
+	 $('#din').hide();
+	 $('#auditorDetails').hide();
+	 $('#secretaryDet').hide();
+	 $('#cinAgent').hide();
+	 $('#AcinBlock').hide();
+	 $('#outsiderDet').hide();
+	 $('#fEmployeeDetail').hide(); */
+	// $('#fdin').hide();
+	// $('#fauditorDetails').hide();
+	 $("input[name='sex']").change(function() {$('#sex').val($('input:radio[name=sex]:checked').val());});
+	 $("input[name='fsex']").change(function() {$('#fsex').val($('input:radio[name=fsex]:checked').val());});
+	 $("input[name='aifcin']").change(function() {$('#aiscin').val($('input:radio[name=aifcin]:checked').val());});
+	/*   $("input[name='isdirector']").change(function() {
+		  $('#isdirector').val($('input:radio[name=isdirector]:checked').val());
+					if ($('input:radio[name=isdirector]:checked').val() == 'Y') {
+						$('#dinMob').hide();
+						$('#individual').hide();
+						$('#din').show();
+						//$('#labelDir').text('Director Details');
+						$('#auditorDetails').show();
+					}
+					else{
+						$('#dinMob').show();
+						$('#individual').show();
+						$('#din').hide();
+						//$('#labelDir').text('Invidual Details');
+						$('#auditorDetails').show();
+					}
+					});  */
+	/*  $('#offDet').hide();
+	 $('#outsiderDet').hide();
+	 $('#auditorDet').hide();
+	 $('#EmployeeDetail').hide(); */
+	// $('#foffDet').hide();
+	 
+	 //if('input:radio[name=isExOfficial]:checked').val() == 'N')
+	 	$('#isExOfficialType').val($('input:radio[name=isExOfficial]:checked').val())
+	 $("input[name='isExOfficial']").change(function() {
+		 $('#isExOfficialType').val($('input:radio[name=isExOfficial]:checked').val());
+	 });
+
+
+	
+	 
+	
+	 
+	 $('#cinBlock').hide();
+	 $('#AcinBlock').hide();
+	 $("input[name='ifcin']").change(function() { 
+		 $('#isCin').val($('input:radio[name=ifcin]:checked').val());
+	if($(this).attr('id')=='cinY' )
+		$('#cinBlock').show();
+	
+	
+	else if($(this).attr('id')=='cinN')
+		$('#cinBlock').hide();
+	
+
+	
+	
+	 
+	 });
+	 
+	 $("input[name='aifcin']").change(function() { 
+		 $('#aisCin').val($('input:radio[name=aifcin]:checked').val());
+	
+	if($(this).attr('id')=='AcinY' )
+		$('#AcinBlock').show();
+	
+	
+	else if($(this).attr('id')=='AcinN')
+		$('#AcinBlock').hide();
+	
+	$('#vendorName').val('');
+	
+	
+	 
+	 });
+	 $('#cintxt').blur(function(){
+		 var token = [[${_csrf.token}]];
+		 var header = [[${_csrf.headerName}]];
+		 $(document).ajaxSend(function(e, xhr, options)
+		   {
+			 xhr.setRequestHeader(header,token );
+		   }), 
+		$.ajax({
+		      type : "post",
+		      url : "getCompanyByCin?cinNum="+$(this).val(),
+// 		      data : {editDeleteId:id},
+		      contentType : "application/json; charset=utf-8",
+		      success : function(data) {
+		    	  
+		    	//  $('#vendorName').val(data[0])
+		      }
+		    }); 
+	 });
+	 
+	 $('#cintxtaud').blur(function(){
+		 var token = [[${_csrf.token}]];
+		 var header = [[${_csrf.headerName}]];
+		 $(document).ajaxSend(function(e, xhr, options)
+		   {
+			 xhr.setRequestHeader(header,token );
+		   }), 
+		$.ajax({
+		      type : "post",
+		      url : "getCompanyByCin?cinNum="+$(this).val(),
+// 		      data : {editDeleteId:id},
+		      contentType : "application/json; charset=utf-8",
+		      success : function(data) {
+		    	  
+		    	  $('#AgentName').val(data[0])
+		      }
+		    }); 
+	 });
+	 
+	 
+	 
+	 $('#memberNo').blur(function(){
+		 var token = [[${_csrf.token}]];
+		 var header = [[${_csrf.headerName}]];
+		 $(document).ajaxSend(function(e, xhr, options)
+		   {
+			 xhr.setRequestHeader(header,token );
+		   }), 
+		$.ajax({
+		      type : "post",
+		      url : "getIcaiDataByMemberNo?memberNo="+$(this).val(),
+// 		      data : {editDeleteId:id},
+		      contentType : "application/json; charset=utf-8",
+		      success : function(data) {
+		    	  $('#memberName').val(data[0]);
+		    	  $('#emailMember').val(data[1]);
+		    	  $('#teleMember').val(data[2]);
+		    	  $('#addressMember').val(data[3]);
+		      }
+		    }); 
+	 });
+	 
+	 
+	 if($('#inditype').val()=='1')
+	 {
+		 
+		 
+		 $('#offDet').show();
+		 $('#individual').hide();
+		 $('#din').show();
+		 $('#auditorDetails').show();
+		
+		 $('#outsiderDet').hide();
+		 $('#auditorDet').hide();
+		 $('#secretaryDet').hide();
+		 
+
+		 $('#fdin').hide();
+		 $('#fauditorDetails').hide();
+		 
+		
+	 } 
+	 else if ( $('#inditype').val()=='2'){
+		 $('#foffDet').show();
+		 $('#individual').hide();
+		 $('#din').hide();
+		 $('#auditorDetails').hide();
+		
+		 $('#outsiderDet').hide();
+		 $('#auditorDet').hide();
+		 $('#secretaryDet').hide();
+		 
+		 $('#offDet').hide();
+		 $('#fdin').show();
+		 $('#fauditorDetails').show();
+	 }
+	 else if ($('#inditype').val()=='3') {
+		 $('#vendorType').prop("checked", true);
+		
+		 $('#EmployeeDetail').show();
+   	  $('#offDet').hide();
+		  $('#auditorDet').hide();
+		  $('#secretaryDet').hide();
+		  $('#outsiderDet').hide()
+		  $('#outsiderDet').hide();
+		  $('#fdin').hide();
+		 $('#fauditorDetails').hide();
+		 $('#foffDet').hide();
+	 }
+	 
+	 else if($('#inditype').val()=='4'){
+		 $('#fEmployeeDetail').show();
+   	  $('#EmployeeDetail').hide();
+   	  $('#offDet').hide();
+		  $('#auditorDet').hide();
+		  $('#secretaryDet').hide();
+		  $('#outsiderDet').hide()
+		  $('#outsiderDet').hide();
+ 
+			 $('#fdin').hide();
+			 $('#fauditorDetails').hide();
+			 $('#foffDet').hide();
+	 }
+	 else if ($('#inditype').val()=='5' ) {
+		
+		
+         if($('#aisCin').val() == 'Y'){
+		 $('#AcinY').prop("checked", true);
+         
+        	
+        	 
+        
+		 $('#offDet').hide();
+		 $('#outsiderDet').hide();
+		 $('#auditorDet').hide();
+		 $('#secretaryDet').show();
+		 $('#cinAgent').show();
+		 $('#AcinBlock').show();
+		 $('#fdin').hide();
+		 $('#fauditorDetails').hide();
+		 $('#fEmployeeDetail').hide();
+		 $('#foffDet').hide();
+         }
+         else{
+        	
+        	 $('#AcinN').prop("checked", true);
+        	 $('#offDet').hide();
+    		 $('#outsiderDet').hide();
+    		 $('#auditorDet').hide();
+    		 $('#secretaryDet').show();
+    		 $('#cinAgent').show();
+    		 $('#AcinBlock').hide();
+    		 $('#fdin').hide();
+    		 $('#fauditorDetails').hide();
+    		 $('#fEmployeeDetail').hide();
+    		 $('#foffDet').hide(); 
+        	 
+         }
+	 }
+	 else if ( $('#inditype').val()=='6'){
+		 
+		 
+		 
+		 if($('#aisCin').val() == 'Y'){
+			 $('#AcinY').prop("checked", true);
+			 $('#secretaryType').prop("checked", true);
+			 $('#offDet').hide();
+			 $('#outsiderDet').hide();
+			 $('#auditorDet').hide();
+			 $('#secretaryDet').show();
+			 $('#cinAgent').show();
+			 $('#AcinBlock').show();
+			 $('#fdin').hide();
+			 $('#fauditorDetails').hide();
+			 $('#fEmployeeDetail').hide();
+			 $('#foffDet').hide();
+	         }
+	         else{
+	        	 
+	        	 $('#AcinN').prop("checked", true);
+	        	 $('#offDet').hide();
+	    		 $('#outsiderDet').hide();
+	    		 $('#auditorDet').hide();
+	    		 $('#secretaryDet').show();
+	    		 $('#cinAgent').show();
+	    		 $('#AcinBlock').hide();
+	    		 $('#fdin').hide();
+	    		 $('#fauditorDetails').hide();
+	    		 $('#fEmployeeDetail').hide();
+	    		 $('#foffDet').hide(); 
+	        	 
+	         }
+	 }
+	 else if ($('#inditype').val()=='7'){
+		//alert($('#isCin').val());
+		// alert($('#isCin').val());
+		if($('#isCin').val() == 'Y'){
+			
+			$('#cinY').prop("checked", true);
+			
+			 $('#outsiderDet').show();
+				
+			 $('#offDet').hide();
+			 $('#secretaryDet').hide();
+			 $('#EmployeeDetail').hide();
+			 $('#cinAgent').hide();
+			 $('#AcinBlock').hide();
+			 $('#cinBlock').show();
+			 $('#fdin').hide();
+			 $('#fauditorDetails').hide();
+			 $('#fEmployeeDetail').hide();
+			 $('#foffDet').hide();
+		}
+		
+		$('#cinN').prop("checked", true);
+    	 $('#outsiderDet').show();
+			
+			 $('#offDet').hide();
+			 $('#secretaryDet').hide();
+			 $('#EmployeeDetail').hide();
+			 $('#cinAgent').hide();
+			 $('#AcinBlock').hide();
+			 $('#fdin').hide();
+			 $('#fauditorDetails').hide();
+			 $('#fEmployeeDetail').hide();
+			 $('#foffDet').hide();
+    	  
+	 }
+
+});
+
+function editCompany(elem){
+	var id = $(elem).prev('input').val();
+	alert(id);
+	var isYes = confirm("Are you sure, you want to edit ?");
+	if(isYes){
+		$('#createNoticeForm').attr('action', 'editCompany');
+		$('#editDeleteId').val(id);
+		$('#createNoticeForm').submit();
+	}
+}
+
+
+function editIndividual(id, comp){
+	//var id = $(elem).prev('input').val();
+alert (id + " "+comp)
+	var isYes  =  confirm("Are you sure You want to edit Individual Type ")
+	
+	if(isYes){
+		$('#createNoticeForm').attr('action', 'editIndividual');
+		$('#editDeleteId').val(id);
+		$('#compId').val(comp);
+		$('#createNoticeForm').submit();
+		//$('#myModal').modal('show')  
+		
+		
+	}
+}
+	//alert(id + " "+indivialType);
+
+function deleteCompany(elem){
+	var id = $(elem).prev('a').prev('input').val();
+	alert(id);
+	var isYes = confirm("Are you sure, you want to delete ?");
+	if(isYes){
+		$('#createNoticeForm').attr('action', 'deleteCompany');
+		$('#editDeleteId').val(id);
+		$('#createNoticeForm').submit();
+	}
+}
+
+function deleteType(elem){
+	var id = $(elem).prev('input').val();
+	var isYes = confirm("Are you sure, you want to delete ?");
+	if(isYes){
+		  var token = [[${_csrf.token}]];
+		 var header = [[${_csrf.headerName}]];
+		 $(document).ajaxSend(function(e, xhr, options)
+		   {
+			 xhr.setRequestHeader(header,token );
+		   }), 
+		$.ajax({
+		      type : "post",
+		      url : "deleteType?editDeleteId="+id,
+// 		      data : {editDeleteId:id},
+		      contentType : "application/json; charset=utf-8",
+		      success : function(data) {
+		 			$(elem).parent('span').remove(); 
+		      }
+		    }); 
+	}
+}
+</script>
+		<div class="row pt-2 pb-2">
+			<div class="col-sm-8">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Edit
+						Individual Details</li>
+				</ol>
+			</div>
+		</div>
+		<form th:action="@{/addEditSummonNew}" method="post"
+			th:object="${summonDetails}" id="createNoticeForm">
+			<!-- <input type="hidden" name="editDeleteId" id="editDeleteId"/>
+		<input type ="hidden" name= "compId" id = "compId"/> -->
+			<input type="hidden" name="editDeleteId" id="editDeleteId"
+				th:field="*{summonTypenewDto.editDeleteId}" /> <input type="hidden"
+				name="compId" id="compId" th:field="*{summonTypenewDto.compId}" /> <input
+				type="hidden" name="dataId" id="dataId"
+				th:field="*{summonTypenewDto.dataId}" />
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="form-header text-uppercase">
+								<i class="fa fa-briefcase"></i> Edit Individual Details
+							</h4>
+
+							<h5 class="form-header">
+								<i class="zmdi zmdi-layers"></i> Case Details
+							</h5>
+
+
+							<div class="form-group row">
+
+								<input type="hidden" th:field="*{id}" /> <input type="hidden"
+									th:field="*{caseId}" />
+
+								<!-- 	<input type="hidden" th:field="*{companySummonsDto.id}" /> -->
+								<input type="hidden" th:field="*{summonTypenewDto.id}" /> <input
+									type="hidden" th:field="*{summonTypenewDto.IndividualId}"
+									th:value="${TypeId}" th:id="inditype">
+								<!--     <input Type = "hidden"  th:id = "aisCin" th:field = "*{summonTypenewDto.isACin}" >
+						 -->
+								<label for="input-13" class="col-sm-2 col-form-label">Case
+									ID : </label>
+								<div class="col-sm-3">
+									<span th:text="${caseDetails.caseId}"></span>
+								</div>
+
+								<label for="input-10" class="col-sm-2 col-form-label">Financial
+									Year : </label>
+								<div class="col-sm-4">
+									<span th:text="${caseDetails.financeYear}"></span>
+
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label for="input-13" class="col-sm-2 col-form-label">Case
+									Title : </label>
+								<div class="col-sm-10">
+									<span th:text="${caseDetails.caseTitle}"></span>
+								</div>
+
+							</div>
+
+							<div class="form-group row">
+
+								<label class="col-sm-4 col-form-label">Investigation
+									Order Received From : </label> <label class="col-sm-6 col-form-label">
+									<span th:text="${caseDetails.radioValue}"></span>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.mcaOrderNo != '' }"
+								class="form-group row" id="mcaDiv">
+
+								<label class="col-sm-2 col-form-label">MCA Order No : </label> <label
+									class="col-sm-4 col-form-label"> <span
+									th:text="${caseDetails.mcaOrderNo}"></span>
+								</label> <label class="col-sm-2 col-form-label">MCA Order Date :
+								</label> <label class="col-sm-4 col-form-label"> <span
+									th:text="${#dates.format(caseDetails.mcaOrderDate,'dd/MM/yyyy')}"></span>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.courtOrderNo != ''}"
+								class="form-group row" id="courtDiv">
+
+								<label class="col-sm-2 col-form-label">Court Order No :
+								</label> <label class="col-sm-4 col-form-label"> <span
+									th:text="${caseDetails.courtOrderNo}"></span>
+								</label> <label class="col-sm-2 col-form-label">Court Order Date
+									: </label> <label class="col-sm-4 col-form-label"> <span
+									th:text="${#dates.format(caseDetails.courtOrderDate,'dd/MM/yyyy')}"></span>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.mcaOrderFile != ''}"
+								class="form-group row" id="mcaFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Communication received from MCA : </label> <label
+									class="col-sm-6 col-form-label"> <a th:target="_blank"
+									th:href="@{|/downloadFiles?fileName=${caseDetails.mcaOrderFile}|}"><span
+										th:text="${caseDetails.mcaOrderFile}"></span></a>
+								</label>
+
+							</div>
+
+							<div th:if="${caseDetails.courtOrderFile != ''}"
+								class="form-group row" id="courtFileDiv">
+
+								<label for="input-11" class="col-sm-6 col-form-label">Copy
+									of the Order received from Court : </label> <label
+									class="col-sm-6 col-form-label"> <a th:target="_blank"
+									th:href="@{|/downloadFiles?fileName=${caseDetails.courtOrderFile}|}"><span
+										th:text="${caseDetails.courtOrderFile}"></span></a>
+								</label>
+
+							</div>
+
+							<th:block th:if="${summonDetails.editDisable == false}">
+								<div class="form-group row">
+									<label for="input-13" class="col-sm-2 col-form-label">
+										Company Name <span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-6">
+										<select class="custom-select"
+											th:field="*{companySummonsDto.id}" id="chooseComp">
+											<option value="0">Select Company</option>
+											<option th:each="insp : ${summonbycaseidCompanyList}"
+												th:value="${insp.id}" th:text="${insp.companyName}"></option>
+
+										</select> <span id="chooseCompErr" style="color: red;"
+											th:errors="*{companySummonsDto.companyName}"></span>
+									</div>
+								</div>
+							</th:block>
+							<th:block th:if="${summonDetails.editDisable != false}">
+								<input type="hidden" th:field="*{companySummonsDto.id}" />
+								<div class="form-group row">
+									<label for="input-13" class="col-sm-2 col-form-label">
+										Company Name <span class="text-danger">*</span>
+									</label>
+									<div class="col-sm-6">
+										<select class="custom-select" disabled="disabled"
+											th:field="*{companySummonsDto.id}" id="chooseComp">
+											<option value="0">Select Company</option>
+											<option th:each="insp : ${summonbycaseidCompanyList}"
+												th:value="${insp.id}" th:text="${insp.companyName}"></option>
+
+										</select> <span id="chooseCompErr" style="color: red;"
+											th:errors="*{companySummonsDto.companyName}"></span>
+									</div>
+								</div>
+							</th:block>
+
+
+
+
+							<div class="form-group row">
+
+								<label class="col-sm-2 col-form-label">Individual Type <span
+									class="text-danger">*</span></label> <label
+									class="col-sm-4 col-form-label"> <span id="inditype"
+									th:text="${individualName}" style="font: bold;"></span>
+								</label>
+
+								<!-- 	 <input type = "text"  th:field="*{summonTypenewDto.IndividualId}"  th:value = "2" th:text= "${individualName}" >
+               			
+ -->
+
+							</div>
+							<th:block th:if="${TypeId ==1}">
+								<div id="offDet">
+									<h6 class="form-header">
+										<i class="zmdi zmdi-layers"></i> <span id="labelDir">Details</span>
+									</h6>
+
+
+									<div id="din">
+
+										<div class="form-group row">
+											<label for="input-13" class="col-sm-2 col-form-label">
+												DIN <span class="text-danger">*</span>
+											</label>
+
+											<th:block th:if="${summonDetails.editDisable == true}">
+												<div class="col-sm-4">
+													<input type="text" class="inputTxt form-control"
+														autocomplete="off" id="dinno" name="din" maxlength="8"
+														placeholder="Enter DIN"
+														th:field="*{summonTypenewDto.dirReg_no}"
+														readonly="readonly" /> <span id="dinErr"
+														class="text-danger"
+														th:errors="*{summonTypenewDto.dirReg_no}"></span>
+												</div>
+											</th:block>
+
+											<th:block th:if="${summonDetails.editDisable == false}">
+
+												<div class="col-sm-4">
+													<input type="text" class="inputTxt form-control"
+														autocomplete="off" id="dinno" name="din" maxlength="8"
+														placeholder="Enter DIN"
+														th:field="*{summonTypenewDto.dirReg_no}" /> <span
+														id="dinErr" class="text-danger"
+														th:errors="*{summonTypenewDto.dirReg_no}"></span>
+												</div>
+											</th:block>
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Name <span class="text-danger">*</span>
+											</label>
+
+											<th:block th:if="${summonDetails.editDisable == true}">
+
+												<div class="col-sm-4">
+													<input type="text" class="inputTxt form-control"
+														autocomplete="off" maxlength="35" id="directorname"
+														name="directorname" th:field="*{summonTypenewDto.dirName}"
+														placeholder="Enter Name" readonly="readonly" /> <span
+														id="directornameErr" class="text-danger"
+														th:errors="*{summonTypenewDto.dirName}"></span>
+												</div>
+											</th:block>
+											<th:block th:if="${summonDetails.editDisable == false}">
+												<div class="col-sm-4">
+													<input type="text" class="inputTxt form-control"
+														autocomplete="off" maxlength="35" id="directorname"
+														name="directorname" th:field="*{summonTypenewDto.dirName}"
+														placeholder="Enter Name" /> <span id="directornameErr"
+														class="text-danger"
+														th:errors="*{summonTypenewDto.dirName}"></span>
+												</div>
+											</th:block>
+										</div>
+									</div>
+
+
+									<div id="auditorDetails">
+										<div class="form-group row">
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Date of Joining </label>
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="dateOfJoining" name="dateOfJoining"
+													th:field="*{summonTypenewDto.diroffJoinDate}"
+													placeholder="DD/MM/YYYY" maxlength="10" /> <span
+													id="dateOfJoiningErr" class="text-danger"
+													th:errors="*{summonTypenewDto.diroffJoinDate}"></span>
+											</div>
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Address <span class="text-danger">*</span>
+											</label>
+											<div class="col-sm-4">
+												<textarea class="inputTxt form-control" cols="2" rows="3"
+													id="regAddr" name="regAddr"
+													th:field="*{summonTypenewDto.dirAddr}"
+													placeholder="Enter Address" maxlength="200"></textarea>
+												<span id="regAddrErr" class="text-danger"
+													th:errors="*{summonTypenewDto.dirAddr}"></span>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Mobile/Telephone No.<span class="text-danger" id="dinMob"></span>
+											</label>
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="telePno" name="telePno"
+													th:field="*{summonTypenewDto.dirMobile}"
+													placeholder="Enter Mobile/Telephone No." maxlength="10" />
+												<span id="offPhone" class="text-danger"
+													th:errors="*{summonTypenewDto.dirMobile}"></span>
+											</div>
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Email Address </label>
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="emailAud" name="emailAud"
+													th:field="*{summonTypenewDto.dirEmail}"
+													placeholder="Enter Email Address" maxlength="100" /> <span
+													id="offEmailErr" class="text-danger"
+													th:errors="*{summonTypenewDto.dirEmail}"></span>
+											</div>
+										</div>
+
+
+										<div class="form-group row">
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Passport Number <span class="text-danger" id="dinpass"></span>
+											</label>
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="dPass" name="dPass"
+													th:field="*{summonTypenewDto.dirpassport}"
+													placeholder="Enter Passport  No." maxlength="10" /> <span
+													id="offPhone" class="text-danger"
+													th:errors="*{summonTypenewDto.dirpassport}"></span>
+											</div>
+											<label for="input-13" class="col-sm-2 col-form-label">Pan
+												Number </label>
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="dPan" name="dPan"
+													th:field="*{summonTypenewDto.dirpanNumber}"
+													placeholder="Enter Pan Number " maxlength="10" /> <span
+													id="offEmailErr" class="text-danger"
+													th:errors="*{summonTypenewDto.dirpanNumber}"></span>
+											</div>
+										</div>
+										<!-- <div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Aadhar Number <span class="text-danger" id="aadhar"></span></label>
+							<div class="col-sm-4">
+								<input type="text" class="inputTxt form-control"
+									autocomplete="off" id="daadhar" name="daadhar" th:field="*{summonTypenewDto.diraadharNumber}"
+									placeholder="Enter aadhar  No." maxlength="12"/>
+								<span id="offPhone" class="text-danger" th:errors="*{summonTypenewDto.diraadharNumber}"></span>
+							</div>
+							
+						</div> -->
+
+									</div>
+								</div>
+							</th:block>
+
+
+							<th:block th:if="${TypeId ==2}">
+								<div id="foffDet">
+									<h6 class="form-header">
+										<i class="zmdi zmdi-layers"></i> <span id="labelDir">Details</span>
+									</h6>
+
+
+									<div id="fdin">
+
+										<div class="form-group row">
+											<label for="input-13" class="col-sm-2 col-form-label">
+												DIN <span class="text-danger">*</span>
+											</label>
+
+											<th:block th:if="${summonDetails.editDisable == false}">
+												<div class="col-sm-4">
+													<input type="text" class="inputTxt form-control"
+														autocomplete="off" id="dinno" name="din" maxlength="8"
+														placeholder="Enter DIN"
+														th:field="*{summonTypenewDto.fdirReg_no}" /> <span
+														id="dinErr" class="text-danger"
+														th:errors="*{summonTypenewDto.fdirReg_no}"></span>
+												</div>
+											</th:block>
+											<th:block th:if="${summonDetails.editDisable == true}">
+												<div class="col-sm-4">
+													<input type="text" class="inputTxt form-control"
+														autocomplete="off" id="dinno" name="din" maxlength="8"
+														placeholder="Enter DIN"
+														th:field="*{summonTypenewDto.fdirReg_no}"
+														readonly="readonly" /> <span id="dinErr"
+														class="text-danger"
+														th:errors="*{summonTypenewDto.fdirReg_no}"></span>
+												</div>
+											</th:block>
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Name <span class="text-danger">*</span>
+											</label>
+											<th:block th:if="${summonDetails.editDisable == false}">
+												<div class="col-sm-4">
+													<input type="text" class="inputTxt form-control"
+														autocomplete="off" maxlength="35" id="directorname"
+														name="directorname"
+														th:field="*{summonTypenewDto.fdirName}"
+														placeholder="Enter Name" /> <span id="directornameErr"
+														class="text-danger"
+														th:errors="*{summonTypenewDto.fdirName}"></span>
+												</div>
+											</th:block>
+
+											<th:block th:if="${summonDetails.editDisable == true}">
+												<div class="col-sm-4">
+													<input type="text" class="inputTxt form-control"
+														autocomplete="off" maxlength="35" id="directorname"
+														name="directorname"
+														th:field="*{summonTypenewDto.fdirName}"
+														placeholder="Enter Name" readonly="readonly" /> <span
+														id="directornameErr" class="text-danger"
+														th:errors="*{summonTypenewDto.fdirName}"></span>
+												</div>
+											</th:block>
+										</div>
+									</div>
+
+
+									<div id="fauditorDetails">
+										<div class="form-group row">
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Date of Joining </label>
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="dateOfJoining" name="dateOfJoining"
+													th:field="*{summonTypenewDto.fdiroffJoinDate}"
+													placeholder="DD/MM/YYYY" maxlength="10" /> <span
+													id="dateOfJoiningErr" class="text-danger"
+													th:errors="*{summonTypenewDto.fdiroffJoinDate}"></span>
+											</div>
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Address <span class="text-danger">*</span>
+											</label>
+											<div class="col-sm-4">
+												<textarea class="inputTxt form-control" cols="2" rows="3"
+													id="regAddr" name="regAddr"
+													th:field="*{summonTypenewDto.fdirAddr}"
+													placeholder="Enter Address" maxlength="200"></textarea>
+												<span id="regAddrErr" class="text-danger"
+													th:errors="*{summonTypenewDto.fdirAddr}"></span>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Mobile/Telephone No.<span class="text-danger" id="dinMob"></span>
+											</label>
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="telePno" name="telePno"
+													th:field="*{summonTypenewDto.fdirMobile}"
+													placeholder="Enter Mobile/Telephone No." maxlength="10" />
+												<span id="offPhone" class="text-danger"
+													th:errors="*{summonTypenewDto.fdirMobile}"></span>
+											</div>
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Email Address </label>
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="emailAud" name="emailAud"
+													th:field="*{summonTypenewDto.fdirEmail}"
+													placeholder="Enter Email Address" maxlength="100" /> <span
+													id="offEmailErr" class="text-danger"
+													th:errors="*{summonTypenewDto.fdirEmail}"></span>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="input-13" class="col-sm-2 col-form-label">
+												Passport Number <span class="text-danger" id="dinpass"></span>
+											</label>
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="ffdPass" name="dPass"
+													th:field="*{summonTypenewDto.fdirpassport}"
+													placeholder="Enter Passport  No." maxlength="10" /> <span
+													id="offpan" class="text-danger"
+													th:errors="*{summonTypenewDto.fdirpassport}"></span>
+											</div>
+											<label for="input-13" class="col-sm-2 col-form-label">Pan
+												Number </label>
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="fdPan" name="fdPan"
+													th:field="*{summonTypenewDto.fdirpanNumber}"
+													placeholder="Enter Pan Number " maxlength="100" /> <span
+													id="offpass" class="text-danger"
+													th:errors="*{summonTypenewDto.fdirpanNumber}"></span>
+											</div>
+										</div>
+
+										<!-- 	<div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Aadhar Number <span class="text-danger" id="aadhar"></span></label>
+							<div class="col-sm-4">
+								<input type="text" class="inputTxt form-control"
+									autocomplete="off" id="faadhar" name="faadhar" th:field="*{summonTypenewDto.fdiraadharNumber}"
+									placeholder="Enter aadhar  No." maxlength="12"/>
+								<span id="offPhone" class="text-danger" th:errors="*{summonTypenewDto.fdiraadharNumber}"></span>
+							</div>
+							
+						</div> -->
+									</div>
+								</div>
+							</th:block>
+							<th:block th:if="${TypeId ==3}">
+								<div id="EmployeeDetail">
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Name <span class="text-danger">*</span>
+										</label>
+										<th:block th:if="${summonDetails.editDisable == false}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="name" name="name"
+													th:field="*{summonTypenewDto.empName}"
+													placeholder="Enter Name" maxlength="35" /> <span
+													id="nameErr" class="text-danger"
+													th:errors="*{summonTypenewDto.empName}"></span>
+											</div>
+										</th:block>
+										<th:block th:if="${summonDetails.editDisable == true}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="name" name="name"
+													th:field="*{summonTypenewDto.empName}"
+													placeholder="Enter Name" maxlength="35" readonly="readonly" />
+												<span id="nameErr" class="text-danger"
+													th:errors="*{summonTypenewDto.empName}"></span>
+											</div>
+										</th:block>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Designation <span class="text-danger">*</span>
+										</label>
+										<th:block th:if="${summonDetails.editDisable == false}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="designation" name="designation"
+													maxlength="35" th:field="*{summonTypenewDto.empdesgi}"
+													placeholder="Enter Designation" /> <span
+													id="designationErr" class="text-danger"
+													th:errors="*{summonTypenewDto.empdesgi}"></span>
+											</div>
+										</th:block>
+										<th:block th:if="${summonDetails.editDisable == true}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="designation" name="designation"
+													maxlength="35" th:field="*{summonTypenewDto.empdesgi}"
+													placeholder="Enter Designation" readonly="readonly" /> <span
+													id="designationErr" class="text-danger"
+													th:errors="*{summonTypenewDto.empdesgi}"></span>
+											</div>
+										</th:block>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-sm-2 col-form-label">Sex <span
+											class="text-danger">*</span></label>
+										<div class="col-sm-4">
+											<div class="icheck-inline">
+												<input type="radio" id="inline-radio-primary" name="sex"
+													value="M" /> <label for="inline-radio-primary">Male</label>
+											</div>
+											<div class="icheck-inline">
+												<input type="radio" id="inline-radio-danger" name="sex"
+													value="F" /> <label for="inline-radio-info">Female</label>
+											</div>
+											<div class="icheck-inline">
+												<input type="radio" id="inline-radio-success" name="sex"
+													value="O" /> <label for="inline-radio-success">Other</label>
+											</div>
+
+											<input type="hidden" th:field="*{summonTypenewDto.empsex}"
+												th:id="sex"> <span id="sexErr" class="text-danger"
+												th:errors="*{summonTypenewDto.empsex}"></span>
+										</div>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											DOB </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="dob" name="dob"
+												th:field="*{summonTypenewDto.empDob}"
+												placeholder="Enter Date of birth" maxlength="10" /> <span
+												id="dobErr" class="text-danger"
+												th:errors="*{summonTypenewDto.empDob}"></span>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Nationality <span class="text-danger"></span>
+										</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="nationality" name="nationality"
+												th:field="*{summonTypenewDto.empNation}"
+												placeholder="Enter Nationality" maxlength="35" /> <span
+												id="nationalityErr" class="text-danger"
+												th:errors="*{summonTypenewDto.empNation}"></span>
+										</div>
+
+
+										<!-- <label for="input-13" class="col-sm-2 col-form-label">
+								Aadhar Number <span class="text-danger" id="aadhar"></span></label>
+							<div class="col-sm-4">
+								<input type="text" class="inputTxt form-control"
+									autocomplete="off" id="empaadhar" name="empaadhar" th:field="*{summonTypenewDto.empaadharNumber}"
+									placeholder="Enter aadhar  No." maxlength="12"/>
+								<span id="offPhone" class="text-danger" th:errors="*{summonTypenewDto.empaadharNumber}"></span>
+							</div> -->
+
+
+
+										<!-- <label for="input-13" class="col-sm-2 col-form-label">
+								National ID </label>
+							<div class="col-sm-4">
+								<input type="text" class="inputTxt form-control"
+									autocomplete="off" id="nationalid" name="nationalid" th:field="*{summonTypenewDto.empnatid}"
+									placeholder="Enter National Id" maxlength="15"/>
+								<span id="nationalidErr" class="text-danger" th:errors="*{summonTypenewDto.empnatid}"></span>
+							</div> -->
+									</div>
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Passport No. </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="passN" name="passN"
+												th:field="*{summonTypenewDto.empPassport}"
+												placeholder="Enter Passport Number" maxlength="8" /> <span
+												id="passNErr" class="text-danger"
+												th:errors="*{summonTypenewDto.empPassport}"></span>
+										</div>
+
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Issue Date</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="issueDate" name="issueDate"
+												th:field="*{summonTypenewDto.empPassDate}"
+												placeholder="Enter Issue Date" maxlength="10" /> <span
+												id="issueDateErr" class="text-danger"
+												th:errors="*{summonTypenewDto.empPassDate}"></span>
+										</div>
+
+									</div>
+
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Place of Issue </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="place" name="place"
+												th:field="*{summonTypenewDto.empissuplace}"
+												placeholder="Enter Place of Issue" maxlength="70" /> <span
+												id="placeErr" class="text-danger"
+												th:errors="*{summonTypenewDto.empissuplace}"></span>
+										</div>
+
+										<label for="input-13" class="col-sm-2 col-form-label">Pan
+											Number </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="empPan" name="empPan"
+												th:field="*{summonTypenewDto.empPanNumber}"
+												placeholder="Enter Pan Number " maxlength="100" /> <span
+												id="offpass" class="text-danger"
+												th:errors="*{summonTypenewDto.empPanNumber}"></span>
+										</div>
+
+									</div>
+
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Date of Joining </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="dateOfJoining" name="dateOfJoining"
+												th:field="*{summonTypenewDto.empoffdate}"
+												placeholder="Enter Date of Joining" maxlength="10" /> <span
+												id="dateOfJoiningErr" class="text-danger"
+												th:errors="*{summonTypenewDto.empoffdate}"></span>
+										</div>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Address <span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-4">
+											<textarea class="inputTxt form-control" cols="2" rows="3"
+												id="regAddr" name="regAddr"
+												th:field="*{summonTypenewDto.empAddress}"
+												placeholder="Enter Address" maxlength="200"></textarea>
+											<span id="regAddrErr" class="text-danger"
+												th:errors="*{summonTypenewDto.empAddress}"></span>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Mobile/Telephone No.<span class="text-danger" id="dinMob"></span>
+										</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="telePno" name="telePno"
+												th:field="*{summonTypenewDto.empMobile}"
+												placeholder="Enter Mobile/Telephone No." maxlength="10" /> <span
+												id="offPhone" class="text-danger"
+												th:errors="*{summonTypenewDto.empMobile}"></span>
+										</div>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Email Address </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="emailAud" name="emailAud"
+												th:field="*{summonTypenewDto.empemail}"
+												placeholder="Enter Email Address" maxlength="100" /> <span
+												id="offEmailErr" class="text-danger"
+												th:errors="*{summonTypenewDto.empemail}"></span>
+										</div>
+									</div>
+
+								</div>
+							</th:block>
+							<th:block th:if="${TypeId ==4}">
+								<div id="fEmployeeDetail">
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Name <span class="text-danger">*</span>
+										</label>
+
+										<th:block th:if="${summonDetails.editDisable == false}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="name" name="name"
+													th:field="*{summonTypenewDto.fempName}"
+													placeholder="Enter Name" maxlength="35" /> <span
+													id="nameErr" class="text-danger"
+													th:errors="*{summonTypenewDto.fempName}"></span>
+											</div>
+										</th:block>
+
+										<th:block th:if="${summonDetails.editDisable == true}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="name" name="name"
+													th:field="*{summonTypenewDto.fempName}"
+													placeholder="Enter Name" maxlength="35" readonly="readonly" />
+												<span id="nameErr" class="text-danger"
+													th:errors="*{summonTypenewDto.fempName}"></span>
+											</div>
+										</th:block>
+
+
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Designation <span class="text-danger">*</span>
+										</label>
+
+										<th:block th:if="${summonDetails.editDisable == false}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="designation" name="designation"
+													maxlength="35" th:field="*{summonTypenewDto.fempdesgi}"
+													placeholder="Enter Designation" /> <span
+													id="designationErr" class="text-danger"
+													th:errors="*{summonTypenewDto.fempdesgi}"></span>
+											</div>
+										</th:block>
+
+										<th:block th:if="${summonDetails.editDisable == true}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="designation" name="designation"
+													maxlength="35" th:field="*{summonTypenewDto.fempdesgi}"
+													placeholder="Enter Designation" readonly="readonly" /> <span
+													id="designationErr" class="text-danger"
+													th:errors="*{summonTypenewDto.fempdesgi}"></span>
+											</div>
+										</th:block>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-sm-2 col-form-label">Sex <span
+											class="text-danger">*</span></label>
+										<div class="col-sm-4">
+											<div class="icheck-inline">
+												<input type="radio" id="inline-radio-primary" name="fsex"
+													value="M" /> <label for="inline-radio-primary">Male</label>
+											</div>
+											<div class="icheck-inline">
+												<input type="radio" id="inline-radio-danger" name="fsex"
+													value="F" /> <label for="inline-radio-info">Female</label>
+											</div>
+											<div class="icheck-inline">
+												<input type="radio" id="inline-radio-success" name="fsex"
+													value="O" /> <label for="inline-radio-success">Other</label>
+											</div>
+
+											<input type="hidden" th:field="*{summonTypenewDto.fempsex}"
+												th:id="fsex"> <span id="sexErr" class="text-danger"
+												th:errors="*{summonTypenewDto.fempsex}"></span>
+										</div>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											DOB </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="dob" name="dob"
+												th:field="*{summonTypenewDto.fempDob}"
+												placeholder="Enter Date of birth" maxlength="10" /> <span
+												id="dobErr" class="text-danger"
+												th:errors="*{summonTypenewDto.fempDob}"></span>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Nationality <span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="nationality" name="nationality"
+												th:field="*{summonTypenewDto.fempNation}"
+												placeholder="Enter Nationality" maxlength="35" /> <span
+												id="nationalityErr" class="text-danger"
+												th:errors="*{summonTypenewDto.fempNation}"></span>
+										</div>
+
+										<label for="input-13" class="col-sm-2 col-form-label">
+											National ID </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="nationalid" name="nationalid"
+												th:field="*{summonTypenewDto.fempnatid}"
+												placeholder="Enter National Id" maxlength="15" /> <span
+												id="nationalidErr" class="text-danger"
+												th:errors="*{summonTypenewDto.fempnatid}"></span>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Passport No. </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="passN" name="passN"
+												th:field="*{summonTypenewDto.fempPassport}"
+												placeholder="Enter Passport Number" maxlength="8" /> <span
+												id="passNErr" class="text-danger"
+												th:errors="*{summonTypenewDto.fempPassport}"></span>
+										</div>
+
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Issue Date</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="issueDate" name="issueDate"
+												th:field="*{summonTypenewDto.fempPassDate}"
+												placeholder="Enter Issue Date" maxlength="10" /> <span
+												id="issueDateErr" class="text-danger"
+												th:errors="*{summonTypenewDto.fempPassDate}"></span>
+										</div>
+
+									</div>
+
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Place of Issue </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="place" name="place"
+												th:field="*{summonTypenewDto.fempissuplace}"
+												placeholder="Enter Place of Issue" maxlength="70" /> <span
+												id="placeErr" class="text-danger"
+												th:errors="*{summonTypenewDto.fempissuplace}"></span>
+										</div>
+
+
+										<label for="input-13" class="col-sm-2 col-form-label">Pan
+											Number </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="fempPan" name="fempPan"
+												th:field="*{summonTypenewDto.fempPanNumber}"
+												placeholder="Enter Pan Number " maxlength="100" /> <span
+												id="offpass" class="text-danger"
+												th:errors="*{summonTypenewDto.fempPanNumber}"></span>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Date of Joining </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="dateOfJoining" name="dateOfJoining"
+												th:field="*{summonTypenewDto.fempoffdate}"
+												placeholder="Enter Date of Joining" maxlength="10" /> <span
+												id="dateOfJoiningErr" class="text-danger"
+												th:errors="*{summonTypenewDto.fempoffdate}"></span>
+										</div>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Address <span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-4">
+											<textarea class="inputTxt form-control" cols="2" rows="3"
+												id="regAddr" name="regAddr"
+												th:field="*{summonTypenewDto.fempAddress}"
+												placeholder="Enter Address" maxlength="200"></textarea>
+											<span id="regAddrErr" class="text-danger"
+												th:errors="*{summonTypenewDto.fempAddress}"></span>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Mobile/Telephone No.<span class="text-danger" id="dinMob"></span>
+										</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="telePno" name="telePno"
+												th:field="*{summonTypenewDto.fempMobile}"
+												placeholder="Enter Mobile/Telephone No." maxlength="10" /> <span
+												id="offPhone" class="text-danger"
+												th:errors="*{summonTypenewDto.fempMobile}"></span>
+										</div>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Email Address </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="emailAud" name="emailAud"
+												th:field="*{summonTypenewDto.fempemail}"
+												placeholder="Enter Email Address" maxlength="100" /> <span
+												id="offEmailErr" class="text-danger"
+												th:errors="*{summonTypenewDto.fempemail}"></span>
+										</div>
+									</div>
+									<!-- <div class="form-group row">
+							<label for="input-13" class="col-sm-2 col-form-label">
+								Aadhar Number <span class="text-danger" id="aadhar"></span></label>
+							<div class="col-sm-4">
+								<input type="text" class="inputTxt form-control"
+									autocomplete="off" id="fempaadharNumber" name="fempaadharNumber" th:field="*{summonTypenewDto.fempaadharNumber}"
+									placeholder="Enter aadhar  No." maxlength="12"/>
+								<span id="offPhone" class="text-danger" th:errors="*{summonTypenewDto.fdiraadharNumber}"></span>
+							</div>
+							
+						</div> -->
+								</div>
+							</th:block>
+							<!-- </div> -->
+							<th:block th:if="${TypeId ==7}">
+								<div id="outsiderDet">
+									<div class="form-group row">
+										<label class="col-sm-3 col-form-label">If CIN is
+											available?<span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-4">
+											<div class="icheck-inline">
+												<input type="radio" id="cinY" name="ifcin" value="Y" /> <label
+													for="inline-radio-primary">Yes</label>
+											</div>
+											<div class="icheck-inline">
+												<input type="radio" id="cinN" name="ifcin" value="N" /> <label
+													for="inline-radio-info">No</label>
+											</div>
+											<input type="hidden" th:field="*{summonTypenewDto.isOCin}"
+												th:id="isOCin"> <span id="isCinErr"
+												class="text-danger" th:errors="*{summonTypenewDto.isOCin}"></span>
+										</div>
+									</div>
+									<div class="form-group row" id="cinBlock">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											CIN <span class="text-danger">*</span>
+										</label>
+										<th:block th:if="${summonDetails.editDisable == false}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" th:id="cintxt" name="cin"
+													th:field="*{summonTypenewDto.othRegno}"
+													placeholder="Enter CIN" maxlength="21" /> <span
+													id="cinNumErr" class="text-danger"
+													th:errors="*{summonTypenewDto.othRegno}"></span>
+											</div>
+										</th:block>
+										<th:block th:if="${summonDetails.editDisable == true}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" th:id="cintxt" name="cin"
+													th:field="*{summonTypenewDto.othRegno}"
+													placeholder="Enter CIN" maxlength="21" readonly="readonly" />
+												<span id="cinNumErr" class="text-danger"
+													th:errors="*{summonTypenewDto.othRegno}"></span>
+											</div>
+										</th:block>
+									</div>
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Name<span class="text-danger">*</span>
+										</label>
+
+										<th:block th:if="${summonDetails.editDisable == false}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" th:id="vendorName" name="vendorName"
+													th:field="*{summonTypenewDto.othName}"
+													placeholder="Enter Name" maxlength="70" /> <span
+													id="vendorNameErr" class="text-danger"
+													th:errors="*{summonTypenewDto.othName}"></span>
+											</div>
+										</th:block>
+										<th:block th:if="${summonDetails.editDisable == true}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" th:id="vendorName" name="vendorName"
+													th:field="*{summonTypenewDto.othName}"
+													placeholder="Enter Name" maxlength="70" readonly /> <span
+													id="vendorNameErr" class="text-danger"
+													th:errors="*{summonTypenewDto.othName}"></span>
+											</div>
+										</th:block>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Relation with company <span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="relCompany" name="relCompany"
+												th:field="*{summonTypenewDto.othRelation}"
+												placeholder="Relation with company" maxlength="35" /> <span
+												id="vendorRelationErr" class="text-danger"
+												th:errors="*{summonTypenewDto.othRelation}"></span>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Email Address <span class="text-danger"></span>
+										</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="emailVendor" name="emailVendor"
+												th:field="*{summonTypenewDto.othEmail}"
+												placeholder="Enter Email Address" maxlength="100" /> <span
+												id="vendorEmailErr" class="text-danger"
+												th:errors="*{summonTypenewDto.othEmail}"></span>
+										</div>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Mobile/Telephone No.<span class="text-danger"></span>
+										</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="teleVendor" name="teleVendor"
+												th:field="*{summonTypenewDto.othMobile}"
+												placeholder="Enter Mobile/Telephone No." maxlength="10" /> <span
+												id="vendorPhoneErr" class="text-danger"
+												th:errors="*{summonTypenewDto.othMobile}"></span>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Address <span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-4">
+											<textarea class="inputTxt form-control" cols="2" rows="3"
+												id="addressVendor" name="addressVendor"
+												th:field="*{summonTypenewDto.othAddress}"
+												placeholder="Enter Address" maxlength="200"></textarea>
+											<span id="vendorAddressErr" class="text-danger"
+												th:errors="*{summonTypenewDto.othAddress}"></span>
+										</div>
+
+
+										<!-- <label for="input-13" class="col-sm-2 col-form-label">
+								Aadhar Number <span class="text-danger" id="aadhar"></span></label>
+							<div class="col-sm-4">
+								<input type="text" class="inputTxt form-control"
+									autocomplete="off" id="othaadharNumber" name="othaadharNumber" th:field="*{summonTypenewDto.othaadharNumber}"
+									placeholder="Enter aadhar  No." maxlength="12"/>
+								<span id="offPhone" class="text-danger" th:errors="*{summonTypenewDto.othaadharNumber}"></span>
+							</div> -->
+
+
+									</div>
+
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Passport Number <span class="text-danger" id="dinpass"></span>
+										</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="othPass" name="othPass"
+												th:field="*{summonTypenewDto.othpassport}"
+												placeholder="Enter Passport  No." maxlength="10" /> <span
+												id="offPhone" class="text-danger"
+												th:errors="*{summonTypenewDto.othpassport}"></span>
+										</div>
+										<label for="input-13" class="col-sm-2 col-form-label">Pan
+											Number </label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="othPan" name="othPan"
+												th:field="*{summonTypenewDto.othpanNumber}"
+												placeholder="Enter Pan Number " maxlength="100" /> <span
+												id="offEmailErr" class="text-danger"
+												th:errors="*{summonTypenewDto.othpanNumber}"></span>
+										</div>
+									</div>
+								</div>
+							</th:block>
+							<th:block th:if="${TypeId ==5 or TypeId==6}">
+								<div id="secretaryDet">
+
+									<div class="form-group row" id="cinAgent">
+										<label class="col-sm-3 col-form-label">If CIN is
+											available?<span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-4">
+											<div class="icheck-inline">
+												<input type="radio" id="AcinY" name="aifcin" value="Y" /> <label
+													for="inline-radio-primary">Yes</label>
+											</div>
+											<div class="icheck-inline">
+												<input type="radio" id="AcinN" name="aifcin" value="N" /> <label
+													for="inline-radio-info">No</label>
+											</div>
+											<input type="hidden" th:field="*{summonTypenewDto.isACin}"
+												th:id="aisCin"> <span id="isCinErr"
+												class="text-danger" th:errors="*{summonTypenewDto.isACin}"></span>
+										</div>
+									</div>
+									<div class="form-group row" id="AcinBlock">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											CIN <span class="text-danger">*</span>
+										</label>
+										<th:block th:if="${summonDetails.editDisable == true}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" th:id="cintxtaud" name="cin"
+													th:field="*{summonTypenewDto.agentRegno}"
+													placeholder="Enter CIN" maxlength="21" readonly="readonly" />
+												<span id="cinNumErr" class="text-danger"
+													th:errors="*{summonTypenewDto.agentRegno}"></span>
+											</div>
+										</th:block>
+										<th:block th:if="${summonDetails.editDisable == false}">
+
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" th:id="cintxtaud" name="cin"
+													th:field="*{summonTypenewDto.agentRegno}"
+													placeholder="Enter CIN" maxlength="21" /> <span
+													id="cinNumErr" class="text-danger"
+													th:errors="*{summonTypenewDto.agentRegno}"></span>
+											</div>
+										</th:block>
+									</div>
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Name of the Person to be summoned/Notice to be issued<span
+											class="text-danger">*</span>
+										</label>
+
+										<th:block th:if="${summonDetails.editDisable == false}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="Audname" name="Audname"
+													th:field="*{summonTypenewDto.agentName}"
+													placeholder="Enter Name " maxlength="30" /> <span
+													id="memNoErr" style="color: red;"
+													th:errors="*{summonTypenewDto.agentName}"></span>
+											</div>
+										</th:block>
+
+										<th:block th:if="${summonDetails.editDisable == true}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="Audname" name="Audname"
+													th:field="*{summonTypenewDto.agentName}"
+													placeholder="Enter Name " maxlength="30"
+													readonly="readonly" /> <span id="memNoErr"
+													style="color: red;"
+													th:errors="*{summonTypenewDto.agentName}"></span>
+											</div>
+										</th:block>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Name of the company <span class="text-danger">*</span>
+										</label>
+										<th:block th:if="${summonDetails.editDisable == false}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="AgentName" name="AgentName"
+													th:field="*{summonTypenewDto.agentcompany}"
+													placeholder="Enter Name" maxlength="70" /> <span
+													id="AgentNameErr" style="color: red;"
+													th:errors="*{summonTypenewDto.agentcompany}"></span>
+											</div>
+										</th:block>
+										<th:block th:if="${summonDetails.editDisable == true}">
+											<div class="col-sm-4">
+												<input type="text" class="inputTxt form-control"
+													autocomplete="off" id="AgentName" name="AgentName"
+													th:field="*{summonTypenewDto.agentcompany}"
+													placeholder="Enter Name" maxlength="70" readonly="readonly" />
+												<span id="AgentNameErr" style="color: red;"
+													th:errors="*{summonTypenewDto.agentcompany}"></span>
+											</div>
+
+										</th:block>
+									</div>
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Email Address <span class="text-danger"></span>
+										</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="Agentemail" name="memberEmail"
+												th:field="*{summonTypenewDto.agentEmail}"
+												placeholder="Enter Email Address" maxlength="100" /> <span
+												id="AgentemailErr" class="text-danger"
+												th:errors="*{summonTypenewDto.agentEmail}"></span>
+										</div>
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Mobile/Telephone No.<span class="text-danger"></span>
+										</label>
+										<div class="col-sm-4">
+											<input type="text" class="inputTxt form-control"
+												autocomplete="off" id="AgentePhome" name="AgentePhome"
+												th:field="*{summonTypenewDto.agentMobile}"
+												placeholder="Enter Mobile/Telephone No." maxlength="10" /> <span
+												id="AgentePhomeErr" class="text-danger"
+												th:errors="*{summonTypenewDto.agentMobile}"></span>
+										</div>
+
+									</div>
+									<div class="form-group row">
+										<label for="input-13" class="col-sm-2 col-form-label">
+											Address <span class="text-danger">*</span>
+										</label>
+										<div class="col-sm-4">
+											<textarea class="inputTxt form-control" cols="2" rows="3"
+												id="Agenteaddress" name="AgenteAddress"
+												th:field="*{summonTypenewDto.agentAddress}"
+												placeholder="Enter Address" maxlength="200"></textarea>
+											<span id="AgenteAddressErr" class="text-danger"
+												th:errors="*{summonTypenewDto.agentAddress}"></span>
+										</div>
+
+										<!-- <label for="input-13" class="col-sm-2 col-form-label">
+								Aadhar Number <span class="text-danger" id="aadhar"></span></label>
+							<div class="col-sm-4">
+								<input type="text" class="inputTxt form-control"
+									autocomplete="off" id="agentaadharNumber" name="agentaadharNumber" th:field="*{summonTypenewDto.agentaadharNumber}"
+									placeholder="Enter aadhar  No." maxlength="12"/>
+								<span id="offPhone" class="text-danger" th:errors="*{summonTypenewDto.agentaadharNumber}"></span>
+							</div> -->
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="input-13" class="col-sm-2 col-form-label">
+										Passport Number <span class="text-danger" id="dinpass"></span>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="inputTxt form-control"
+											autocomplete="off" id="dPass" name="dPass"
+											th:field="*{summonTypenewDto.agentpassport}"
+											placeholder="Enter Passport  No." maxlength="10" /> <span
+											id="offPhone" class="text-danger"
+											th:errors="*{summonTypenewDto.agentpassport}"></span>
+									</div>
+									<label for="input-13" class="col-sm-2 col-form-label">Pan
+										Number </label>
+									<div class="col-sm-4">
+										<input type="text" class="inputTxt form-control"
+											autocomplete="off" id="dPan" name="dPan"
+											th:field="*{summonTypenewDto.agentpanNumber}"
+											placeholder="Enter Pan Number " maxlength="100" /> <span
+											id="offEmailErr" class="text-danger"
+											th:errors="*{summonTypenewDto.agentpanNumber}"></span>
+									</div>
+								</div>
+							</th:block>
+
+
+
+							<div class="form-group row">
+								<div class="col-sm-4"></div>
+								<div class="col-sm-5">
+									<button type="submit" th:name="savecomp" th:id="savecomp"
+										class="btn btn-danger">
+										<i class="fa fa-plus"></i> Update individual Details
+									</button>
+								</div>
+								<div class="col-sm-3"></div>
+							</div>
+
+
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</form>
+
+
+
+	</div>
+
+
+
+
+
+</body>
+</html>
